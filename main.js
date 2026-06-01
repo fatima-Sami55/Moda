@@ -125,7 +125,7 @@ const {
     }));
 
     // 🛡️ GENERAL RATE LIMITER (DoS Protection) - TEMPORARILY DISABLED FOR TESTING
-    /*
+  
     const generalLimiter = rateLimit({
       windowMs: 15 * 60 * 1000,
       max: 200,
@@ -134,10 +134,10 @@ const {
       message: "Too many requests from this IP. Please try again in 15 minutes."
     });
     app.use(generalLimiter);
-    */
+  
 
     // 🛡️ AUTH RATE LIMITER (Brute-Force Protection) - TEMPORARILY DISABLED FOR TESTING
-    /*
+    
     const authLimiter = rateLimit({
       windowMs: 15 * 60 * 1000,
       max: 15,
@@ -149,7 +149,7 @@ const {
     app.use("/signup", authLimiter);
     app.use("/forgot-password", authLimiter);
     app.use("/reset-password", authLimiter);
-    */
+    
 
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
