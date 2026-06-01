@@ -4,35 +4,42 @@ header {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  padding: 0 20px;
-  height: 100px;
+  padding: 0 40px;
+  height: 90px;
   width: 100%;
   position: fixed;
   top: 0;
-  background-color: #fff;
+  background-color: var(--bg-deep) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   z-index: 1100;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: var(--shadow-premium);
+  transition: var(--transition-smooth);
+}
+
+header a,
+header a:hover,
+header a:focus {
+  text-decoration: none !important;
 }
 
 header.nav-after {
   top: 0;
 }
 
-/* Add extra offset if verification flash is shown */
 header.offset-top {
   top: 60px; 
 }
 
 @media (max-width: 804px) {
- body.unverified header.nav-after {
+  body.unverified header.nav-after {
     top: 120px !important;
   }
-
   .banner {
     margin-top: 200px; 
   }
 }
-
 
 @media (max-width: 360px) {
   body.unverified header.nav-after {
@@ -40,21 +47,35 @@ header.offset-top {
   }
 }
 
-
 header .logo {
   display: flex;
   align-items: center;
   gap: 10px;
   flex: 1;
-  margin-left: 50px;
+  margin-left: 0;
 }
 
-header .logo h1,
-header h3 {
-  font-family: "Dancing Script", cursive;
-  font-size: 24px;
-  margin: 0;
-  color: black;
+header .logo h3 a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  font-family: var(--font-heading) !important;
+}
+
+header .logo h3 a span {
+  font-family: var(--font-heading) !important;
+  font-weight: 700;
+  font-size: 26px;
+  color: var(--text-primary) !important;
+  background: none !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: unset !important;
+  letter-spacing: -0.02em;
+}
+
+header .logo img {
+  filter: drop-shadow(0 0 8px var(--border-glow));
 }
 
 /* ======================== Nav Links ======================== */
@@ -68,43 +89,84 @@ header ul {
   padding: 0;
 }
 
-header ul li a {
-  text-decoration: none;
-  font-weight: 700;
-  color: rgb(3, 3, 3);
-  text-transform: uppercase;
-  padding: 10px 15px;
-  transition: 0.2s ease-in-out;
+header ul li.link {
+  position: relative;
 }
 
-header ul li.no-border a:hover {
-  border-bottom: none !important;
+header ul li.link a {
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-secondary) !important;
+  text-transform: uppercase;
+  font-size: 18px;
+  letter-spacing: 0.05em;
+  padding: 10px 15px;
+  transition: var(--transition-smooth);
+}
+
+header ul li.link a::after {
+  content: '' !important;
+  position: absolute;
+  bottom: 0;
+  left: 15px;
+  right: 15px;
+  height: 2px;
+  background: var(--accent-gradient) !important;
+  transform: scaleX(0);
+  transition: var(--transition-smooth);
+  border: none !important;
+  display: block !important;
+  margin: 0 !important;
+  vertical-align: normal !important;
+}
+
+header ul li.link a:hover {
+  color: var(--text-primary) !important;
+}
+
+header ul li.link a:hover::after {
+  transform: scaleX(1) !important;
 }
 
 #user:hover {
   border-bottom: none !important;
 }
 
-
-header ul li a:hover {
-  border-bottom: 2px solid rgb(19, 18, 18);
-  color: #090909;
-}
-
-
 /* ======================== Dropdown ======================== */
 .dropdown-toggle::after {
-  content: none;
-}
-
-.dropdown-item:hover {
-  background-color: #eee;
-  border-bottom: none;
-  text-decoration: none;
+  content: none !important;
 }
 
 header .dropdown-menu {
-  min-width: 150px;
+  background: var(--bg-surface-glass) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-light) !important;
+  box-shadow: var(--shadow-premium) !important;
+  border-radius: 14px;
+  padding: 8px;
+  margin-top: 10px;
+}
+
+header .dropdown-item {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary) !important;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: var(--transition-smooth);
+}
+
+header .dropdown-item:hover {
+  background-color: rgba(232, 196, 58, 0.15) !important;
+  color: var(--text-primary) !important;
+  transform: translateX(4px);
+}
+
+header .dropdown-divider {
+  border-color: var(--border-light);
 }
 
 header .dropdown-item:active,
@@ -112,50 +174,80 @@ header .dropdown-item:visited {
   background-color: transparent;
 }
 
+header .dropdown-item p {
+  margin: 0;
+}
+
 /* ======================== Search Bar ======================== */
 .search-container {
-  margin-top: 10px;
+  margin-top: 0;
 }
 
 .search-form .form-group {
   position: relative;
-  width: 32px;
-  height: 32px;
-  border-radius: 25px;
-  background-color: #fff;
-  border: 1px solid #ccc;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background-color: rgba(26, 26, 26, 0.06);
+  border: 1px solid var(--border-light);
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  transition: all 0.35s;
-  box-shadow: 0 1px 1px rgba(62, 57, 57, 0.744) inset;
+  transition: var(--transition-smooth);
 }
 
 .search-form .form-group input.form-control {
   width: 0;
-  padding-right: 20px;
-  border: none;
-  background: white;
-  color: black;
-  transition: width 0.35s ease;
+  padding: 0px !important;
+  padding-right: 35px !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-body);
+  font-size: 14px;
+  transition: width 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .search-form .form-group input.form-control:focus,
 .search-form .form-group:hover input.form-control {
-  width: 300px;
-  border-radius: 25px 4px 4px 25px;
-  background-color: #e3e3e4;
+  width: 260px;
+  padding: 0px !important;
+  padding-left: 15px !important;
+  padding-right: 35px !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.search-form .form-group:focus-within,
+.search-form .form-group:hover {
+  width: 260px;
+  background-color: rgba(26, 26, 26, 0.12);
+  border-color: var(--primary-accent);
+  box-shadow: var(--shadow-glow);
 }
 
 .search-form .form-group span.form-control-feedback {
   position: absolute;
   right: 0;
-  width: 32px;
-  height: 32px;
-  text-align: center;
-  line-height: 32px;
-  color: black;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
   cursor: pointer;
+  pointer-events: none;
+}
+
+.search-form .form-group span.form-control-feedback i {
+  color: var(--text-secondary) !important;
+  transition: var(--transition-smooth);
+}
+
+.search-form .form-group:focus-within span.form-control-feedback i {
+  color: var(--primary-accent) !important;
 }
 
 /* ======================== Hamburger Icon ======================== */
@@ -167,21 +259,54 @@ header .dropdown-item:visited {
   display: none;
   font-size: 28px;
   cursor: pointer;
-  color: black;
+  color: var(--text-primary);
 }
 
 /* ======================== User Image / Cart ======================== */
 #user-img {
-  height: 40px;
-  width: 40px;
+  height: 42px;
+  width: 42px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 20px;
-  border: none;
+  border: 2px solid var(--border-light);
+  transition: var(--transition-smooth);
+}
+
+#user-img:hover {
+  border-color: var(--primary-accent);
+  box-shadow: var(--shadow-glow);
+}
+
+header ul.nav-links li.user-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important;
 }
 
 #cart {
-  margin-left: 10px;
+  margin-left: 15px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+#cart i.material-icons {
+  color: var(--text-secondary) !important;
+  font-size: 28px;
+  transition: var(--transition-smooth);
+}
+
+#cart:hover i.material-icons {
+  color: var(--text-primary) !important;
+  transform: scale(1.1);
+}
+
+header .notification-counter {
+  background: var(--accent-gradient) !important;
+  border: none !important;
+  box-shadow: var(--shadow-glow);
+  font-weight: 700;
+  color: white !important;
 }
 
 body.unverified .banner {
@@ -195,39 +320,44 @@ body.unverified .banner {
   header {
     flex-direction: column;
     height: auto;
-    padding: 10px 20px;
+    padding: 15px 30px;
     align-items: flex-start;
     position: fixed;
     width: 100%;
-    z-index: 999;
+    z-index: 1100;
   }
 
   .menu {
     display: block;
     position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 1001; /* so it's always above the nav */
+    top: 25px;
+    right: 30px;
+    z-index: 1001;
+  }
+
+  .menu i {
+    color: var(--text-primary) !important;
   }
 
   header ul {
     flex-direction: column;
     align-items: center;
     position: fixed;
-    top: 100px; /* default for verified users */
+    top: 90px; 
     right: -100%;
-    background-color: white;
+    background-color: var(--bg-surface) !important;
+    border-left: 1px solid var(--border-light);
     width: 60%;
-    height: calc(100vh - 100px);
-    transition: right 0.5s ease;
+    height: calc(100vh - 90px);
+    transition: right 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
     z-index: 1000;
-    box-shadow: -2px 0 8px rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-premium);
     padding-top: 40px;
-    gap: 50px;
+    gap: 40px;
   }
 
   body.unverified header ul {
-    top: 130px; /* push nav lower if flash is showing */
+    top: 130px; 
     height: calc(100vh - 130px);
   }
 
@@ -237,12 +367,12 @@ body.unverified .banner {
 
   .search-form .form-group:hover input.form-control,
   .search-form .form-group input.form-control:focus {
-    width: 250px;
+    width: 200px;
   }
 }
-
 </style>
-<!-- Flash inline styling -->
+<!-- Global Neobrutalist Toast component included -->
+<%- include('toast') %>
 <%
   let headerClass = 'nav-after';
   if (page === 'home' && !isVerified) {
@@ -251,28 +381,6 @@ body.unverified .banner {
 %>
 <!-- If logged in -->
 <% if (isLoggedIn) { %> 
-  <% if (success.length > 0 ) {%>
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-  <%= success %>
-  <alert
-    type="button"
-    class="btn-close"
-    data-bs-dismiss="alert"
-    aria-label="Close"
-  ></alert>
-</div>
-<% } %> 
-<% if (error.length > 0 ) {%>
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-  <%= error %>
-  <alert
-    type="button"
-    class="btn-close"
-    data-bs-dismiss="alert"
-    aria-label="Close"
-  ></alert>
-</div>
-<% } %>
 <!-- header -->
 <header id="navbar" class="<%= headerClass %>">
   <div class="logo">
@@ -285,12 +393,12 @@ body.unverified .banner {
         <img
           src="../image/Acess logo/logo.png"
           class="h-8"
-          alt="Acess Logo"
+          alt="Moda Logo"
           style="width: 60px; height: 60px"
         />
         <span
           class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
-          >Acess</span
+          >Moda</span
         >
       </a>
     </h3>
@@ -489,7 +597,7 @@ body.unverified .banner {
       
     </li>
     <% } %>
-    <li>
+    <li class="user-actions">
       <div class="btn-group position-relative no-border">
         <a
           href="#"
@@ -578,29 +686,8 @@ body.unverified .banner {
 
 <!-- If not logged in -->
 <% } %> <% if (!isLoggedIn) { %> 
-  <% if (success.length > 0 ) {%>
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-  <%= success %>
-  <alert
-    type="button"
-    class="btn-close"
-    data-bs-dismiss="alert"
-    aria-label="Close"
-  ></alert>
-</div>
-<% } %> <% if (error.length > 0 ) {%>
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-  <%= error %>
-  <alert
-    type="button"
-    class="btn-close"
-    data-bs-dismiss="alert"
-    aria-label="Close"
-  ></alert>
-</div>
-<% } %>
 <!-- header -->
-<header id="navbar" class="nav-after" class="<%= headerClass %>">
+<header id="navbar" class="<%= headerClass %>">
   <div class="logo">
     <h3>
       <a
@@ -611,12 +698,12 @@ body.unverified .banner {
         <img
           src="../image/Acess logo/logo.png"
           class="h-8"
-          alt="Acess Logo"
+          alt="Moda Logo"
           style="width: 60px; height: 60px"
         />
         <span
           class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
-          >Acess</span
+          >Moda</span
         >
       </a>
     </h3>

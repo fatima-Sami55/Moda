@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 220" width="100%" height="100%">
+  <!-- Background Shadow under the feet -->
+  <ellipse cx="150" cy="204" rx="42" ry="4" fill="#E0DED7" opacity="0.4" />
+
+  <!-- Left Panel Sparkles & Inactive List Rows -->
+  <!-- Plus Sparkle Top-Left -->
+  <path d="M 72 38 L 80 38 M 76 34 L 76 42" stroke="#D1D0D5" stroke-width="2" stroke-linecap="round" />
+  <!-- Small Circle Sparkle -->
+  <circle cx="112" cy="38" r="3" fill="none" stroke="#D1D0D5" stroke-width="2" />
+  
+  <!-- Active Broken Heart Row -->
+  <!-- Active Yellow Rounded Box -->
+  <rect x="36" y="52" width="24" height="24" rx="5" fill="#FFE082" stroke="#1F1E23" stroke-width="1.5" />
+  <!-- Left Side Broken Heart -->
+  <path d="M 48 57.5 C 45.5 54.5 43 57.5 43 60 C 43 62.5 45.5 65 48 67 L 48 62.5 L 46.5 61 L 48 59.5 Z" fill="#1F1E23" />
+  <!-- Right Side Broken Heart -->
+  <path d="M 49 57.5 C 51.5 54.5 54 57.5 54 60 C 54 62.5 51.5 65 49 67 L 49 62.5 L 50.5 61 L 49 59.5 Z" fill="#1F1E23" />
+  <!-- Active Orange Text Lines -->
+  <rect x="68" y="56" width="44" height="7" rx="3.5" fill="#FE672E" />
+  <rect x="68" y="67" width="30" height="7" rx="3.5" fill="#FE672E" />
+
+  <!-- Inactive Broken Heart Row -->
+  <!-- Inactive Faded Grey Box -->
+  <rect x="36" y="88" width="24" height="24" rx="5" fill="#F5F5F5" stroke="#D1D0D5" stroke-width="1.5" opacity="0.6" />
+  <!-- Inactive Left Heart -->
+  <path d="M 48 93.5 C 45.5 90.5 43 93.5 43 96 C 43 98.5 45.5 101 48 103 L 48 98.5 L 46.5 97 L 48 95.5 Z" fill="#8C8A90" opacity="0.6" />
+  <!-- Inactive Right Heart -->
+  <path d="M 49 93.5 C 51.5 90.5 54 93.5 54 96 C 54 98.5 51.5 101 49 103 L 49 98.5 L 50.5 97 L 49 95.5 Z" fill="#8C8A90" opacity="0.6" />
+  <!-- Inactive Faded Lines -->
+  <rect x="68" y="92" width="44" height="7" rx="3.5" fill="#F5F5F5" opacity="0.6" />
+  <rect x="68" y="103" width="30" height="7" rx="3.5" fill="#F5F5F5" opacity="0.6" />
+
+  <!-- Wavy Motion Lines Bottom-Left -->
+  <path d="M 32 126 Q 36 122 40 126 T 48 126" fill="none" stroke="#D1D0D5" stroke-width="1.5" stroke-linecap="round" />
+  <path d="M 56 132 Q 60 128 64 132 T 72 132" fill="none" stroke="#D1D0D5" stroke-width="1.5" stroke-linecap="round" />
+
+  <!-- The Sad Shopping Bag Character -->
+  <!-- Right 3D perspective depth panel (Lookbook Yellow) -->
+  <polygon points="190,46 206,48 206,140 190,148" fill="#FFC107" stroke="#1F1E23" stroke-width="1.5" stroke-linejoin="round" />
+  <!-- Depth lines/stitch details -->
+  <line x1="202" y1="120" x2="202" y2="128" stroke="#1F1E23" stroke-width="1.5" stroke-linecap="round" />
+  <line x1="202" y1="133" x2="202" y2="135" stroke="#1F1E23" stroke-width="1.5" stroke-linecap="round" />
+
+  <!-- Front main panel of bag -->
+  <polygon points="120,50 190,46 190,148 120,144" fill="#FFFFFF" stroke="#1F1E23" stroke-width="1.5" stroke-linejoin="round" />
+  
+  <!-- Front top flap/crease -->
+  <path d="M 120 50 Q 155 48 190 46 L 190 51 Q 155 53 120 55 Z" fill="#ECEAE3" stroke="#1F1E23" stroke-width="1.5" />
+
+  <!-- Handles -->
+  <path d="M 136 58 Q 155 76 176 62" fill="none" stroke="#1F1E23" stroke-width="1.5" stroke-linecap="round" />
+  <circle cx="136" cy="58" r="1.5" fill="#1F1E23" />
+  <circle cx="176" cy="62" r="1.5" fill="#1F1E23" />
+
+  <!-- Sad Closed Eyes -->
+  <path d="M 136 94 Q 142 92 148 94" fill="none" stroke="#1F1E23" stroke-width="2.2" stroke-linecap="round" />
+  <path d="M 168 93 Q 174 91 180 93" fill="none" stroke="#1F1E23" stroke-width="2.2" stroke-linecap="round" />
+
+  <!-- Sad Squiggly Mouth -->
+  <path d="M 152 114 Q 155 112 158 114 T 164 114" fill="none" stroke="#1F1E23" stroke-width="1.8" stroke-linecap="round" />
+
+  <!-- Arms loops (clasping/crossed in front) -->
+  <!-- Left arm -->
+  <path d="M 120 110 C 112 118 114 134 142 134" fill="none" stroke="#1F1E23" stroke-width="1.5" stroke-linecap="round" />
+  <!-- Right arm -->
+  <path d="M 190 120 C 196 126 194 134 162 134" fill="none" stroke="#1F1E23" stroke-width="1.5" stroke-linecap="round" />
+  <!-- Fingers overlap detail -->
+  <line x1="138" y1="132" x2="142" y2="136" stroke="#1F1E23" stroke-width="1.5" stroke-linecap="round" />
+  <line x1="162" y1="132" x2="158" y2="136" stroke="#1F1E23" stroke-width="1.5" stroke-linecap="round" />
+
+  <!-- Legs -->
+  <!-- Left Leg -->
+  <path d="M 142 146 C 140 168 134 186 130 196" fill="none" stroke="#1F1E23" stroke-width="1.5" stroke-linecap="round" />
+  <!-- Right Leg -->
+  <path d="M 174 147 C 176 169 180 188 176 198" fill="none" stroke="#1F1E23" stroke-width="1.5" stroke-linecap="round" />
+
+  <!-- Orange Lookbook Wavy Shoes -->
+  <!-- Left Shoe -->
+  <path d="M 130 196 Q 124 196 120 194 Q 118 190 124 190 Q 130 190 134 196 Z" fill="#FE672E" stroke="#1F1E23" stroke-width="1.5" stroke-linejoin="round" />
+  <!-- Right Shoe -->
+  <path d="M 176 198 Q 170 200 166 198 Q 164 194 170 194 Q 176 194 180 198 Z" fill="#FE672E" stroke="#1F1E23" stroke-width="1.5" stroke-linejoin="round" />
+</svg>

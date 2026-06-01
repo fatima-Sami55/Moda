@@ -12,7 +12,7 @@ const sendEmail = async ({ to, subject, html }) => {
   console.log(to, subject, html);
   try {
     await transporter.sendMail({
-      from: `"Acess" <${process.env.GMAIL_USER}>`,
+      from: `"Moda" <${process.env.GMAIL_USER}>`,
       to,
       subject,
       html,

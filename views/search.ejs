@@ -1,699 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acess</title>
-    <link rel="icon" type="image/png" href="/image/Acess%20logo/logo.png?v=1.0" />
-  </head>
+  <%- include('../partials/head', {title: 'Moda — Search Results'}) %>
   <body>
-<!-- stylesheets -->
+
     <link href="/css/search.css" rel="stylesheet" type="text/css" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-<!-- Navbar -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
     <%- include('../partials/navbar', { page: page }) %>
-<!-- Serach result + filter section -->
-<% 
-const search = []; 
-searchResults.forEach(product => { 
-search.push({ 
-      id: JSON.stringify(product.id), 
-      name: product.name,
-      description: product.description, 
-      image: product.image, 
-      price: JSON.stringify(product.price), 
-      categories: product.categories, 
-      style: product.style 
-  }); 
-}); 
-%> 
- <!-- Hidden div to store search data for JS filtering -->
- <div id="search-data" data-search='<%- JSON.stringify(searchResults) %>' style="display:none;"></div>
- <!-- Serach result + filter section Wrapper -->
- <div class="search" style="padding-top: 100px;">
-  <div>
-    <!-- Main Content Section -->
-    <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="sort-header-section flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
-        <h1 class="Result-header text-4xl font-bold tracking-tight text-gray-900">
-          Results for : <%=query%>
-        </h1>
-        <div class="flex items-center">
-          <div class="relative inline-block text-left">
-            <form action="/search" method="GET" class="flex items-center">
-              <!-- Retain search query -->
-              <input type="hidden" name="search" value="<%= query %>">
-              <!-- Sort Label/Button (Just for visual grouping, not functional dropdown) -->
-              <label for="sort" class="mr-2 text-sm font-medium text-gray-700">Sort</label>
-              <br>
-              <!-- Proper select element -->
-              <select
-                id="sort"
-                name="sort"
-                onchange="this.form.submit()"
-                class="ml-3 text-sm font-medium text-gray-700 hover:text-gray-900 bg-white border border-gray-300 rounded-md pl-3 pr-8 py-1 focus:outline-none appearance-none"
-              >
-                <option value="default" <% if (sort === 'default') { %>selected<% } %>>Default</option>
-                <option value="price-low-high" <% if (sort === 'price-low-high') { %>selected<% } %>>Price: Low to High</option>
-                <option value="price-high-low" <% if (sort === 'price-high-low') { %>selected<% } %>>Price: High to Low</option>
-              </select>
-            </form>
+
+    <%
+    searchResults.forEach(product => {
+      /* pre-process for JS filtering */
+    });
+    %>
+
+    <div class="search-page">
+      <div class="container">
+
+        <!-- ────────── HEADER ROW ────────── -->
+        <div class="search-header">
+
+          <!-- Title + chip — all inline -->
+          <div class="search-title-block">
+            <h1 class="search-result-title">
+              Results for: <span class="search-query">"<%= query %>"</span>
+              <% if (searchResults.length > 0) { %>
+                <span class="result-count-chip"><%= searchResults.length %> found</span>
+              <% } %>
+            </h1>
           </div>
-        </div>
-      </div>
 
-      <!-- Products and Filters Section -->
-      <section aria-labelledby="products-heading" class="pb-24 pt-6">
-        <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-          <!-- Filters Sidebar (Desktop) -->
-          <form class="lg:col-span-1 fixed-sidebar border-r border-gray-200 px-4">
-            <h4 style="text-align: left; padding-bottom: 25px">Filters</h4>
-            <!-- Categories Filter Section -->
-            <div class="border-b border-gray-200 py-6">
-              <h3 class="-my-3 flow-root">
-                <button
-                  type="button"
-                  class="flex w-full items-center justify-between py-3 text-sm text-gray-400 hover:text-gray-500 toggle-button"
-                  aria-controls="filter-section-categories-desktop"
-                  aria-expanded="false"
-                >
-                  <span class="font-medium text-gray-900">Categories</span>
-                  <span class="ml-6 flex items-center">
-                    <svg
-                      class="expand-icon h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
-                      />
-                    </svg>
-                    <svg
-                      class="collapse-icon hidden h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </h3>
-              <div
-                class="filter-section pt-6 hidden"
-                id="filter-section-categories-desktop"
-              >
-                <div class="space-y-4">
-                  <div class="flex items-center">
-                    <input
-                      id="filter-category-men-desktop"
-                      name="category"
-                      value="men"
-                      type="checkbox"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-category-men-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >Men</label
-                    >
-                  </div>
-                  <div class="flex items-center">
-                    <input
-                      id="filter-category-women-desktop"
-                      name="category"
-                      value="women"
-                      type="checkbox"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-category-women-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >Women</label
-                    >
-                  </div>
-                  <div class="flex items-center">
-                    <input
-                      id="filter-category-kids-desktop"
-                      name="category"
-                      value="kids"
-                      type="checkbox"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-category-kids-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >Kids</label
-                    >
-                  </div>
-                  <div class="flex items-center">
-                    <input
-                      id="filter-category-accessories-desktop"
-                      name="category"
-                      value="acessiories"
-                      type="checkbox"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-category-accessories-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >Accessories</label
-                    >
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Style Filter Section -->
-            <div class="border-b border-gray-200 py-6">
-              <h3 class="-my-3 flow-root">
-                <button
-                  type="button"
-                  class="flex w-full items-center justify-between py-3 text-sm text-gray-400 hover:text-gray-500 toggle-button"
-                  aria-controls="filter-section-styles-desktop"
-                  aria-expanded="false"
-                >
-                  <span class="font-medium text-gray-900">Styles</span>
-                  <span class="ml-6 flex items-center">
-                    <svg
-                      class="expand-icon h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
-                      />
-                    </svg>
-                    <svg
-                      class="collapse-icon hidden h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </h3>
-              <div
-                class="filter-section pt-6 hidden"
-                id="filter-section-styles-desktop"
-              >
-                <div class="grid grid-cols-3 gap-4">
-                  <div class="flex items-center">
-                    <input
-                      id="filter-style-casual-desktop"
-                      name="style[]"
-                      value="casual"
-                      type="checkbox"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-style-casual-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >Casual</label
-                    >
-                  </div>
-                  <div class="flex items-center">
-                    <input
-                      id="filter-style-formal-desktop"
-                      name="style[]"
-                      value="formal"
-                      type="checkbox"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-style-formal-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >Formal</label
-                    >
-                  </div>
-                  <div class="flex items-center">
-                    <input
-                      id="filter-style-vintage-desktop"
-                      name="style[]"
-                      value="vintage"
-                      type="checkbox"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-style-vintage-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >Vintage</label
-                    >
-                  </div>
-                  <div class="flex items-center">
-                    <input
-                      id="filter-style-traditional-desktop"
-                      name="style[]"
-                      value="traditional"
-                      type="checkbox"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-style-traditional-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >Traditional</label
-                    >
-                  </div>
-                  <div class="flex items-center">
-                    <input
-                      id="filter-style-costume-desktop"
-                      name="style[]"
-                      value="costume"
-                      type="checkbox"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-style-costume-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >Costume</label
-                    >
-                  </div>
-                  <div class="flex items-center">
-                    <input
-                      id="filter-style-outdoor-desktop"
-                      name="style[]"
-                      value="outdoor"
-                      type="checkbox"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-style-outdoor-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >Outdoor</label
-                    >
-                  </div>
-                  <div class="flex items-center">
-                    <input
-                      id="filter-style-sporty-desktop"
-                      name="style[]"
-                      value="sporty"
-                      type="checkbox"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-style-sporty-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >Sporty</label
-                    >
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Price Range Filter Section -->
-            <div class="py-6">
-              <h3 class="-my-3 flow-root">
-                <button
-                  type="button"
-                  class="flex w-full items-center justify-between py-3 text-sm text-gray-400 hover:text-gray-500 toggle-button"
-                  aria-controls="filter-section-price-desktop"
-                  aria-expanded="false"
-                >
-                  <span class="font-medium text-gray-900">Price Range</span>
-                  <span class="ml-6 flex items-center">
-                    <svg
-                      class="expand-icon h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
-                      />
-                    </svg>
-                    <svg
-                      class="collapse-icon hidden h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </h3>
-              <div
-                class="filter-section pt-6 hidden"
-                id="filter-section-price-desktop"
-              >
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="flex items-center">
-                    <input
-                      id="filter-price-under50-desktop"
-                      name="price"
-                      value="under50"
-                      type="radio"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-price-under50-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >Under $50</label
-                    >
-                  </div>
-                  <div class="flex items-center">
-                    <input
-                      id="filter-price-50to100-desktop"
-                      name="price"
-                      value="50to100"
-                      type="radio"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-price-50to100-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >$50 - $100</label
-                    >
-                  </div>
-                  <div class="flex items-center">
-                    <input
-                      id="filter-price-100to200-desktop"
-                      name="price"
-                      value="100to200"
-                      type="radio"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-price-100to200-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >$100 - $200</label
-                    >
-                  </div>
-                  <div class="flex items-center">
-                    <input
-                      id="filter-price-over200-desktop"
-                      name="price"
-                      value="over200"
-                      type="radio"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onclick="filterProducts()"
-                    />
-                    <label
-                      for="filter-price-over200-desktop"
-                      class="ml-3 text-sm text-gray-600"
-                      >Over $200</label
-                    >
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form>
+          <!-- Sort — client-side only, no page reload -->
+          <div class="sort-form">
+            <label for="sort" class="sort-label">Sort by</label>
+            <select id="sort" class="sort-select">
+              <option value="default"        <% if (sort === 'default')       { %>selected<% } %>>Default</option>
+              <option value="price-low-high" <% if (sort === 'price-low-high'){ %>selected<% } %>>Price: Low → High</option>
+              <option value="price-high-low" <% if (sort === 'price-high-low'){ %>selected<% } %>>Price: High → Low</option>
+            </select>
+          </div>
 
-          <!-- Products Display Section -->
-          <% if (searchResults.length > 0) { %>
-          <div class="lg:col-span-3">
-            <div class="container mt-4" id="p-card">
-              <div id="products-container" class="row row-cols-1 row-cols-md-3 g-4">
-                <% searchResults.forEach(product => { %>
-                <div class="col" data-category="<%= product.categories %>">
-                  <div
-                    class="card product-card h-100"
-                    data-product-id="<%= product.id %>"
-                    data-price="<%= product.price %>" 
-                    data-rating="<%= product.rating || 0 %>"
-                  >
-                    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                      <img
-                        class="product-thumb card-img-top"
-                        src="<%= product.image %>"
-                        alt="<%= product.name %>"
-                      />
-                      <a href="#!">
-                        <div
-                          class="mask"
-                          style="background-color: rgba(251, 251, 251, 0.15);"
-                        ></div>
-                      </a>
-                    </div>
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title font-weight-bold product-brand">
-                        <a><%= product.name %></a>
-                      </h5>
-                      <ul class="list-unstyled list-inline mb-2">
-                        <li class="list-inline-item">
-                          <strong class="price text-success"
-                            >$<%= product.price %></strong
-                          >
-                        </li>
-                      </ul>
-                      <p class="card-text product-short-description">
-                        <%= product.description %>
-                      </p>
-                      <div class="mt-auto">
-                        <a href="#" class="btn btn-dark card-btn text-white"
-                          >View product</a
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
+        </div><!-- /search-header -->
+
+        <!-- ────────── TWO-COLUMN LAYOUT ────────── -->
+        <div class="search-layout">
+
+          <!-- ── FILTER SIDEBAR ── -->
+          <aside class="filter-sidebar">
+            <p class="filter-sidebar-title">Filters</p>
+
+            <!-- Categories -->
+            <div class="filter-group">
+              <button class="filter-toggle-btn" data-target="filter-categories">
+                <span class="filter-toggle-label">Categories</span>
+                <span class="filter-icons">
+                  <span class="plus-icon">+</span>
+                  <span class="minus-icon">−</span>
+                </span>
+              </button>
+              <div class="filter-panel" id="filter-categories">
+                <% [['men','Men'],['women','Women'],['kids','Kids'],['acessiories','Accessories']].forEach(([val,label]) => { %>
+                <label class="filter-item">
+                  <input type="checkbox" name="category" value="<%= val %>">
+                  <span><%= label %></span>
+                </label>
                 <% }) %>
               </div>
             </div>
-          </div>
-          <% } else { %>
-          <div class="lg:col-span-1 text-center">
-            <h1 class="font-bold" style="font-size: 30px">
-              No result found 😞
-            </h1>
-          </div>
-          <% } %>
-        </div>
-      </section>
-    </main>
-  </div>
-</div>
 
-  </body>
-
- <!-- scripts -->
-
-  <script>
-  function filterProducts() {
-    // Get checked checkboxes for categories and styles
-    const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
-    const selectedCategories = Array.from(checkedBoxes)
-      .filter((checkbox) => checkbox.name === "category")
-      .map((checkbox) => checkbox.value);
-    const selectedStyles = Array.from(checkedBoxes)
-      .filter((checkbox) => checkbox.name === "style[]")
-      .map((checkbox) => checkbox.value);
-
-    // Get selected radio for price
-    const selectedPriceInput = document.querySelector('input[name="price"]:checked');
-    const selectedPrice = selectedPriceInput ? selectedPriceInput.value : null;
-
-    // Get search data from hidden div
-    const searchDataDiv = document.getElementById("search-data");
-    if (!searchDataDiv) {
-      console.error("Search data not found in DOM.");
-      return;
-    }
-    const searchDataString = searchDataDiv.getAttribute("data-search");
-    let searchData;
-    try {
-      searchData = JSON.parse(searchDataString);
-    } catch (e) {
-      console.error("Failed to parse search data:", e);
-      return;
-    }
-
-    // Filter products
-    const filteredProducts = searchData.filter((product) => {
-      const matchesCategory =
-        selectedCategories.length === 0 ||
-        selectedCategories.some((category) => product.categories === category);
-
-      const matchesStyle =
-        selectedStyles.length === 0 ||
-        selectedStyles.some((style) => product.style === style);
-
-      let matchesPrice = true;
-      if (selectedPrice) {
-        const price = parseFloat(product.price);
-        if (selectedPrice === "under50") matchesPrice = price < 50;
-        else if (selectedPrice === "50to100") matchesPrice = price >= 50 && price <= 100;
-        else if (selectedPrice === "100to200") matchesPrice = price > 100 && price <= 200;
-        else if (selectedPrice === "over200") matchesPrice = price > 200;
-      }
-
-      return matchesCategory && matchesStyle && matchesPrice;
-    });
-
-    const productsContainer = document.querySelector("#p-card");
-    // Clean the container and insert one proper row
-    productsContainer.innerHTML = '<div class="row row-cols-1 row-cols-md-3 g-4" id="product-row"></div>';
-
-    const productRow = document.getElementById("product-row");
-
-    if (filteredProducts.length === 0) {
-      productRow.innerHTML = `<div class="col-12 text-center"><h1 class="font-bold" style="font-size: 30px">No result found 😞</h1></div>`;
-      return;
-    }
-
-    filteredProducts.forEach((product) => {
-      const productHTML = `
-        <div class="col mb-4" data-category="${product.categories}">
-          <div class="card product-card h-100" data-product-id="${product.id}" data-rating="${product.rating || 0}">
-            <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-              <img class="product-thumb card-img-top" src="${product.image}" alt="${product.name}" />
-              <a href="#!">
-                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-              </a>
-            </div>
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title font-weight-bold product-brand">
-                <a>${product.name}</a>
-              </h5>
-              <ul class="list-unstyled list-inline mb-2">
-                <li class="list-inline-item">
-                  <strong class="price text-success" data-price="${product.price}">$${product.price}</strong>
-                </li>
-              </ul>
-              <p class="card-text product-short-description">${product.description}</p>
-              <div class="mt-auto">
-                <a href="#" class="btn btn-dark card-btn text-white">View product</a>
+            <!-- Styles -->
+            <div class="filter-group">
+              <button class="filter-toggle-btn" data-target="filter-styles">
+                <span class="filter-toggle-label">Styles</span>
+                <span class="filter-icons">
+                  <span class="plus-icon">+</span>
+                  <span class="minus-icon">−</span>
+                </span>
+              </button>
+              <div class="filter-panel" id="filter-styles">
+                <div class="filter-styles-grid">
+                  <% ['casual','formal','vintage','traditional','costume','outdoor','sporty','classic'].forEach(s => { %>
+                  <label class="filter-item">
+                    <input type="checkbox" name="style" value="<%= s %>">
+                    <span><%= s.charAt(0).toUpperCase()+s.slice(1) %></span>
+                  </label>
+                  <% }) %>
+                </div>
               </div>
             </div>
+
+            <!-- Price -->
+            <div class="filter-group" style="border-bottom:none;">
+              <button class="filter-toggle-btn" data-target="filter-price">
+                <span class="filter-toggle-label">Price Range</span>
+                <span class="filter-icons">
+                  <span class="plus-icon">+</span>
+                  <span class="minus-icon">−</span>
+                </span>
+              </button>
+              <div class="filter-panel" id="filter-price">
+                <% [['under50','Under $50'],['50to100','$50 – $100'],['100to200','$100 – $200'],['over200','Over $200']].forEach(([val,label]) => { %>
+                <label class="filter-item">
+                  <input type="radio" name="price" value="<%= val %>">
+                  <span><%= label %></span>
+                </label>
+                <% }) %>
+              </div>
+            </div>
+
+            <button class="clear-filters-btn">Clear All Filters</button>
+          </aside>
+
+          <!-- ── PRODUCTS GRID ── -->
+          <div>
+            <% if (searchResults.length > 0) { %>
+            <div class="products-grid" id="p-card">
+              <% searchResults.forEach(product => {
+                const itemRating = (typeof ratingsMap !== 'undefined' && ratingsMap[product.name.toLowerCase().trim()]) || { avgRating: '0.0', totalReviews: 0 };
+                const avg = parseFloat(itemRating.avgRating || 0);
+              %>
+              <div class="product-card" data-category="<%= product.categories %>" data-style="<%= product.style %>" data-price="<%= product.price %>">
+                <div class="product-img-wrapper">
+                  <img class="product-thumb" src="<%= product.image %>" alt="<%= product.name %>" />
+                  <span class="product-badge"><%= product.categories %></span>
+                </div>
+                <div class="product-card-body">
+                  <h5 class="product-brand"><%= product.name %></h5>
+                  <p class="product-short-description"><%= product.description %></p>
+                  <div class="price-rating-row">
+                    <strong class="price">$<%= product.price %></strong>
+                    <div class="search-stars card-rating-trigger" title="View reviews">
+                      <% for (let i = 1; i <= 5; i++) { %>
+                        <% if (i <= Math.floor(avg)) { %><i class="fa fa-star"></i>
+                        <% } else if (i - 0.5 <= avg) { %><i class="fa fa-star-half-o"></i>
+                        <% } else { %><i class="fa fa-star-o"></i>
+                        <% } %>
+                      <% } %>
+                      <span class="rating-count">(<%= itemRating.totalReviews %>)</span>
+                    </div>
+                  </div>
+                  <a href="#" class="card-btn">View Piece</a>
+                </div>
+              </div>
+              <% }) %>
+            </div>
+            <% } else { %>
+            <div class="no-results">
+              <div class="no-results-illustration">
+                <img src="/image/vectors/no_results.svg" alt="No Results Found" class="no-results-svg" />
+              </div>
+              <h2 class="no-results-title">No Results Found</h2>
+              <p class="no-results-sub">Try a different search term or adjust your filters.</p>
+            </div>
+            <% } %>
           </div>
-        </div>
-      `;
-      productRow.insertAdjacentHTML("beforeend", productHTML);
-    });
-  }
- </script>
 
-<script>
-  document.querySelectorAll(".card-btn").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      event.preventDefault();
+        </div><!-- /search-layout -->
+      </div><!-- /container -->
+    </div><!-- /search-page -->
 
-      // Find the parent product card
-      const productCard = event.target.closest(".product-card");
+    <%- include('../partials/footer') %>
 
-      if (!productCard) {
-        alert("Product card not found");
-        return;
-      }
+    <script>
+      (function() {
+        /* ================================================================
+           SEARCH PAGE — Unified client-side: Sort + Filter + Clear
+           All three controls read the same state and call applyAll()
+         ================================================================ */
 
-      // Extract data from the specific product card
-      const itemName = productCard
-        .querySelector(".product-brand")
-        .innerText.trim();
-      const itemImage = productCard.querySelector(".product-thumb").src;
-      const itemDescription = productCard
-        .querySelector(".product-short-description")
-        .innerText.trim();
-      const itemPrice = productCard
-        .querySelector(".price")
-        .innerText.replace("$", "")
-        .trim();
+        // Parse original server data once, ensuring fallback
+        var RAW_DATA = <%- JSON.stringify(searchResults) %> || [];
 
-      // Construct URL with encoded query parameters
-      const url = new URL("/Product", window.location.origin);
-      url.searchParams.set("name", encodeURIComponent(itemName));
-      url.searchParams.set("img", encodeURIComponent(itemImage));
-      url.searchParams.set("desc", encodeURIComponent(itemDescription));
-      url.searchParams.set("price", encodeURIComponent(itemPrice));
+        /* ---- Render a single card ---- */
+        function buildCard(p) {
+          if (!p) return '';
+          
+          var avg = parseFloat(p.avgRating || 0);
+          var stars = '';
+          for (var i = 1; i <= 5; i++) {
+            if      (i <= Math.floor(avg)) stars += '<i class="fa fa-star"></i>';
+            else if (i - 0.5 <= avg)      stars += '<i class="fa fa-star-half-o"></i>';
+            else                          stars += '<i class="fa fa-star-o"></i>';
+          }
 
-      window.location.href = url.toString();
-    });
-  });
-</script>
+          // Escape double quotes inside values to avoid breaking rendered HTML
+          var safeName = p.name ? String(p.name).replace(/"/g, '&quot;') : '';
+          var safeDesc = p.description ? String(p.description).replace(/"/g, '&quot;') : '';
+          var safeCategory = p.categories ? String(p.categories).toLowerCase().trim() : '';
+          var safeStyle = p.style ? String(p.style).toLowerCase().trim() : '';
+          var safePrice = p.price !== undefined && p.price !== null ? parseFloat(p.price) : 0;
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const toggleButtons = document.querySelectorAll(".toggle-button");
+          return `
+            <div class="product-card" data-category="${safeCategory}" data-style="${safeStyle}" data-price="${safePrice}">
+              <div class="product-img-wrapper">
+                <img class="product-thumb" src="${p.image || ''}" alt="${safeName}" />
+                <span class="product-badge">${p.categories || 'Item'}</span>
+              </div>
+              <div class="product-card-body">
+                <h5 class="product-brand">${safeName}</h5>
+                <p class="product-short-description">${safeDesc}</p>
+                <div class="price-rating-row">
+                  <strong class="price" data-price="${safePrice}">$${safePrice.toFixed(2)}</strong>
+                  <div class="search-stars card-rating-trigger" title="View reviews">
+                    ${stars}
+                    <span class="rating-count">(${p.totalReviews || 0})</span>
+                  </div>
+                </div>
+                <a href="#" class="card-btn">View Piece</a>
+              </div>
+            </div>`;
+        }
 
-      toggleButtons.forEach((button) => {
-        button.addEventListener("click", function () {
-          const sectionId = button.getAttribute("aria-controls");
-          const section = document.getElementById(sectionId);
-          const isExpanded = button.getAttribute("aria-expanded") === "true";
+        /* ---- Master function: reads sort + ALL filters, renders grid ---- */
+        function applyAll() {
+          console.log("Applying search page filters and sorting...");
 
-          // Close all filter sections
-          document
-            .querySelectorAll(".filter-section")
-            .forEach((filterSection) => {
-              if (filterSection !== section) {
-                filterSection.classList.add("hidden");
-              }
-            });
+          // 1. Read sort option
+          var sortEl = document.getElementById('sort');
+          var sortVal = sortEl ? sortEl.value : 'default';
 
-          // Reset all toggle buttons
-          toggleButtons.forEach((btn) => {
-            if (btn !== button) {
-              btn.setAttribute("aria-expanded", "false");
-              btn.querySelector(".expand-icon").classList.remove("hidden");
-              btn.querySelector(".collapse-icon").classList.add("hidden");
-            }
+          // 2. Read category checkboxes
+          var cats = [];
+          document.querySelectorAll('input[name="category"]:checked').forEach(function(c) {
+            cats.push(c.value.toLowerCase().trim());
           });
 
-          // Toggle the clicked filter section
-          section.classList.toggle("hidden", isExpanded);
-          button.setAttribute("aria-expanded", !isExpanded);
-          button
-            .querySelector(".expand-icon")
-            .classList.toggle("hidden", !isExpanded);
-          button
-            .querySelector(".collapse-icon")
-            .classList.toggle("hidden", isExpanded);
-        });
-      });
-    });
-  </script>
+          // 3. Read style checkboxes
+          var styles = [];
+          document.querySelectorAll('input[name="style"]:checked').forEach(function(c) {
+            styles.push(c.value.toLowerCase().trim());
+          });
 
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"
-  ></script>
+          // 4. Read price radio option
+          var priceEl = document.querySelector('input[name="price"]:checked');
+          var price   = priceEl ? priceEl.value.toLowerCase().trim() : null;
 
-  <script
-    src="https://kit.fontawesome.com/542d90fccf.js"
-    crossorigin="anonymous"
-  ></script>
+          console.log("Filters active - Categories:", cats, "Styles:", styles, "Price Range:", price, "Sort:", sortVal);
 
+          // 5. Filter dataset
+          var results = RAW_DATA.filter(function(p) {
+            if (!p) return false;
+            
+            var pCategory = p.categories ? String(p.categories).toLowerCase().trim() : '';
+            var pStyle = p.style ? String(p.style).toLowerCase().trim() : '';
+
+            var matchCat   = !cats.length   || cats.indexOf(pCategory) !== -1;
+            var matchStyle = !styles.length || styles.indexOf(pStyle) !== -1;
+            var matchPrice = true;
+            
+            if (price) {
+              var pr = parseFloat(p.price || 0);
+              if (price === 'under50')  matchPrice = pr < 50;
+              else if (price === '50to100')  matchPrice = pr >= 50 && pr <= 100;
+              else if (price === '100to200') matchPrice = pr > 100 && pr <= 200;
+              else if (price === 'over200')  matchPrice = pr > 200;
+            }
+            
+            return matchCat && matchStyle && matchPrice;
+          });
+
+          // 6. Sort results
+          if (sortVal === 'price-low-high') {
+            results.sort(function(a, b) { return parseFloat(a.price || 0) - parseFloat(b.price || 0); });
+          } else if (sortVal === 'price-high-low') {
+            results.sort(function(a, b) { return parseFloat(b.price || 0) - parseFloat(a.price || 0); });
+          }
+
+          // 7. Update DOM Grid
+          var grid = document.getElementById('p-card');
+          if (!grid) {
+            console.warn("Product grid container '#p-card' not found in the DOM.");
+            return;
+          }
+
+          // Update count chip
+          var countChip = document.querySelector('.result-count-chip');
+          if (countChip) {
+            countChip.textContent = results.length + ' found';
+          }
+
+          if (!results.length) {
+            grid.innerHTML = `
+              <div class="no-results" style="grid-column: 1 / -1; width: 100%; box-sizing: border-box;">
+                <div class="no-results-illustration">
+                  <img src="/image/vectors/no_results.svg" alt="No Results Found" class="no-results-svg" />
+                </div>
+                <h2 class="no-results-title">No Results Found</h2>
+                <p class="no-results-sub">Try adjusting your filters or clearing them.</p>
+              </div>`;
+            return;
+          }
+
+          grid.innerHTML = results.map(buildCard).join('');
+          console.log("Search page results rendered successfully. Count:", results.length);
+        }
+
+        // Expose functions globally immediately
+        window.applyAll = applyAll;
+
+        window.clearFilters = function() {
+          console.log("Clearing all filters...");
+          
+          // Uncheck every checkbox and radio button
+          document.querySelectorAll('input[type="checkbox"], input[type="radio"]')
+                  .forEach(function(i) { i.checked = false; });
+          
+          // Reset sort selector to default option
+          var sortEl = document.getElementById('sort');
+          if (sortEl) sortEl.value = 'default';
+          
+          // Re-evaluate filters and re-render
+          applyAll();
+        };
+
+        // Initialize DOM-dependent listeners
+        function initListeners() {
+          console.log("Initializing search page DOM listeners...");
+
+          /* ---- Accordion toggle ---- */
+          document.querySelectorAll('.filter-toggle-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              var targetId = btn.dataset.target;
+              var panel  = document.getElementById(targetId);
+              if (!panel) return;
+              
+              var isOpen = panel.classList.contains('open');
+
+              // Close all panels first to maintain accordion-like clean sidebar
+              document.querySelectorAll('.filter-panel').forEach(function(p) { p.classList.remove('open'); });
+              document.querySelectorAll('.filter-toggle-btn').forEach(function(b) { b.classList.remove('open'); });
+
+              // Open the clicked panel if it was closed
+              if (!isOpen) {
+                panel.classList.add('open');
+                btn.classList.add('open');
+              }
+            });
+          });
+
+          /* ---- Sort dropdown change listener ---- */
+          var sortEl = document.getElementById('sort');
+          if (sortEl) {
+            sortEl.addEventListener('change', applyAll);
+          }
+
+          /* ---- Sidebar filters change listeners ---- */
+          document.querySelectorAll('.filter-sidebar input').forEach(function(input) {
+            input.addEventListener('change', applyAll);
+          });
+
+          /* ---- Clear filters button click listener ---- */
+          var clearBtn = document.querySelector('.clear-filters-btn');
+          if (clearBtn) {
+            clearBtn.addEventListener('click', clearFilters);
+          }
+
+          /* ---- Navigate to product page (event delegation, survives re-render) ---- */
+          document.addEventListener('click', function(e) {
+            var btn  = e.target.closest('.card-btn');
+            var star = e.target.closest('.card-rating-trigger');
+            var card = (btn || star) ? (btn || star).closest('.product-card') : null;
+            if (!card) return;
+            e.preventDefault();
+
+            var nameEl = card.querySelector('.product-brand');
+            var name   = nameEl ? nameEl.innerText.trim() : '';
+
+            var imgEl = card.querySelector('.product-thumb');
+            var img   = imgEl ? imgEl.src : '';
+
+            var descEl = card.querySelector('.product-short-description');
+            var desc   = descEl ? descEl.innerText.trim() : '';
+
+            var priceEl = card.querySelector('.price');
+            var price   = priceEl ? priceEl.innerText.replace('$', '').trim() : '';
+
+            var url = new URL('/Product', window.location.origin);
+            url.searchParams.set('name',  name);
+            url.searchParams.set('img',   img);
+            url.searchParams.set('desc',  desc);
+            url.searchParams.set('price', price);
+            window.location.href = url.toString() + (star ? '#reviews' : '');
+          });
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initListeners);
+        } else {
+          initListeners();
+        }
+      })();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
+  </body>
 </html>

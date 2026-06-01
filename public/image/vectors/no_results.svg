@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <!-- Definitions for Gradients -->
+  <defs>
+    <!-- Sky Circle Gradient (Moda Indigo Blue) -->
+    <radialGradient id="skyGrad" cx="50%" cy="50%" r="50%" fx="30%" fy="30%">
+      <stop offset="0%" stop-color="#8E8DFF" />
+      <stop offset="100%" stop-color="#6A69FF" />
+    </radialGradient>
+
+    <!-- Shading Gradients (Moda Solar Orange) -->
+    <linearGradient id="doorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FE8354" />
+      <stop offset="100%" stop-color="#FE672E" />
+    </linearGradient>
+
+    <!-- Star Path -->
+    <g id="star">
+      <path d="M 0,-4.5 Q 0,0 4.5,0 Q 0,0 0,4.5 Q 0,0 -4.5,0 Q 0,0 0,-4.5" fill="#FFFFFF" />
+    </g>
+  </defs>
+
+  <!-- 1. Background Sky Circle -->
+  <circle cx="100" cy="90" r="52" fill="url(#skyGrad)" stroke="#1A3B5C" stroke-width="3.5" />
+
+  <!-- 2. Sky Decorations -->
+  <!-- White "?!" Text Symbol -->
+  <text x="114" y="69" fill="#FFFFFF" font-family="'Outfit', 'Unbounded', 'Inter', sans-serif" font-weight="900" font-size="16" letter-spacing="-1px" transform="rotate(8 114 69)">?!</text>
+
+  <!-- Stars -->
+  <use href="#star" x="65" y="80" transform="scale(1.1)" />
+  <use href="#star" x="62" y="93" transform="scale(0.7)" />
+  <use href="#star" x="135" y="92" transform="scale(1.2)" />
+  <use href="#star" x="143" y="99" transform="scale(0.8)" />
+  <use href="#star" x="133" y="105" transform="scale(0.6)" />
+
+  <!-- 3. Observatory Building Structures -->
+  
+  <!-- Cylinder Shadow Base (Under-layer) -->
+  <path d="M 70 85 L 90 85 L 90 135 L 70 135 Z" fill="#D1D8E0" />
+  
+  <!-- Plinth/Foundation Shading -->
+  <path d="M 62 135 Q 62 135 62 135 A 4 4 0 0 0 58 139 L 58 149 L 85 149 L 85 135 Z" fill="#D1D8E0" />
+
+  <!-- Dome Shading -->
+  <path d="M 70 85 A 30 30 0 0 1 100 55 L 100 85 Z" fill="#D1D8E0" />
+
+  <!-- Plinth/Foundation Outline -->
+  <rect x="58" y="135" width="84" height="14" rx="4" ry="4" fill="none" stroke="#1A3B5C" stroke-width="3.5" />
+  <rect x="58" y="135" width="84" height="14" rx="4" ry="4" fill="#EAF0F6" opacity="0.3" />
+  <path d="M 58 139 A 4 4 0 0 1 62 135 L 138 135 A 4 4 0 0 1 142 139 L 142 149 L 58 149 Z" fill="none" stroke="#1A3B5C" stroke-width="3.5" />
+
+  <!-- Plinth Bottom Accent Line -->
+  <line x1="56" y1="149" x2="144" y2="149" stroke="#1A3B5C" stroke-width="3.5" stroke-linecap="round" />
+
+  <!-- Main Building Body Outline -->
+  <rect x="70" y="85" width="60" height="50" fill="none" stroke="#1A3B5C" stroke-width="3.5" />
+  <rect x="70" y="85" width="60" height="50" fill="#F4F7FA" opacity="0.4" />
+  <path d="M 70 85 L 130 85 L 130 135 L 70 135 Z" fill="none" stroke="#1A3B5C" stroke-width="3.5" />
+
+  <!-- Dome Roof Outline -->
+  <path d="M 70 85 A 30 30 0 0 1 130 85" fill="none" stroke="#1A3B5C" stroke-width="3.5" />
+  <path d="M 70 85 A 30 30 0 0 1 130 85 Z" fill="none" stroke="#1A3B5C" stroke-width="3.5" />
+
+  <!-- Yellow Accent Divider Bar (Changed to Solar Orange) -->
+  <rect x="70" y="82" width="60" height="4" fill="#FE672E" stroke="#1A3B5C" stroke-width="3.5" />
+
+  <!-- Dome Viewing Slit / Hatch -->
+  <!-- Dome Shimmer Line (Visual elegance) -->
+  <path d="M 112 56 A 30 30 0 0 1 123 72" fill="none" stroke="#1A3B5C" stroke-width="3.5" />
+  <path d="M 115 57 L 122 72" fill="none" stroke="#1A3B5C" stroke-width="3.5" />
+
+  <!-- Telescope Lens/Tube extending outward (Changed to Solar Orange) -->
+  <rect x="120" y="55" width="8" height="6" rx="1.5" ry="1.5" fill="#FE672E" stroke="#1A3B5C" stroke-width="2.5" transform="rotate(-35 124 58)" />
+
+  <!-- 4. Windows (Four rounded rectangles - Changed to Solar Orange) -->
+  <!-- Window 1 -->
+  <rect x="76" y="96" width="8" height="12" rx="3.5" ry="3.5" fill="#FE672E" stroke="#1A3B5C" stroke-width="3" />
+  <!-- Window 2 -->
+  <rect x="88" y="96" width="8" height="12" rx="3.5" ry="3.5" fill="#FE672E" stroke="#1A3B5C" stroke-width="3" />
+  <!-- Window 3 -->
+  <rect x="104" y="96" width="8" height="12" rx="3.5" ry="3.5" fill="#FE672E" stroke="#1A3B5C" stroke-width="3" />
+  <!-- Window 4 -->
+  <rect x="116" y="96" width="8" height="12" rx="3.5" ry="3.5" fill="#FE672E" stroke="#1A3B5C" stroke-width="3" />
+
+  <!-- 5. Central Double Entrance Door -->
+  <rect x="90" y="113" width="20" height="22" rx="1" ry="1" fill="url(#doorGrad)" stroke="#1A3B5C" stroke-width="3.5" />
+  
+  <!-- Door Vertical Center Split Line -->
+  <line x1="100" y1="113" x2="100" y2="135" stroke="#1A3B5C" stroke-width="3" />
+
+  <!-- Diagonal Glass Reflections (Polished detail) -->
+  <polygon points="92,126 95,116 97,117 94,127" fill="#FFFFFF" opacity="0.6" />
+  <polygon points="94,128 97,118 99,119 96,129" fill="#FFFFFF" opacity="0.6" />
+  <polygon points="102,126 105,116 107,117 104,127" fill="#FFFFFF" opacity="0.6" />
+  <polygon points="104,128 107,118 109,119 106,129" fill="#FFFFFF" opacity="0.6" />
+
+  <!-- 6. Stairs leading up to the doors -->
+  <!-- Bottom Step -->
+  <rect x="80" y="132" width="40" height="4" rx="1.5" ry="1.5" fill="#F4F7FA" stroke="#1A3B5C" stroke-width="3" />
+  <!-- Middle Step -->
+  <rect x="83" y="128" width="34" height="4" rx="1.5" ry="1.5" fill="#F4F7FA" stroke="#1A3B5C" stroke-width="3" />
+  <!-- Top Step -->
+  <rect x="87" y="124" width="26" height="4" rx="1.5" ry="1.5" fill="#F4F7FA" stroke="#1A3B5C" stroke-width="3" />
+
+</svg>

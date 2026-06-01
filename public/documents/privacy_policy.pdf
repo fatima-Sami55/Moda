@@ -1,0 +1,85 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog
+   /Pages 2 0 R
+>>
+endobj
+2 0 obj
+<< /Type /Pages
+   /Kids [ 3 0 R ]
+   /Count 1
+>>
+endobj
+3 0 obj
+<< /Type /Page
+   /Parent 2 0 R
+   /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >>
+   /MediaBox [ 0 0 595.28 841.89 ]
+   /Contents 6 0 R
+>>
+endobj
+4 0 obj
+<< /Type /Font
+   /Subtype /Type1
+   /BaseFont /Helvetica-Bold
+>>
+endobj
+5 0 obj
+<< /Type /Font
+   /Subtype /Type1
+   /BaseFont /Helvetica
+>>
+endobj
+6 0 obj
+<< /Length 1200 >>
+stream
+BT
+/F1 22 Tf
+70 760 Td
+(MODA RETAIL CO. - PRIVACY POLICY) Tj
+/F2 12 Tf
+0 -40 Td
+(Effective Date: June 1, 2026) Tj
+0 -30 Td
+(1. OVERVIEW & DATA COLLECTION) Tj
+0 -18 Td
+(At Moda, we prioritize the protection and security of our clients' personal data. This privacy) Tj
+0 -15 Td
+(document details how our secure database processes and stores your transaction details.) Tj
+0 -25 Td
+(2. HOW WE PROTECT YOUR DATA) Tj
+0 -18 Td
+(All user details, including encrypted passwords (via bcrypt) and session parameters, are stored) Tj
+0 -15 Td
+(securely on our Microsoft Azure cloud infrastructure with SSL/TLS encryption active.) Tj
+0 -25 Td
+(3. COOKIES & TRACKING) Tj
+0 -18 Td
+(Moda uses cookies solely to maintain your active shopping cart, wishlist coordinates, and) Tj
+0 -15 Td
+(authenticated login sessions. We do not sell your personal coordinates to third-party networks.) Tj
+0 -25 Td
+(4. CONTACT FOR INQUIRIES) Tj
+0 -18 Td
+(For data compliance questions, please contact our support desk at: support@moda.com.) Tj
+0 -60 Td
+(Copyright Moda © 2026. All rights reserved.) Tj
+ET
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f
+0000000009 00000 n
+0000000058 00000 n
+0000000115 00000 n
+0000000224 00000 n
+0000000293 00000 n
+0000000356 00000 n
+trailer
+<< /Size 7
+   /Root 1 0 R
+>>
+startxref
+1200
+%%EOF

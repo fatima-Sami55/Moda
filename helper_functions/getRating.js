@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { pool } = require("../database/data");
 const data1 = require("../seeds/product.json");
 const data2 = require("../seeds/acessiories.json");
 const data3 = require("../seeds/men.json");
@@ -59,7 +60,30 @@ function findProductByName(name) {
   );
 }
 
+async function getAllProductRatings() {
+  try {
+    const result = await pool.request().query(`
+      SELECT product_name, AVG(CAST(rating AS DECIMAL(3,2))) AS avgRating, COUNT(*) AS totalReviews 
+      FROM reviews 
+      GROUP BY product_name
+    `);
+    
+    const ratingsMap = {};
+    for (const row of result.recordset) {
+      ratingsMap[row.product_name.toLowerCase().trim()] = {
+        avgRating: parseFloat(row.avgRating || 0).toFixed(1),
+        totalReviews: row.totalReviews || 0
+      };
+    }
+    return ratingsMap;
+  } catch (err) {
+    console.error("Error fetching all product ratings:", err);
+    return {};
+  }
+}
+
 module.exports = {
   getProductRating,
-  findProductByName
+  findProductByName,
+  getAllProductRatings
 };

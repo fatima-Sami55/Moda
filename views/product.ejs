@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acess</title>
-    <link rel="icon" type="image/png" href="/image/Acess%20logo/logo.png?v=1.0" />
-  </head>
+    <%- include('../partials/head', {title: 'Acess'}) %>
   
   <body>
     <!-- stylesheets -->
@@ -33,28 +27,76 @@
 <!-- Navbar -->
     <%- include('../partials/navbar', { page: page }) %>
 <!-- Product Card + Rating + Review Section -->
-    <div class="main-card container py-4">
-  <div class="row justify-content-center">
-    <!-- Product Card -->
-    <div class="col-lg-6 col-md-8">
-      <div class="product-card">
-        <div class="badge">Hot</div>
-        <div class="product-tumb">
-          <img src="<%=data.itemImage %>" alt="" class="img img-fluid">
+    <div class="main-card container pt-0 pb-5">
+      <div class="row g-5 align-items-center">
+        <!-- Left Column: Large Image Showcase Container -->
+        <div class="col-12 col-lg-6">
+          <div class="modern-product-image-container">
+            <!-- Status Badge overlapping the image top-left -->
+            <div class="purchase-status-badge">
+              <span><%= purchasesCount %> Purchased</span>
+            </div>
+            <img src="<%= data.itemImage %>" alt="<%= data.itemName %>" class="img img-fluid modern-product-image" />
+          </div>
         </div>
-        <div class="product-details">
-          <span class="product-catagory card-title"><%=data.itemName %></span>
-          <h4><a href="#"><%=data.itemName %></a></h4>
-          <p class="card-text"><%=data.itemDescription%></p>
-          <div class="product-bottom-details d-flex justify-content-between align-items-center">
-            <div class="product-price card-price">$<%=data.itemPrice%></div>
-            <div class="product-links">
+
+        <!-- Right Column: Premium Details & Call-To-Actions -->
+        <div class="col-12 col-lg-6">
+          <div class="modern-product-details">
+            <div class="capsule-badge-row">
+              <span class="capsule-pill">HOT ITEM</span>
+            </div>
+            <h1 class="modern-product-title card-title"><%= data.itemName %></h1>
+
+            <!-- Ratings Summary -->
+            <% 
+              let topAvgRating = parseFloat(avgRating || 0);
+              let topTotalReviews = parseInt(totalReviews || 0);
+            %>
+            <a href="#reviews" class="d-flex align-items-center mb-3" style="text-decoration: none; color: inherit; width: fit-content;" title="Scroll to reviews">
+              <div class="me-2" style="font-size: 1.2rem; line-height: 1;">
+                <% for (let i = 1; i <= 5; i++) { %>
+                  <% if (i <= Math.floor(topAvgRating)) { %>
+                    <i class="fa fa-star schriftorange"></i>
+                  <% } else if (i - 0.5 <= topAvgRating) { %>
+                    <i class="fa fa-star-half-o schriftorange"></i>
+                  <% } else { %>
+                    <i class="fa fa-star-o text-muted"></i>
+                  <% } %>
+                <% } %>
+              </div>
+              <span class="text-muted" style="font-size: 0.90rem; line-height: 1; margin-left: 5px;">(<%= topTotalReviews %> customer reviews)</span>
+            </a>
+
+            <!-- Price block -->
+            <div class="modern-price-block mb-4">
+              <span class="modern-price-tag card-price">$<%= data.itemPrice %></span>
+            </div>
+
+            <hr class="divider-line my-4" />
+
+            <!-- Product Description Sub-Section -->
+            <h3 class="modern-sub-title">Product Details</h3>
+            <p class="modern-product-desc card-text mb-4"><%= data.itemDescription %></p>
+
+            <hr class="divider-line my-4" />
+
+            <!-- Call-To-Action Operations -->
+            <div class="modern-actions-row d-flex align-items-center gap-3">
               <% if (isLoggedIn) { %>
-                <a class="cart-link wish" href="/wish"><i class="fa fa-heart btn-wish"></i></a>
-                <a class="cart-link cart" href="/add-to-cart"><i class="fa fa-shopping-cart btn-cart"></i></a>
+                <button class="btn-cart modern-cta-btn add-to-cart-cta flex-grow-1">
+                  Add to Cart <i class="fa fa-shopping-cart ms-2"></i>
+                </button>
+                <button class="btn-wish modern-cta-btn wishlist-cta">
+                  Wishlist <i class="fa fa-heart ms-2"></i>
+                </button>
               <% } else { %>
-                <a class="cart-link wish" href="/protected"><i class="fa fa-heart btn-wish"></i></a>
-                <a class="cart-link cart" href="/protected"><i class="fa fa-shopping-cart btn-cart"></i></a>
+                <a href="/protected" class="modern-cta-btn add-to-cart-cta text-decoration-none flex-grow-1 text-center">
+                  Add to Cart <i class="fa fa-shopping-cart ms-2"></i>
+                </a>
+                <a href="/protected" class="modern-cta-btn wishlist-cta text-decoration-none text-center">
+                  Wishlist <i class="fa fa-heart ms-2"></i>
+                </a>
               <% } %>
             </div>
           </div>
@@ -62,432 +104,223 @@
       </div>
     </div>
 
-    <!-- Ratings Section -->
-    <div class="col-12 mt-5">
-  <div class="bg-white rounded shadow-lg p-4 graph-star-rating">
-    <h2 class="fs-1 text-black">Description</h2>
-    <p class="text-black"><%= data.itemDescription %></p>
+    <!-- Ratings & Reviews Container -->
+    <div class="container pb-5">
+      <% 
+        let finalAvgRating = typeof avgRating !== 'undefined' ? avgRating : '0.0';
+        let finalTotalReviews = typeof totalReviews !== 'undefined' ? totalReviews : 0;
+        let finalRatings = ratings;
+        let isRatingsDummy = false;
 
-    <h2 class="fs-1 text-black mt-4">Rating</h2>
-<% ratings.forEach(r => { %>
-  <div class="rating-view">
-    <span class="sternzahl"><%= r.stars %> <i class="fas fa-star schriftorange"></i></span>
-    <div class="skill">
-      <div class="rating-bar">
-        <div style="width: <%= r.count %>%;"><span class="animate orange"></span></div>
-      </div>
-    </div>
-    <span class="zahlreviews"><%= r.count %></span>
-  </div>
-<% }); %>
-    
-  </div>
-    </div>
+        if (parseInt(finalTotalReviews) === 0) {
+          isRatingsDummy = true;
+          finalAvgRating = '4.5';
+          finalTotalReviews = 20;
+          finalRatings = [
+            { stars: 5, count: 60, displayCount: 12 }, // 60%
+            { stars: 4, count: 25, displayCount: 5 },  // 25%
+            { stars: 3, count: 10, displayCount: 2 },  // 10%
+            { stars: 2, count: 5, displayCount: 1 },   // 5%
+            { stars: 1, count: 0, displayCount: 0 }    // 0%
+          ];
+        }
+      %>
 
-    <!-- Reviews Section -->
-    <div class="col-12 mt-4">
-  <div class="bg-white rounded shadow-lg p-4 restaurant-detailed-ratings-and-reviews">
-    <h2 class="fs-1 text-black">Reviews</h2>
+      <!-- Ratings Section -->
+      <div class="row">
+        <div class="col-12 product-page-section">
+          <div class="modern-details-card p-4 p-md-5 graph-star-rating">
+            <!-- Ratings Breakdown Sub-section -->
+            <h2 class="modern-sub-title-large" style="margin-bottom: 30px;">Customer Rating</h2>
 
-    <!-- Review Items -->
-    <div class="reviews-members pt-4 pb-4 border-bottom review-item">
-      <div class="d-flex">
-        <img src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="mr-3 rounded-pill reviews-members-avatar">
-        <div class="media-body ms-3">
-          <div class="reviews-members-header d-flex justify-content-between">
-            <h6 class="mb-1"><a class="text-black" href="#">Singh Osahan</a></h6>
-            <span class="star-rating">
-              <i class="icofont-ui-rating active"></i><i class="icofont-ui-rating active"></i><i class="icofont-ui-rating active"></i><i class="icofont-ui-rating active"></i><i class="icofont-ui-rating"></i>
-            </span>
+            <% if (isRatingsDummy) { %>
+              <div class="alert alert-info py-2 px-3 mb-4 rounded-0" style="background-color: #FFF5EA !important; border: 2px solid var(--text-primary) !important; color: var(--text-primary) !important; font-family: var(--font-body); font-weight: 500; font-size: 0.9rem;">
+                <i class="fa fa-info-circle me-2"></i><strong>Demo Mode:</strong> Displaying example customer ratings breakdown. Real customer reviews will automatically update these.
+              </div>
+            <% } %>
+            
+            <div class="row mt-4 align-items-center">
+              <!-- Rating Summary Box (Left) -->
+              <div class="col-12 col-md-4 text-center mb-4 mb-md-0">
+                <div class="modern-rating-summary-box">
+                  <h1 class="modern-rating-score"><%= parseFloat(finalAvgRating).toFixed(1) %></h1>
+                  <div style="font-size: 1.4rem; line-height: 1;">
+                    <% const avgBreakdown = parseFloat(finalAvgRating); %>
+                    <% for (let i = 1; i <= 5; i++) { %>
+                      <% if (i <= Math.floor(avgBreakdown)) { %>
+                        <i class="fa fa-star schriftorange"></i>
+                      <% } else if (i - 0.5 <= avgBreakdown) { %>
+                        <i class="fa fa-star-half-o schriftorange"></i>
+                      <% } else { %>
+                        <i class="fa fa-star-o text-muted"></i>
+                      <% } %>
+                    <% } %>
+                  </div>
+                  <p class="text-muted mb-0" style="font-size: 0.95rem; font-family: var(--font-body);">Based on <%= finalTotalReviews %> customer reviews</p>
+                </div>
+              </div>
+
+              <!-- Rating Breakdown Progress Bars (Right) -->
+              <div class="col-12 col-md-8">
+                <div class="modern-rating-bars-container d-flex flex-column gap-3">
+                  <% finalRatings.forEach(r => { %>
+                    <div class="rating-view d-flex align-items-center gap-3">
+                      <span class="sternzahl" style="min-width: 80px; font-weight: 700; color: var(--text-primary); font-family: var(--font-body);"><%= r.stars %> Stars</span>
+                      <div class="skill flex-grow-1">
+                        <div class="rating-bar" style="background: rgba(26, 26, 26, 0.06) !important; border: 2px solid var(--text-primary) !important; height: 12px; overflow: hidden; border-radius: 0px;">
+                          <div style="width: <%= r.count %>%; height: 100%; background: var(--primary-accent) !important;"></div>
+                        </div>
+                      </div>
+                      <span class="zahlreviews text-center" style="min-width: 50px; padding: 4px 8px; border: 2px solid var(--text-primary); background: #FFFFFF; font-weight: 700; font-size: 0.85rem; font-family: var(--font-body); border-radius: 0px !important;"><%= parseInt(typeof r.displayCount !== 'undefined' ? r.displayCount : r.count) %></span>
+                    </div>
+                  <% }); %>
+                </div>
+              </div>
+            </div>
           </div>
-          <p class="text-gray">Tue, 20 Mar 2020</p>
-          <div class="reviews-members-body">
-            <p>Great product recommend to all.</p>
+        </div>
+      </div>
+
+      <!-- Reviews Section -->
+      <div class="row">
+        <div class="col-12 product-page-section" id="reviews">
+          <div class="modern-details-card p-4 p-md-5 restaurant-detailed-ratings-and-reviews">
+            <h2 class="modern-sub-title-large" style="margin-bottom: 30px;">Customer Reviews</h2>
+
+            <% 
+              let displayReviews = [];
+              let isDummy = false;
+              if (typeof dbReviews !== 'undefined' && dbReviews.length > 0) {
+                displayReviews = dbReviews;
+              } else {
+                isDummy = true;
+                displayReviews = [
+                  {
+                    firstname: "Marcus",
+                    lastname: "Vance",
+                    rating: 5,
+                    review: "Absolutely insane quality. The high-top ankle support is super sturdy, and the materials feel extremely premium. The details look so futuristic in person. Definitely copping the other colorways.",
+                    img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150&auto=format&fit=crop"
+                  },
+                  {
+                    firstname: "Elena",
+                    lastname: "Rostova",
+                    rating: 4,
+                    review: "Very comfortable for daily wear and look extremely polished. Spacing is perfect. The only minor thing is they run slightly large, so maybe size down by half. Aside from that, 10/10 streetwear aesthetic.",
+                    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop"
+                  }
+                ];
+              }
+            %>
+
+            <% if (isDummy) { %>
+              <div class="alert alert-info py-2 px-3 mb-4 rounded-0" style="background-color: #FFF5EA !important; border: 2px solid var(--text-primary) !important; color: var(--text-primary) !important; font-family: var(--font-body); font-weight: 500; font-size: 0.9rem;">
+                <i class="fa fa-info-circle me-2"></i><strong>Demo Mode:</strong> Displaying example customer reviews to demonstrate styling. Real reviews will automatically replace these.
+              </div>
+            <% } %>
+
+            <% displayReviews.forEach(r => { %>
+              <div class="reviews-members pt-4 pb-4 border-bottom review-item" style="border-color: rgba(26, 26, 26, 0.12) !important;">
+                <div class="d-flex">
+                  <img src="<%= r.img || 'http://bootdey.com/img/Content/avatar/avatar1.png' %>" alt="Avatar" class="mr-3 rounded-pill reviews-members-avatar" style="width: 55px; height: 55px; object-fit: cover; border: 2px solid var(--text-primary) !important; box-shadow: 2px 2px 0px var(--text-primary);">
+                  <div class="media-body ms-3 w-100">
+                    <div class="reviews-members-header d-flex justify-content-between align-items-center">
+                      <h6 class="mb-0"><span class="text-black fw-bold" style="font-family: var(--font-body); font-size: 1.1rem;"><%= r.firstname %> <%= r.lastname %></span></h6>
+                      <span class="star-rating" style="font-size: 1.1rem;">
+                        <% for (let i = 1; i <= 5; i++) { %>
+                          <i class="fas fa-star <%= i <= r.rating ? 'schriftorange' : 'text-muted' %>"></i>
+                        <% } %>
+                      </span>
+                    </div>
+                    <div class="reviews-members-body mt-2">
+                      <p class="text-black mb-0" style="font-family: var(--font-body); font-size: 0.98rem; line-height: 1.65; color: var(--text-secondary) !important;"><%= r.review %></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% }); %>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="reviews-members pt-4 pb-4 border-bottom review-item">
-      <div class="d-flex">
-        <img src="http://bootdey.com/img/Content/avatar/avatar6.png" alt="Avatar" class="mr-3 rounded-pill reviews-members-avatar">
-        <div class="media-body ms-3">
-          <div class="reviews-members-header d-flex justify-content-between">
-            <h6 class="mb-1"><a class="text-black" href="#">Gurdeep Singh</a></h6>
-            <span class="star-rating">
-              <i class="icofont-ui-rating active"></i><i class="icofont-ui-rating active"></i><i class="icofont-ui-rating active"></i><i class="icofont-ui-rating active"></i><i class="icofont-ui-rating"></i>
-            </span>
-          </div>
-          <p class="text-gray">Tue, 20 Mar 2020</p>
-          <div class="reviews-members-body">
-            <p>Really liked it </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Hidden Reviews (initially hidden with d-none) -->
-    <div class="reviews-members pt-4 pb-4 border-bottom review-item d-none">
-      <div class="d-flex">
-        <img src="http://bootdey.com/img/Content/avatar/avatar2.png" alt="Avatar" class="mr-3 rounded-pill reviews-members-avatar">
-        <div class="media-body ms-3">
-          <div class="reviews-members-header d-flex justify-content-between">
-            <h6 class="mb-1"><a class="text-black" href="#">Aman Khurana</a></h6>
-            <span class="star-rating">
-              <i class="icofont-ui-rating active"></i><i class="icofont-ui-rating active"></i><i class="icofont-ui-rating"></i><i class="icofont-ui-rating"></i><i class="icofont-ui-rating"></i>
-            </span>
-          </div>
-          <p class="text-gray">Wed, 22 Mar 2020</p>
-          <div class="reviews-members-body">
-            <p>This was helpful but could use more product details...</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="reviews-members pt-4 pb-4 border-bottom review-item d-none">
-      <div class="d-flex">
-        <img src="http://bootdey.com/img/Content/avatar/avatar5.png" alt="Avatar" class="mr-3 rounded-pill reviews-members-avatar">
-        <div class="media-body ms-3">
-          <div class="reviews-members-header d-flex justify-content-between">
-            <h6 class="mb-1"><a class="text-black" href="#">Sara Malik</a></h6>
-            <span class="star-rating">
-              <i class="icofont-ui-rating active"></i><i class="icofont-ui-rating active"></i><i class="icofont-ui-rating active"></i><i class="icofont-ui-rating"></i><i class="icofont-ui-rating"></i>
-            </span>
-          </div>
-          <p class="text-gray">Fri, 24 Mar 2020</p>
-          <div class="reviews-members-body">
-            <p>Delivery was smooth, but packaging could be better.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- See All Reviews Button -->
-    <a id="seeAllBtn" class="text-center w-100 d-block mt-4 fw-bold review-link" href="#">See All Reviews</a>
-    <a id="seeLessBtn" class="text-center w-100 d-block mt-4 fw-bold d-none review-link" href="#">See Less</a>
-  </div>
-    </div>
-  </div>
-
-     </div>
 <!-- Related products section -->
-   <section class="related-products py-5 bg-dark">
+   <section class="related-products py-5">
       <div class="container px-4 px-lg-5 mt-5">
-        <h2 class="fw-bolder mb-4 text-white" >Related products</h2>
-       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
-         <% randomData1Products.forEach(product => { %>
-           <div class="col mb-5 card-recommended">
-            <div class="card h-100">
-               <div class="badge">Recommended</div>
-              <!-- Product image-->
-              <img
-                class="card-img-top  img"
-                style="height: 300px;"
-                src="<%=product.image %>"
-                alt="..."
-              />
-              <!-- Product details-->          
-              <div class="card-body p-4">
-                <div class="text-center">
-                  <!-- Product name-->
-                  <h5 class="fw-bolder card-title"><%=product.name %></h5>
-                   <p class="card-text"><%= product.description %></p>
-                  <!-- Product price-->
-                 <p class="card-price"> $<%=product.price %></p>
-                </div>
-              </div>
-              <!-- Product actions-->
-              <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <div class="text-center">
-                  <a class="btn btn-outline-dark mt-auto card-btn" href="#"
-                    >View Product</a
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-           <% }); %>
-             <% randomData3Products.forEach(product => { %>
-           <div class="col mb-5 card-recommended">
+        <h2 class="modern-sub-title-large" style="margin-bottom: 8px;">Related products</h2>
+        <div class="category-divider"></div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-5 justify-content-center align-items-stretch">
+          <% 
+            // Combine all related product groups
+            let allRelated = [
+              ...randomData1Products,
+              ...randomData3Products,
+              ...randomData4Products
+            ];
+            for (const cat in randomData2Products) {
+              allRelated.push(...randomData2Products[cat]);
+            }
             
-            <div class="card h-100">
-               <div class="badge">Recommended</div>
-              <!-- Product image-->
-              <img
-                class="card-img-top  img"
-                style="height: 300px;"
-                src="<%=product.image %>"
-                alt="..."
-              />
-              <!-- Product details--> 
-              <div class="card-body p-4">
-                <div class="text-center">
-                  <!-- Product name-->
-                  <h5 class="fw-bolder card-title"><%=product.name %></h5>
-                   <p class="card-text"><%= product.description %></p>
-                  <!-- Product price-->
-                 <p class="card-price"> $<%=product.price %></p>
-                </div>
-              </div>
-              <!-- Product actions-->
-              <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <div class="text-center">
-                  <a class="btn btn-outline-dark mt-auto card-btn" href="#"
-                    >View Product</a
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-           <% }); %>
-             <% randomData4Products.forEach(product => { %>
-           <div class="col mb-5 card-recommended">
-            
-            <div class="card h-100">
-               <div class="badge">Recommended</div>
-              <!-- Product image-->
-              <img
-                class="card-img-top  img"
-                style="height: 300px;"
-                src="<%=product.image %>"
-                alt="..."
-              />
-              <!-- Product details-->
-               
-              <div class="card-body p-4">
-                <div class="text-center">
-                  <!-- Product name-->
-                  <h5 class="fw-bolder card-title"><%=product.name %></h5>
-                   <p class="card-text"><%= product.description %></p>
-                  <!-- Product price-->
-                 <p class="card-price"> $<%=product.price %></p>
-                </div>
-              </div>
-              <!-- Product actions-->
-              <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <div class="text-center">
-                  <a class="btn btn-outline-dark mt-auto card-btn" href="#"
-                    >View Product</a
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-           <% }); %>
+            // Deduplicate items, and filter out the current active viewed product
+            let uniqueRelated = [];
+            let seenNames = new Set();
+            const currentName = data.itemName.toLowerCase().trim();
+            seenNames.add(currentName);
 
-              <% for (const category in randomData2Products) { %>
-        <% randomData2Products[category].forEach(product => { %>
-          <div class="col mb-5 card-recommended">
-            
-            <div class="card h-100">
-               <div class="badge">Recommended</div>
-              <!-- Product image-->
-              <img
-                class="card-img-top img"
-                style="height: 300px;"
-                src="<%=product.image %>"
-                alt="..."
-              />
-              <!-- Product details-->
-               
-              <div class="card-body p-4">
-                <div class="text-center">
-                  <!-- Product name-->
-                  <h5 class="fw-bolder card-title"><%=product.name %></h5>
-                   <p class="card-text"><%= product.description %></p>
-                  <!-- Product price-->
-                 <p class="card-price"> $<%=product.price %></p>
+            allRelated.forEach(p => {
+              const nameLower = p.name.toLowerCase().trim();
+              if (!seenNames.has(nameLower)) {
+                seenNames.add(nameLower);
+                uniqueRelated.push(p);
+              }
+            });
+
+            // Slice to exactly 9 products for clean tucked 3-row presentation
+            let finalRelatedList = uniqueRelated.slice(0, 9);
+          %>
+
+          <% finalRelatedList.forEach(product => { %>
+            <div class="col mb-5 card-recommended d-flex">
+              <div class="product-card w-100 d-flex flex-column justify-content-between">
+                <span class="badge-best-selling">Recommended</span>
+                <div class="product-image">
+                  <img src="<%= product.image %>" class="product-thumb img" alt="<%= product.name %>" />
                 </div>
-              </div>
-              <!-- Product actions-->
-              <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <div class="text-center">
-                  <a class="btn btn-outline-dark mt-auto card-btn" href="#"
-                    >View Product</a
-                  >
+                <div class="product-info">
+                  <h4 class="product-brand card-title"><%= product.name %></h4>
+                  <p class="product-short-description card-text"><%= product.description %></p>
+                  
+                  <div class="text-warning mb-2 card-rating-trigger" style="font-size: 0.95rem; cursor: pointer;" title="View reviews">
+                    <% const itemRating = (typeof ratingsMap !== 'undefined' && ratingsMap[product.name.toLowerCase().trim()]) || { avgRating: '0.0', totalReviews: 0 }; %>
+                    <% const avg = parseFloat(itemRating.avgRating || 0); %>
+                    <% for (let i = 1; i <= 5; i++) { %>
+                      <% if (i <= Math.floor(avg)) { %>
+                        <i class="fa fa-star schriftorange"></i>
+                      <% } else if (i - 0.5 <= avg) { %>
+                        <i class="fa fa-star-half-o schriftorange"></i>
+                      <% } else { %>
+                        <i class="fa fa-star-o text-muted"></i>
+                      <% } %>
+                    <% } %>
+                    <span class="text-muted ms-1" style="font-size: 0.75rem;">(<%= itemRating.totalReviews %>)</span>
+                  </div>
+
+                  <span class="price card-price">$<%= product.price %></span>
+                  <a href="#" class="card-btn">View Product</a>
                 </div>
               </div>
             </div>
-          </div>
-           <% }); %>
-      <% } %>
+          <% }); %>
         </div>
       </div>
     </section>
 <!-- Footer section -->
-    <footer id="footer" class="footer-1 ">
-      <div class="main-footer widgets-dark typo-light">
-        <div class="container">
-          <div class="row row-f">
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <div class="widget subscribe no-box">
-                <h1 class="widget-title">Acess<span style="background-color: #2f3841;"></span></h1>
-                <p>
-                  Our company sales the besh clothes in the house. You will get
-                  everything here according to your need and wish.
-                </p>
-              </div>
-            </div>
-
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <div class="widget no-box">
-                <h5 class="widget-title">Quick Links<span style="background-color: #2f3841;"></span></h5>
-                <ul class="thumbnail-widget">
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Get Started</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Top Fashion</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Highly Sell</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Event/Sales</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content"><a href="#.">News</a></div>
-                  </li>
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Acessioreies</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content"><a href="#.">About</a></div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <div class="widget no-box">
-                <h5 class="widget-title">Get Started<span style="background-color: #2f3841;"></span></h5>
-                <p>Get your favourite clothes here.</p>
-                <a class="btn btn-dark" href="/product">Buy here</a>
-              </div>
-            </div>
-
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <div class="widget no-box">
-                <h5 class="widget-title">Contact Us<span style="background-color: #2f3841;"></span></h5>
-
-                <p>
-                  <a href="mailto:info@domain.com" title="glorythemes"
-                    >info@domain.com</a
-                  >
-                </p>
-                <ul class="social-footer2">
-                  <li class="">
-                    <a title="youtube" target="_blank" href=""
-                      ><img
-                        alt="youtube"
-                        width="30"
-                        height="30"
-                        src="data:image/png;base64,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"
-                    /></a>
-                  </li>
-                  <li class="">
-                    <a href="" target="_blank" title="Facebook"
-                      ><img
-                        alt="Facebook"
-                        width="30"
-                        height="30"
-                        src="data:image/png;base64,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"
-                    /></a>
-                  </li>
-                  <li class="">
-                    <a href="" target="_blank" title="Twitter"
-                      ><img
-                        alt="Twitter"
-                        width="30"
-                        height="30"
-                        src="data:image/png;base64,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"
-                    /></a>
-                  </li>
-                  <li class="">
-                    <a title="instagram" target="_blank" href=""
-                      ><img
-                        alt="instagram"
-                        width="30"
-                        height="30"
-                        src="data:image/png;base64,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"
-                    /></a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-copyright">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12 text-center">
-              <p>Copyright Acess © 2023. All rights reserved.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <%- include('../partials/footer') %>
     
   </body>
 
 <!-- scripts -->
 
- <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const reviews = document.querySelectorAll(".review-item");
-    const seeAllBtn = document.getElementById("seeAllBtn");
-    const seeLessBtn = document.getElementById("seeLessBtn");
 
-    let visibleCount = 2;
-    const showIncrement = 2;
-
-    // Show reviews logic
-    seeAllBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      let shown = 0;
-      for (let i = visibleCount; i < reviews.length && shown < showIncrement; i++) {
-        reviews[i].classList.remove("d-none");
-        shown++;
-        visibleCount++;
-      }
-
-      if (visibleCount >= reviews.length) {
-        seeAllBtn.classList.add("d-none");
-      }
-
-      if (visibleCount > 2) {
-        seeLessBtn.classList.remove("d-none");
-      }
-    });
-
-    // Hide reviews logic
-    seeLessBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      for (let i = 2; i < reviews.length; i++) {
-        reviews[i].classList.add("d-none");
-      }
-
-      visibleCount = 2;
-      seeAllBtn.classList.remove("d-none");
-      seeLessBtn.classList.add("d-none");
-    });
-  });
-</script>
 
   <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -495,107 +328,173 @@
     crossorigin="anonymous"
   ></script>
 
+  <!-- Brutalist Lookbook Toast Notification Script -->
+  <script>
+    function showLookbookToast(title, message, isError = false) {
+      // Find or create toast element
+      let toast = document.querySelector('.lookbook-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.className = 'lookbook-toast';
+        document.body.appendChild(toast);
+      }
+      
+      toast.innerHTML = `
+        <div class="lookbook-toast-icon ${isError ? 'error' : ''}">
+          <span>${isError ? '✕' : '✓'}</span>
+        </div>
+        <div class="lookbook-toast-content">
+          <div class="lookbook-toast-title">${title}</div>
+          <p class="lookbook-toast-message">${message}</p>
+        </div>
+      `;
+      
+      // Force reflow/repaint
+      toast.offsetHeight;
+      
+      // Slide in
+      toast.classList.add('show');
+      
+      // Dismiss after 3.2 seconds
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3200);
+    }
+  </script>
+
+  <!-- Add to Cart Click Handler with Sleek Toast Feedback -->
   <script>
     document.querySelectorAll('.btn-cart').forEach(button => {
       button.addEventListener('click', async (event) => {
+        if (button.disabled) return;
+        const originalHTML = button.innerHTML;
+        button.disabled = true;
+        button.style.opacity = '0.7';
+        button.innerHTML = '<i class="fa fa-spinner fa-spin me-2"></i> Adding...';
         try {
           const itemNameElements = document.getElementsByClassName('card-title');
           const itemImageElements = document.getElementsByClassName('img');
           const itemDescriptionElements = document.getElementsByClassName('card-text');
           const itemPriceElements = document.getElementsByClassName('card-price');
     
-          // Declare variables outside the if block
           let itemName, itemImage, itemDescription, itemPrice;
     
-          // Assuming you want to get the data from the first element in each collection
           if (itemNameElements.length > 0 && itemImageElements.length > 0 && itemDescriptionElements.length > 0 && itemPriceElements.length > 0) {
             itemName = itemNameElements[0].innerText.trim();
             itemImage = itemImageElements[0].src;
             itemDescription = itemDescriptionElements[0].innerText.trim();
             itemPrice = itemPriceElements[0].innerText.replace('$', '').trim();
           } else {
-            alert('One or more elements not found');
+            showLookbookToast('Error', 'Product elements not found on the page.', true);
+            button.disabled = false;
+            button.style.opacity = '';
+            button.innerHTML = originalHTML;
             return;
           }
     
           const response = await fetch('/add-to-cart', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              itemName,
-              itemImage,
-              itemDescription,
-              itemPrice
-            })
-          });
-    
-          if (response.ok) {
-            const data = await response.json(); 
-            if (data.alreadyInCart) {
-              alert('Item already in the cart');
-            } else {
-              alert(`Item added to cart successfully! Item ID: ${data.itemId}`);
-            }
-          } else {
-            const errorData = await response.json();
-            alert(`Error adding item to cart: ${errorData.message}`);
-          }
-        } catch (error) {
-          console.error('Error:', error);
-        }
-      });
-    });
-    </script>    
-  
-  <script>
-    document.querySelectorAll('.btn-wish').forEach(button => {
-      button.addEventListener('click', async (event) => {
-        try {
-          // Find the parent product card
-          const itemNameElements = document.getElementsByClassName('card-title');
-          const itemImageElements = document.getElementsByClassName('img');
-          const itemDescriptionElements = document.getElementsByClassName('card-text');
-          const itemPriceElements = document.getElementsByClassName('card-price')
-
-          // Declare variables outside the if block
-          let itemName, itemImage, itemDescription, itemPrice, currentDate;
-    
-          // Assuming you want to get the data from the first element in each collection
-          if (itemNameElements.length > 0 && itemImageElements.length > 0 && itemDescriptionElements.length > 0 && itemPriceElements.length > 0) {
-            itemName = itemNameElements[0].innerText.trim();
-            itemImage = itemImageElements[0].src;
-            itemDescription = itemDescriptionElements[0].innerText.trim();
-            itemPrice = itemPriceElements[0].innerText.replace('$', '').trim();
-            currentDate = new Date().toDateString();
-
-          } else {
-            alert('One or more elements not found');
-            return;
-          }
-  
-          const response = await fetch('/wish', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify({
               itemName,
               itemImage,
               itemDescription,
               itemPrice,
-              currentDate
+              _csrf: "<%= csrfToken %>"
+            })
+          });
+    
+          if (response.ok) {
+            const data = await response.json(); 
+            showLookbookToast('Added to Cart', `${itemName} was successfully added to your shopping cart.`);
+            button.innerHTML = '<i class="fa fa-check me-2"></i> Added!';
+            setTimeout(() => { button.disabled = false; button.style.opacity = ''; button.innerHTML = originalHTML; }, 2000);
+          } else {
+            const errorData = await response.json().catch(() => ({}));
+            showLookbookToast('Failed to Add', `${errorData.error || errorData.message || 'Unable to add item to cart.'}`, true);
+            button.disabled = false;
+            button.style.opacity = '';
+            button.innerHTML = originalHTML;
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          showLookbookToast('Connection Error', 'Failed to connect to checkout database.', true);
+          button.disabled = false;
+          button.style.opacity = '';
+          button.innerHTML = originalHTML;
+        }
+      });
+    });
+  </script>    
+  
+  <!-- Wishlist Click Handler with Sleek Toast Feedback -->
+  <script>
+    document.querySelectorAll('.btn-wish').forEach(button => {
+      button.addEventListener('click', async (event) => {
+        if (button.disabled) return;
+        const originalHTML = button.innerHTML;
+        button.disabled = true;
+        button.style.opacity = '0.7';
+        button.innerHTML = '<i class="fa fa-spinner fa-spin me-2"></i> Saving...';
+        try {
+          const itemNameElements = document.getElementsByClassName('card-title');
+          const itemImageElements = document.getElementsByClassName('img');
+          const itemDescriptionElements = document.getElementsByClassName('card-text');
+          const itemPriceElements = document.getElementsByClassName('card-price')
+ 
+          let itemName, itemImage, itemDescription, itemPrice, currentDate;
+    
+          if (itemNameElements.length > 0 && itemImageElements.length > 0 && itemDescriptionElements.length > 0 && itemPriceElements.length > 0) {
+            itemName = itemNameElements[0].innerText.trim();
+            itemImage = itemImageElements[0].src;
+            itemDescription = itemDescriptionElements[0].innerText.trim();
+            itemPrice = itemPriceElements[0].innerText.replace('$', '').trim();
+            currentDate = new Date().toDateString();
+          } else {
+            showLookbookToast('Error', 'Product elements not found on the page.', true);
+            button.disabled = false;
+            button.style.opacity = '';
+            button.innerHTML = originalHTML;
+            return;
+          }
+  
+          const response = await fetch('/wish', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({
+              itemName,
+              itemImage,
+              itemDescription,
+              itemPrice,
+              currentDate,
+              _csrf: "<%= csrfToken %>"
             })
           });
   
           if (response.ok) {
-            window.location.href = '/wish';
+            showLookbookToast('Saved to Wishlist', `${itemName} has been added to your wishlist.`);
+            setTimeout(() => {
+              window.location.href = '/wish';
+            }, 1400);
           } else {
-            console.log('Item not displayed!');
+            const errorData = await response.json().catch(() => ({}));
+            showLookbookToast('Already Saved', `${errorData.error || errorData.message || 'This item is already in your wishlist.'}`, true);
+            button.disabled = false;
+            button.style.opacity = '';
+            button.innerHTML = originalHTML;
           }
         } catch (error) {
           console.error('Error:', error);
+          showLookbookToast('Connection Error', 'Failed to connect to wishlist database.', true);
+          button.disabled = false;
+          button.style.opacity = '';
+          button.innerHTML = originalHTML;
         }
       });
     });
@@ -623,6 +522,29 @@
     window.location.href = url.toString();
   });
 });
+</script>
+
+<script>
+  // Modern Magnifying Glass Inner Hover Zoom Effect
+  const zoomContainer = document.querySelector('.modern-product-image-container');
+  const zoomImg = document.querySelector('.modern-product-image');
+
+  if (zoomContainer && zoomImg) {
+    zoomContainer.addEventListener('mousemove', (e) => {
+      const rect = zoomContainer.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const xPercent = (x / rect.width) * 100;
+      const yPercent = (y / rect.height) * 100;
+      
+      zoomImg.style.transformOrigin = `${xPercent}% ${yPercent}%`;
+    });
+
+    zoomContainer.addEventListener('mouseleave', () => {
+      zoomImg.style.transformOrigin = 'center center';
+    });
+  }
 </script>
 
 </html>

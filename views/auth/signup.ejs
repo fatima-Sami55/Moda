@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acess</title>
-    <link rel="icon" type="image/png" href="/image/Acess%20logo/logo.png?v=1.0" />
-  </head>
+    <%- include('../../partials/head', {title: 'Moda — Signup'}) %>
   <body>
 <!-- stylesheets -->
     <link
@@ -15,7 +9,7 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-    <link href="/css/signup.css" rel="stylesheet" type="text/css" />
+    <link href="/css/signup.css?v=1.3" rel="stylesheet" type="text/css" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -27,10 +21,9 @@
 
 <!-- Navbar -->
 <%- include('../../partials/navbar', { page: page }) %>
-<!-- for flash messages -->
-<div id="alertContainer"></div>
+
 <!-- signup form -->
-    <div class="container py-5">
+<div class="container py-5">
   <!-- Toggle Buttons -->
   <div class="text-center mb-4">
     <div class="btn-group" role="group">
@@ -46,7 +39,7 @@
       <div id="loginForm" class="card shadow mb-4">
         <div class="card-body">
           <h3 class="text-center">
-            <img src="../image/Acess logo/logo.png" alt="Logo" width="60" />
+            <img src="/image/Acess logo/logo.png" alt="Logo" width="60" />
           </h3>
           <form id="form1" class="needs-validation" novalidate enctype="multipart/form-data">
             <div class="row g-3">
@@ -82,7 +75,11 @@
               </div>
 
               <div class="col-12 text-center">
-                <button type="submit" id="nextButton" class="btn btn-dark w-100" disabled>Next</button>
+                <button type="submit" id="nextButton" class="btn btn-dark w-100">Next</button>
+              </div>
+              <div class="col-12 text-center mt-3">
+                <span style="font-size: 16px; color: var(--text-secondary);">Already have an account? </span>
+                <a href="/login" style="text-decoration: none; color: var(--primary-accent); font-weight: 600;">Login</a>
               </div>
             </div>
           </form>
@@ -93,7 +90,7 @@
       <div id="signupForm" class="card shadow mb-4 d-none">
         <div class="card-body">
           <h3 class="text-center">
-            <img src="../image/Acess logo/logo.png" alt="Logo" width="60" />
+            <img src="/image/Acess logo/logo.png" alt="Logo" width="60" />
           </h3>
           <form id="form2" class="needs-validation" novalidate>
             <div class="row g-3">
@@ -138,17 +135,16 @@
               <div class="col-12 text-center">
                 <button type="submit" class="btn btn-dark w-100">Sign Up</button>
               </div>
+              <div class="col-12 text-center mt-3">
+                <span style="font-size: 16px; color: var(--text-secondary);">Already have an account? </span>
+                <a href="/login" style="text-decoration: none; color: var(--primary-accent); font-weight: 600;">Login</a>
+              </div>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
-</div>
-<!-- Footer Login Redirect -->
-<div class="container text-center" style="font-size: 18px; margin-top: 40px;">
-  Already have an account?
-  <a href="/login" style="text-decoration: none; color: blue;">Login</a>
 </div>
 
   </body>
@@ -164,12 +160,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const nextButton = document.getElementById("nextButton");
   const form1 = document.getElementById("form1");
   const form2 = document.getElementById("form2");
-  const alertContainer = document.getElementById("alertContainer");
 
   const nameRegex = /^[A-Za-z]+$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,12}$/;
 
-  function validateForm1() {
+  function validateForm1(showErrors = true) {
     let valid = true;
     const firstname = form1.firstname;
     const lastname = form1.lastname;
@@ -177,30 +172,32 @@ document.addEventListener("DOMContentLoaded", function () {
     const email = form1.email;
     const img = form1.img;
 
-    [firstname, lastname, password, email, img].forEach(input => input.classList.remove("is-invalid"));
+    if (showErrors) {
+      [firstname, lastname, password, email, img].forEach(input => input.classList.remove("is-invalid"));
+    }
 
     if (!nameRegex.test(firstname.value.trim())) {
-      firstname.classList.add("is-invalid");
+      if (showErrors) firstname.classList.add("is-invalid");
       valid = false;
     }
 
     if (!nameRegex.test(lastname.value.trim())) {
-      lastname.classList.add("is-invalid");
+      if (showErrors) lastname.classList.add("is-invalid");
       valid = false;
     }
 
     if (!passwordRegex.test(password.value.trim())) {
-      password.classList.add("is-invalid");
+      if (showErrors) password.classList.add("is-invalid");
       valid = false;
     }
 
     if (!email.value.trim() || !email.checkValidity()) {
-      email.classList.add("is-invalid");
+      if (showErrors) email.classList.add("is-invalid");
       valid = false;
     }
 
     if (!img.files || img.files.length === 0) {
-      img.classList.add("is-invalid");
+      if (showErrors) img.classList.add("is-invalid");
       valid = false;
     }
 
@@ -246,33 +243,53 @@ document.addEventListener("DOMContentLoaded", function () {
     return valid;
   }
 
+  // Silent Live Navigation Validation
   function toggleNextButton() {
-    const isValid = validateForm1();
-    nextButton.disabled = !isValid;
+    const isValid = validateForm1(false);
     billingBtn.disabled = !isValid;
   }
 
+  // Hook live checks silently without showing error red highlights prematurely
   form1.addEventListener("input", toggleNextButton);
 
-  // Setup live validation for form2
+  // Clear Form 1 errors on input focus/interaction once marked invalid
+  const form1Fields = ["firstname", "lastname", "email", "Pass", "img"];
+  form1Fields.forEach(fieldName => {
+    const field = form1[fieldName];
+    field.addEventListener("input", () => {
+      if (field.classList.contains("is-invalid")) {
+        validateForm1(true);
+      }
+      toggleNextButton();
+    });
+  });
+
+  // Setup live validation for form2 on blur/interactive correction only
   const form2Fields = ["address", "phone", "city", "province", "zip"];
   form2Fields.forEach((fieldName) => {
     const field = form2[fieldName];
-    field.addEventListener("input", () => validateForm2Field(fieldName));
-    field.addEventListener("blur", () => form2.classList.add("was-validated"));
+    field.addEventListener("blur", () => validateForm2Field(fieldName));
+    field.addEventListener("input", () => {
+      if (field.classList.contains("is-invalid")) {
+        validateForm2Field(fieldName);
+      }
+    });
   });
 
   const checkbox = form2.querySelector('input[type="checkbox"]');
   checkbox.addEventListener("change", () => validateForm2Field("checkbox"));
 
-  // Next or Billing button click
+  // Tab switching and Next step handling
   function goToForm2(e) {
     e.preventDefault();
-    if (validateForm1()) {
+    if (validateForm1(true)) {
       form1.classList.remove("was-validated");
       showForm2();
     } else {
       form1.classList.add("was-validated");
+      if (window.showToast) {
+        window.showToast("Please fill in all account setup fields correctly.", "error");
+      }
     }
   }
 
@@ -281,12 +298,16 @@ document.addEventListener("DOMContentLoaded", function () {
   form1.addEventListener("submit", goToForm2);
   accountBtn.addEventListener("click", showForm1);
 
+  // Form 2 Ajax Registration Submission
   form2.addEventListener("submit", function (event) {
     event.preventDefault();
     console.log("🚀 form2 submit event triggered");
 
     if (!validateForm2()) {
       form2.classList.add("was-validated");
+      if (window.showToast) {
+        window.showToast("Please complete all billing address fields correctly.", "error");
+      }
       return;
     }
 
@@ -302,6 +323,13 @@ document.addEventListener("DOMContentLoaded", function () {
     formData.append("province", form2.province.value);
     formData.append("zip", form2.zip.value);
 
+    // Disable button to prevent multi-click spamming
+    const submitBtn = form2.querySelector('button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin me-2"></i> Registering...';
+    }
+
     fetch("/signup", {
       method: "POST",
       body: formData,
@@ -312,42 +340,51 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
           data = await response.json();
         } catch (err) {
-    console.log("❌ JSON Parse Error");
-    alertContainer.innerHTML = `<div class="alert alert-danger">Could not parse server response.</div>`;
-    return;
+          console.log("❌ JSON Parse Error");
+          if (window.showToast) {
+            window.showToast("Could not parse server response.", "error");
+          }
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = "Sign Up";
+          }
+          return;
         }
 
-        alertContainer.innerHTML = "";
-
         if (data.error) {
-          alertContainer.innerHTML = `
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-              ${data.error}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>`;
-          alertContainer.scrollIntoView({ behavior: "smooth", block: "center" });
+          if (window.showToast) {
+            window.showToast(data.error, "error");
+          }
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = "Sign Up";
+          }
         } else if (data.success) {
-          alertContainer.innerHTML = `
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-              ${data.success}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>`;
+          if (window.showToast) {
+            window.showToast(data.success, "success");
+          }
           setTimeout(() => window.location.href = "/home", 1500);
         } else if (data.redirect) {
           window.location.href = data.redirect;
         } else {
-          alertContainer.innerHTML = `<div class="alert alert-warning">Unexpected response.</div>`;
+          if (window.showToast) {
+            window.showToast("Unexpected response from server.", "error");
+          }
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = "Sign Up";
+          }
         }
       })
       .catch((err) => {
-        alert("🔥 Fetch error:", err);
-        alert(err);
         console.log("🔥 Fetch error:", err);
-        alertContainer.innerHTML = `
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            Something went wrong. Please try again.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>`;
+        if (window.showToast) {
+          window.showToast("Something went wrong. Please try again.", "error");
+        }
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = "Sign Up";
+        }
       });
   });
 
@@ -371,7 +408,7 @@ document.addEventListener("DOMContentLoaded", function () {
     billingBtn.classList.add("btn-dark");
   }
 
-  // Init
+  // Init silent validation
   toggleNextButton();
 });
 </script>

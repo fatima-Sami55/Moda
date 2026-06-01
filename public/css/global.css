@@ -1,0 +1,248 @@
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800;900&family=Roboto:wght@300;400;500;700&display=swap');
+
+:root {
+  --primary-accent: #FE672E;      /* Vivid Burn Orange */
+  --secondary-accent: #6A69FF;    /* Sporty Electric Violet-Blue */
+  --accent-gradient: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+  --bg-deep: #FFFAF0;             /* Warm off-white canvas (#FFFAF0) */
+  --bg-surface: #FFF5EA;          /* Harmonious warm surface tone */
+  --bg-surface-glass: rgba(255, 250, 240, 0.95);
+  --border-light: rgba(31, 30, 35, 0.12);
+  --border-glow: rgba(254, 103, 46, 0.28);
+  --text-primary: #1F1E23;        /* Pitch Black */
+  --text-secondary: #4A494F;
+  --shadow-premium: 0 12px 40px rgba(0, 0, 0, 0.08);
+  --shadow-glow: 0 0 20px rgba(254, 103, 46, 0.18);
+  --font-heading: 'Unbounded', sans-serif;
+  --font-body: 'Roboto', sans-serif;
+  --transition-smooth: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --header-height: 90px;
+}
+
+html {
+  scroll-behavior: smooth !important;
+  background-color: var(--bg-deep);
+}
+
+a,
+a:visited {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.28s ease;
+}
+
+a:hover,
+a:focus {
+  color: var(--primary-accent);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.035em;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 5vw, 5.5rem);
+  line-height: 1.02;
+  margin-bottom: 0.75rem;
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  margin-bottom: 0.75rem;
+}
+
+h3 {
+  font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+  margin-bottom: 0.6rem;
+}
+
+p,
+li,
+span,
+input,
+button,
+textarea,
+select {
+  font-family: var(--font-body);
+  color: var(--text-secondary);
+}
+
+button,
+.btn,
+input[type="submit"],
+input[type="button"] {
+  border: 2px solid var(--text-primary);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-primary);
+  padding: 0.9rem 1.5rem;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: var(--transition-smooth);
+}
+
+button.primary,
+.btn-primary,
+.button-primary {
+  background: var(--primary-accent) !important;
+  border-color: var(--text-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+button.secondary,
+.btn-secondary,
+.button-secondary {
+  background: transparent !important;
+  border-color: var(--primary-accent) !important;
+  color: var(--text-primary) !important;
+}
+
+button.secondary:hover,
+.btn-secondary:hover,
+.button-secondary:hover {
+  background: rgba(106, 105, 255, 0.12) !important;
+  color: var(--text-primary) !important;
+}
+
+.outline-pill {
+  border-color: var(--secondary-accent) !important;
+  color: var(--text-primary) !important;
+  background: transparent !important;
+  border-radius: 999px !important;
+}
+
+.outline-pill:hover {
+  background: rgba(106, 105, 255, 0.12) !important;
+}
+
+section {
+  padding: 90px 0;
+}
+
+section hr {
+  border-color: rgba(26, 26, 26, 0.08);
+}
+
+header,
+.site-header {
+  background-color: var(--bg-deep) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1px solid rgba(26, 26, 26, 0.12) !important;
+}
+
+body header .dropdown-menu,
+body header .search-form .form-group,
+body .alert,
+body .modal-header,
+body .card,
+body .card-body {
+  background-color: var(--bg-surface) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-color: rgba(26, 26, 26, 0.12) !important;
+}
+
+/* ==========================================================================
+   MODERN MINIMALIST VERIFICATION STRIP (Stripe/Vercel Aesthetic)
+   ========================================================================== */
+.verification-strip {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 48px !important;
+  background: var(--text-primary) !important; /* Pitch Black background */
+  border-bottom: 2px solid var(--primary-accent) !important; /* Vivid Burn Orange bottom glow */
+  color: #FFFFFF !important;
+  z-index: 2100 !important; /* Above fixed headers */
+  font-family: var(--font-body);
+  display: flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+}
+
+.verification-strip .strip-emoji {
+  font-size: 16px;
+  display: inline-block;
+  animation: pulseEmoji 2s infinite ease-in-out;
+}
+
+@keyframes pulseEmoji {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+
+.verification-strip .strip-text {
+  font-family: var(--font-body) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.verification-strip .strip-text strong {
+  font-family: var(--font-heading) !important;
+  font-weight: 800 !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: var(--primary-accent) !important;
+  margin-right: 6px;
+}
+
+.verification-strip .strip-action-btn {
+  background: var(--primary-accent) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--text-primary) !important;
+  border-radius: 999px !important; /* Sleek Pill Shape */
+  padding: 6px 16px !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 800 !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  box-shadow: 2px 2px 0px var(--text-primary) !important;
+  transition: var(--transition-smooth) !important;
+  cursor: pointer;
+}
+
+.verification-strip .strip-action-btn:hover:not(:disabled) {
+  background: #FFFFFF !important;
+  color: var(--text-primary) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 3px 3px 0px var(--text-primary) !important;
+}
+
+.verification-strip .strip-action-btn:disabled {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+}
+
+/* Adjust fixed wrappers & page offsets when unverified */
+body.unverified {
+  padding-top: 138px !important; /* Shifts body content down to accommodate strip (90px navbar + 48px strip) */
+}
+
+body.unverified header,
+body.unverified .site-header {
+  top: 48px !important; /* Pushes the fixed navbar down by the strip height! */
+  transition: top 0.3s ease;
+}
+
+body.unverified .sidebar-card-wrapper {
+  top: 188px !important; /* Offsets sticky profile sidebar: 140px default + 48px strip */
+}

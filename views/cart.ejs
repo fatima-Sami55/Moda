@@ -1,262 +1,347 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acess</title>
-    <link rel="icon" type="image/png" href="/image/Acess%20logo/logo.png?v=1.0" />
-  </head>
-<!-- stylesheets  -->
-   <link href="/css/cart.css" rel="stylesheet" type="text/css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
-    <link
-      href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"
-      rel="stylesheet"
-    />
+  <%- include('../partials/head', {title: 'Acess - Shopping Cart'}) %>
+  <!-- stylesheets -->
+  <link href="/css/cart.css" rel="stylesheet" type="text/css" />
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+    crossorigin="anonymous"
+  />
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    rel="stylesheet"
+  />
   <body>
-<!-- Navbar -->
+    <!-- Navbar -->
     <%- include('../partials/navbar_carts', {page:page}) %>
-<% if (cartItems.length === 0) { %>
-  <!-- Empty Cart -->
-  <div class="container text-center cart-container-empty my-5">
-    <img
-      src="../image/vectors/find.jpg"
-      alt="No items"
-      class="img-fluid"
-      style="max-width: 300px;"
-    />
-    <h2 class="mt-4">No items found in the cart!</h2>
-  </div>
-<% } else { %>
-  <!--Cart with items -->
-  <div class="container cart-container my-4">
-    
-    <!--Desktop Table View -->
-    <div class="table-responsive d-none d-md-block">
-      <table id="cart" class="table table-hover align-middle">
-        <thead class="table-light">
-          <tr>
-            <th style="width: 40%">Product</th>
-            <th style="width: 15%">Price</th>
-            <th style="width: 15%">Quantity</th>
-            <th style="width: 20%" class="text-center">Subtotal</th>
-            <th style="width: 10%"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% cartItems.forEach((item, index) => { %>
-          <tr>
-            <td>
-              <div class="d-flex align-items-center gap-2">
-                <img src="<%= item.item_img %>" alt="Image" class="img-thumbnail" style="width: 64px; height: 64px; object-fit: cover;" />
-                <div>
-                  <h6 class="mb-1"><%= item.item_Name %></h6>
-                  <small class="text-muted d-block text-truncate description-text" title="<%= item.item_description %>">
-                    <%= item.item_description %>
-                  </small>
-                </div>
-              </div>
-            </td>
-            <td><span class="item-price">$<%= item.item_price %></span></td>
-            <td>
-              <div class="input-group quantity-group">
-                <button type="button" class="btn btn-outline-secondary btn-qty-minus" data-index="<%= index %>">-</button>
-                <input type="number" class="form-control text-center quantity-input" value="1" min="1" max="20" data-index="<%= index %>" readonly />
-                <button type="button" class="btn btn-outline-secondary btn-qty-plus" data-index="<%= index %>">+</button>
-              </div>
-            </td>
-            <td class="text-center item-subtotal">$0.00</td>
-            <td>
-              <form action="/delete/<%= item.id %>" method="POST" class="d-inline">
-                <button class="btn btn-sm btn-danger" title="Remove">
-                  <i class="fa fa-trash-o"></i>
-                </button>
-              </form>
-            </td>
-          </tr>
-          <% }) %>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>
-              <a href="/acessiories" class="btn btn-warning btn-sm">
-                <i class="fa fa-angle-left"></i> Continue Shopping
-              </a>
-            </td>
-            <td colspan="2"></td>
-            <td class="text-center" id="cart-total"><strong>Total $0.00</strong></td>
-            <td>
-              <a href="/checkout" class="btn btn-success btn-sm w-100">
-                Checkout <i class="fa fa-angle-right"></i>
-              </a>
-            </td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
 
-   <!--Mobile Card View -->
-  <div class="d-block d-md-none">
-  <% cartItems.forEach((item, index) => { %>
-  <div class="card mb-3">
-    <div class="card-body">
-      <div class="d-flex align-items-center gap-3 mb-2">
-        <img src="<%= item.item_img %>" alt="Image" class="img-thumbnail" style="width: 64px; height: 64px; object-fit: cover;" />
-        <div class="flex-grow-1">
-          <h6 class="mb-1"><%= item.item_Name %></h6>
-          <small class="text-muted description-text" title="<%= item.item_description %>">
-            <%= item.item_description %>
-          </small>
+    <!-- Neobrutalist Deletion Confirmation Overlay -->
+    <div id="cart-confirm-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(31, 30, 35, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center;">
+      <div style="background: #FFFFFF; border: 3px solid #1F1E23; box-shadow: 8px 8px 0px #1F1E23; max-width: 480px; width: 100%; padding: 40px; text-align: center; border-radius: 0px;">
+        <div style="width: 70px; height: 70px; background: #FFECEC; border: 3px solid #1F1E23; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 3px 3px 0px #1F1E23;">
+          <i class="fa-regular fa-trash-can" style="font-size: 1.8rem; color: #6A69FF;"></i>
+        </div>
+        <h4 style="font-family: var(--font-heading), sans-serif; font-weight: 800; text-transform: uppercase; color: #1F1E23; font-size: 1.25rem; letter-spacing: 0.02em; margin-bottom: 12px;">Remove Item?</h4>
+        <p style="font-family: var(--font-body), sans-serif; font-weight: 500; color: #555; font-size: 0.95rem; line-height: 1.6; margin-bottom: 30px;">Are you sure you want to remove this item from your shopping cart?</p>
+        <div class="d-flex align-items-center justify-content-center gap-3">
+          <button id="overlay-confirm-btn" class="btn px-4 py-2" style="background: #FE672E; color: #FFFFFF; border: 3px solid #1F1E23; font-family: var(--font-heading), sans-serif; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; box-shadow: 3px 3px 0px #1F1E23; border-radius: 0px; transition: all 0.15s ease;">Yes, Remove</button>
+          <button id="overlay-cancel-btn" class="btn px-4 py-2" style="background: #FFFFFF; color: #1F1E23; border: 3px solid #1F1E23; font-family: var(--font-heading), sans-serif; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; box-shadow: 3px 3px 0px #1F1E23; border-radius: 0px; transition: all 0.15s ease;">No, Keep It</button>
         </div>
       </div>
-
-      <div class="mb-2"><strong>Price:</strong> <span class="item-price">$<%= item.item_price %></span></div>
-
-      <div class="input-group quantity-group mb-2">
-        <button type="button" class="btn btn-outline-secondary btn-qty-minus" data-index="<%= index %>">-</button>
-        <input type="number" class="form-control text-center quantity-input" value="1" min="1" max="20" data-index="<%= index %>" readonly />
-        <button type="button" class="btn btn-outline-secondary btn-qty-plus" data-index="<%= index %>">+</button>
-      </div>
-
-      <div class="mb-2"><strong>Subtotal:</strong> <span class="item-subtotal">$0.00</span></div>
-
-      <form action="/delete/<%= item.id %>" method="POST" class="mt-2">
-        <button class="btn btn-sm btn-danger w-100" title="Remove">
-          <i class="fa fa-trash-o"></i> Remove
-        </button>
-      </form>
     </div>
-  </div>
-  <% }) %>
 
-  <div class="d-flex justify-content-between align-items-center mt-3">
-    <a href="/acessiories" class="btn btn-warning btn-sm">
-      <i class="fa fa-angle-left"></i> Continue Shopping
-    </a>
-    <a href="/checkout" class="btn btn-success btn-sm">
-      Checkout <i class="fa fa-angle-right"></i>
-    </a>
-  </div>
-  <div class="text-center mt-3" id="cart-total">
-    <strong>Total $0.00</strong>
-  </div>
-</div>
-  </div>
-<% } %>
+    <% if (cartItems.length === 0) { %>
+      <!-- Empty Cart -->
+      <div class="container text-center cart-container-empty my-5">
+        <div class="empty-cart-showcase">
+          <img
+            src="/image/vectors/empty_cart.svg"
+            alt="No items"
+            class="img-fluid empty-cart-img"
+          />
+          <h2 class="mt-4 empty-cart-heading">Your Cart is Empty</h2>
+          <p class="empty-cart-sub">Looks like you haven't added anything to your cart yet.</p>
+          <a href="/acessiories" class="btn btn-warning mt-3">
+            <i class="fa fa-chevron-left me-2"></i> Shop Collection
+          </a>
+        </div>
+      </div>
+    <% } else { %>
+      <!-- Cart with items -->
+      <div class="container cart-container my-5">
+        <h1 class="cart-main-title mb-4">Your Shopping Cart</h1>
+        
+        <div class="row g-5">
+          <!-- Left Column: Products List (Table on Desktop, Cards on Mobile) -->
+          <div class="col-12 col-lg-8">
+            
+            <!-- Desktop Table View -->
+            <div class="table-responsive d-none d-md-block">
+              <table id="cart" class="table align-middle">
+                <thead>
+                  <tr>
+                    <th style="width: 50%">Product</th>
+                    <th style="width: 15%">Price</th>
+                    <th style="width: 20%">Quantity</th>
+                    <th style="width: 15%" class="text-end">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% cartItems.forEach((item, index) => { %>
+                    <tr class="cart-item-row">
+                      <td>
+                        <div class="d-flex align-items-center gap-3">
+                          <img src="<%= item.item_img %>" alt="<%= item.item_Name %>" class="img-thumbnail cart-item-thumb" />
+                          <div class="cart-item-details">
+                            <h6 class="cart-item-name mb-1"><%= item.item_Name %></h6>
+                            <small class="cart-item-desc d-block text-truncate" title="<%= item.item_description %>">
+                              <%= item.item_description %>
+                            </small>
+                            <!-- Remove trigger underneath desktop text for cleaner layout -->
+                            <form action="/delete/<%= item.id %>" method="POST" class="mt-2 cart-delete-form">
+                              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                              <button class="cart-remove-link" type="button">
+                                <i class="fa-regular fa-trash-can me-1"></i> Remove
+                              </button>
+                            </form>
+                          </div>
+                        </div>
+                      </td>
+                      <td><span class="item-price">$<%= item.item_price %></span></td>
+                      <td>
+                        <div class="input-group quantity-group">
+                          <button type="button" class="btn btn-qty-minus" data-index="<%= index %>">-</button>
+                          <input type="number" class="form-control text-center quantity-input" value="1" min="1" max="20" data-index="<%= index %>" readonly />
+                          <button type="button" class="btn btn-qty-plus" data-index="<%= index %>">+</button>
+                        </div>
+                      </td>
+                      <td class="text-end"><span class="item-subtotal">$0.00</span></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
 
-<!-- scripts  -->
+            <!-- Mobile Card View -->
+            <div class="d-block d-md-none">
+              <% cartItems.forEach((item, index) => { %>
+                <div class="card mb-3 cart-mobile-card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                      <img src="<%= item.item_img %>" alt="<%= item.item_Name %>" class="img-thumbnail cart-item-thumb" />
+                      <div class="flex-grow-1 overflow-hidden">
+                        <h6 class="cart-item-name mb-1"><%= item.item_Name %></h6>
+                        <small class="cart-item-desc d-block text-truncate" title="<%= item.item_description %>">
+                          <%= item.item_description %>
+                        </small>
+                      </div>
+                    </div>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // For each cart row/card, bind the plus/minus buttons to their corresponding quantity/subtotal/price
-    function updateTotal() {
-      let total = 0;
-      document.querySelectorAll(".item-subtotal").forEach((subtotal) => {
-        total += parseFloat(subtotal.innerText.replace("$", "").trim());
-      });
-      document.querySelectorAll("#cart-total").forEach((el) => {
-        el.innerHTML = "<strong>Total $" + total.toFixed(2) + "</strong>";
-      });
-      localStorage.setItem("cartTotal", total.toFixed(2));
-    }
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="mobile-label">Price:</span>
+                      <span class="item-price">$<%= item.item_price %></span>
+                    </div>
 
-    // Helper to update subtotal for a given row/card
-    function updateSubtotal(row) {
-      const priceEl = row.querySelector(".item-price");
-      const qtyInput = row.querySelector(".quantity-input");
-      const subtotalEl = row.querySelector(".item-subtotal");
-      if (priceEl && qtyInput && subtotalEl) {
-        const price = parseFloat(priceEl.innerText.replace("$", "").trim());
-        const quantity = parseInt(qtyInput.value);
-        const subtotal = price * quantity;
-        subtotalEl.innerText = "$" + subtotal.toFixed(2);
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="mobile-label">Quantity:</span>
+                      <div class="input-group quantity-group">
+                        <button type="button" class="btn btn-qty-minus" data-index="<%= index %>">-</button>
+                        <input type="number" class="form-control text-center quantity-input" value="1" min="1" max="20" data-index="<%= index %>" readonly />
+                        <button type="button" class="btn btn-qty-plus" data-index="<%= index %>">+</button>
+                      </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <span class="mobile-label">Subtotal:</span>
+                      <span class="item-subtotal">$0.00</span>
+                    </div>
+
+                    <form action="/delete/<%= item.id %>" method="POST" class="mt-2 cart-delete-form">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                      <button class="btn btn-sm btn-danger w-100 py-2 d-flex align-items-center justify-content-center gap-2 cart-remove-link-mobile" type="button">
+                        <i class="fa-regular fa-trash-can"></i> Remove Item
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+            
+          </div>
+
+          <!-- Right Column: Sidebar Order Summary -->
+          <div class="col-12 col-lg-4">
+            <div class="order-summary-card p-4">
+              <h3 class="summary-title mb-4">Order Summary</h3>
+              
+              <div class="summary-row d-flex justify-content-between mb-3">
+                <span class="summary-label">Subtotal</span>
+                <span class="summary-val" id="summary-subtotal">$0.00</span>
+              </div>
+              
+
+              <hr class="summary-divider my-4" />
+              
+              <div class="summary-row d-flex justify-content-between mb-4">
+                <span class="summary-label-total">Total</span>
+                <span class="summary-val-total" id="cart-total">$0.00</span>
+              </div>
+              
+              <div class="summary-actions d-flex flex-column gap-3">
+                <a href="/checkout" class="btn btn-success w-100 py-3 d-flex align-items-center justify-content-center gap-2">
+                  Proceed to Checkout <i class="fa fa-chevron-right"></i>
+                </a>
+                <a href="/acessiories" class="btn btn-warning w-100 py-3 d-flex align-items-center justify-content-center gap-2">
+                  <i class="fa fa-chevron-left"></i> Continue Shopping
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- scripts -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const desktopRows = document.querySelectorAll("table#cart tbody tr");
+        const mobileCards = document.querySelectorAll(".cart-mobile-card");
+
+        function updateTotal() {
+          let total = 0;
+          // Sum subtotals from desktop rows (or mobile if desktop is hidden)
+          const rowsToUse = desktopRows.length > 0 ? desktopRows : mobileCards;
+          rowsToUse.forEach((row) => {
+            const subtotalEl = row.querySelector(".item-subtotal");
+            if (subtotalEl) {
+              total += parseFloat(subtotalEl.innerText.replace("$", "").trim()) || 0;
+            }
+          });
+          
+          // Update total price values on sidebar
+          document.querySelectorAll("#cart-total").forEach((el) => {
+            el.innerText = "$" + total.toFixed(2);
+          });
+          
+          const subtotalEl = document.getElementById("summary-subtotal");
+          if (subtotalEl) {
+            subtotalEl.innerText = "$" + total.toFixed(2);
+          }
+
+          localStorage.setItem("cartTotal", total.toFixed(2));
+
+          // Sync quantities array to localStorage
+          const quantities = [];
+          rowsToUse.forEach((row) => {
+            const qtyInput = row.querySelector(".quantity-input");
+            if (qtyInput) {
+              quantities.push(parseInt(qtyInput.value) || 1);
+            }
+          });
+          localStorage.setItem("quantities", JSON.stringify(quantities));
+        }
+
+        // Helper to calculate subtotal for a given row or card element
+        function updateElementSubtotal(el) {
+          const priceEl = el.querySelector(".item-price");
+          const qtyInput = el.querySelector(".quantity-input");
+          const subtotalEl = el.querySelector(".item-subtotal");
+          if (priceEl && qtyInput && subtotalEl) {
+            const price = parseFloat(priceEl.innerText.replace("$", "").trim()) || 0;
+            const quantity = parseInt(qtyInput.value) || 1;
+            const subtotal = price * quantity;
+            subtotalEl.innerText = "$" + subtotal.toFixed(2);
+          }
+        }
+
+        // Synchronizes quantity input and subtotal across both layouts
+        function syncQuantityAndSubtotal(index, newQty) {
+          // 1. Sync Desktop Row
+          const desktopRow = desktopRows[index];
+          if (desktopRow) {
+            const qtyInput = desktopRow.querySelector(".quantity-input");
+            if (qtyInput) qtyInput.value = newQty;
+            updateElementSubtotal(desktopRow);
+          }
+
+          // 2. Sync Mobile Card
+          const mobileCard = mobileCards[index];
+          if (mobileCard) {
+            const qtyInput = mobileCard.querySelector(".quantity-input");
+            if (qtyInput) qtyInput.value = newQty;
+            updateElementSubtotal(mobileCard);
+          }
+
+          // 3. Update overall Cart Total & quantities array
+          updateTotal();
+        }
+
+        // Add event listeners for desktop view
+        desktopRows.forEach((row, index) => {
+          const minusBtn = row.querySelector(".btn-qty-minus");
+          const plusBtn = row.querySelector(".btn-qty-plus");
+          const qtyInput = row.querySelector(".quantity-input");
+
+          minusBtn?.addEventListener("click", function () {
+            let value = parseInt(qtyInput.value) || 1;
+            if (value > 1) {
+              syncQuantityAndSubtotal(index, value - 1);
+            }
+          });
+
+          plusBtn?.addEventListener("click", function () {
+            let value = parseInt(qtyInput.value) || 1;
+            if (value < 20) {
+              syncQuantityAndSubtotal(index, value + 1);
+            }
+          });
+
+          updateElementSubtotal(row);
+        });
+
+        // Add event listeners for mobile view
+        mobileCards.forEach((card, index) => {
+          const minusBtn = card.querySelector(".btn-qty-minus");
+          const plusBtn = card.querySelector(".btn-qty-plus");
+          const qtyInput = card.querySelector(".quantity-input");
+
+          minusBtn?.addEventListener("click", function () {
+            let value = parseInt(qtyInput.value) || 1;
+            if (value > 1) {
+              syncQuantityAndSubtotal(index, value - 1);
+            }
+          });
+
+          plusBtn?.addEventListener("click", function () {
+            let value = parseInt(qtyInput.value) || 1;
+            if (value < 20) {
+              syncQuantityAndSubtotal(index, value + 1);
+            }
+          });
+
+          updateElementSubtotal(card);
+        });
+
+        // Initial overall cart total
         updateTotal();
-      }
-    }
 
-    // Table rows
-    document.querySelectorAll("table#cart tbody tr").forEach((row) => {
-      const minusBtn = row.querySelector(".btn-qty-minus");
-      const plusBtn = row.querySelector(".btn-qty-plus");
-      const qtyInput = row.querySelector(".quantity-input");
-      minusBtn?.addEventListener("click", function () {
-        let value = parseInt(qtyInput.value);
-        if (value > 1) {
-          qtyInput.value = value - 1;
-          updateSubtotal(row);
-        }
-      });
-      plusBtn?.addEventListener("click", function () {
-        let value = parseInt(qtyInput.value);
-        if (value < 20) {
-          qtyInput.value = value + 1;
-          updateSubtotal(row);
-        }
-      });
-      qtyInput?.addEventListener("keydown", function (e) {
-        e.preventDefault();
-      });
-      // Initial subtotal
-      updateSubtotal(row);
-    });
+        // Soft confirmation overlay for removal
+        let activeRemoveForm = null;
+        const overlay = document.getElementById("cart-confirm-overlay");
 
-    // Mobile cards
-    document.querySelectorAll(".card").forEach((card) => {
-      const minusBtn = card.querySelector(".btn-qty-minus");
-      const plusBtn = card.querySelector(".btn-qty-plus");
-      const qtyInput = card.querySelector(".quantity-input");
-      minusBtn?.addEventListener("click", function () {
-        let value = parseInt(qtyInput.value);
-        if (value > 1) {
-          qtyInput.value = value - 1;
-          updateSubtotal(card);
-        }
+        document.addEventListener("click", (event) => {
+          const removeBtn = event.target.closest(".cart-remove-link, .cart-remove-link-mobile");
+          if (removeBtn) {
+            event.preventDefault();
+            activeRemoveForm = removeBtn.closest("form");
+            overlay.style.display = "flex";
+          }
+        });
+
+        document.getElementById("overlay-cancel-btn").addEventListener("click", () => {
+          overlay.style.display = "none";
+          activeRemoveForm = null;
+        });
+
+        document.getElementById("overlay-confirm-btn").addEventListener("click", () => {
+          if (activeRemoveForm) {
+            const confirmBtn = document.getElementById("overlay-confirm-btn");
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = "Removing...";
+            activeRemoveForm.submit();
+          }
+        });
       });
-      plusBtn?.addEventListener("click", function () {
-        let value = parseInt(qtyInput.value);
-        if (value < 20) {
-          qtyInput.value = value + 1;
-          updateSubtotal(card);
-        }
-      });
-      qtyInput?.addEventListener("keydown", function (e) {
-        e.preventDefault();
-      });
-      // Initial subtotal
-      updateSubtotal(card);
-    });
+    </script>
 
-    // Save quantities on checkout (if you have a checkout button with id="checkout-button")
-    document.querySelectorAll("#checkout-button").forEach((btn) => {
-      btn?.addEventListener("click", function () {
-        const quantities = Array.from(document.querySelectorAll(".quantity-input")).map((input) => input.value);
-        localStorage.setItem("quantities", JSON.stringify(quantities));
-      });
-    });
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
 
-    // Initial total
-    updateTotal();
-  });
-</script>
-
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"
-  ></script>
-
-  <script
-    src="https://kit.fontawesome.com/542d90fccf.js"
-    crossorigin="anonymous"
-  ></script>
-
+    <%- include('../partials/footer') %>
+  </body>
 </html>

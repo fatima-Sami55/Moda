@@ -1,65 +1,256 @@
-@import url("https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap");
-html{
-  height: auto;
-  width: auto;
-  margin: 0;
-} 
-
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial;
-  
-}
-body{
+/* ==========================================================================
+   DESIGN FOUNDATIONS & TOKEN VARIABLES
+   ========================================================================== */
+html {
   height: auto;
   width: auto;
   margin: 0;
   scroll-behavior: smooth !important;
+  background-color: var(--bg-deep);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font-body);
+}
+
+body {
+  background-color: var(--bg-deep) !important;
+  color: var(--text-primary) !important;
+  height: auto;
+  width: auto;
+  margin: 0;
   padding-top: 150px;
-
+  padding-bottom: 80px !important; /* Prevents squishing at bottom of page */
 }
 
-@media (max-width: 576px) {
-  .form-card {
-    padding: 1rem;
-  }
-
-  .input-group-text {
-    font-size: 14px;
-    text-align: center;
-    justify-content: center;
-  }
-
-  .btn {
-    width: 100% !important;
-    margin-top: 10px;
-  }
+header {
+  position: fixed !important;
+  top: 0 !important;
+  width: 100% !important;
+  z-index: 1100 !important;
 }
 
-::-webkit-scrollbar{
+/* ==========================================================================
+   AUTHENTICATION GLASS CARDS
+   ========================================================================== */
+.form-card,
+.card {
+  background: #FFFFFF !important;
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 0px !important; /* Sharp corners */
+  box-shadow: 10px 10px 0px var(--text-primary) !important; /* Streetwear offset shadow */
+  color: var(--text-primary) !important;
+  padding: 40px !important;
+  margin-top: 2% !important;
+  transition: var(--transition-smooth);
+}
+
+.form-card:hover,
+.card:hover {
+  border-color: var(--text-primary) !important;
+  box-shadow: 14px 14px 0px var(--text-primary) !important;
+}
+
+.form-card h3 img,
+.card h3 img {
+  filter: drop-shadow(4px 4px 0px var(--text-primary));
+}
+
+.form-card h4,
+.card h4,
+.card-body h3,
+.card-body h4 {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 2.2rem !important;
+  color: var(--text-primary) !important;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.form-card p.text-muted,
+.card p.text-muted {
+  color: var(--text-secondary) !important;
+}
+
+.form-card label,
+.card label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-primary) !important;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   FORM INPUT CONTROLS & SELECTORS
+   ========================================================================== */
+.form-control,
+.form-select {
+  background: #FFFFFF !important;
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 0px !important; /* Streetwear sharp style */
+  color: var(--text-primary) !important;
+  padding: 12px 16px !important;
+  font-family: var(--font-body);
+  transition: var(--transition-smooth);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background: #FFFFFF !important;
+  border-color: var(--primary-accent) !important;
+  box-shadow: var(--shadow-glow) !important;
+  color: var(--text-primary) !important;
+}
+
+.form-control::placeholder {
+  color: var(--text-secondary) !important;
+  opacity: 0.5;
+}
+
+.form-select option {
+  background-color: #FFFFFF !important;
+  color: var(--text-primary) !important;
+}
+
+/* Validation Feedback styling */
+.invalid-feedback {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--secondary-accent) !important;
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   BUTTONS & LINKS
+   ========================================================================== */
+.btn-dark {
+  background: var(--primary-accent) !important; /* Solar Yellow CTA */
+  color: var(--text-primary) !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  font-size: 1.15rem;
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 50px !important; /* Pill style */
+  padding: 12px 30px !important;
+  box-shadow: 4px 4px 0px var(--text-primary) !important;
+  transition: var(--transition-smooth) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.btn-dark:hover {
+  background: var(--secondary-accent) !important; /* Burn Orange hover */
+  color: white !important;
+  box-shadow: 6px 6px 0px var(--text-primary) !important;
+  transform: translate(-2px, -2px) !important;
+}
+
+.btn-dark:disabled {
+  background: #EADFD0 !important;
+  color: var(--text-secondary) !important;
+  opacity: 0.6;
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: var(--border-light) !important;
+}
+
+/* ==========================================================================
+   NEOBRUTALIST SIGNUP FORM TABS
+   ========================================================================== */
+.btn-group {
+  gap: 15px !important;
+}
+
+.btn-group > .btn:not(:first-child),
+.btn-group > .btn-group:not(:first-child) {
+  margin-left: 0 !important;
+}
+
+#accountBtn,
+#billingBtn {
+  border-radius: 0px !important;
+  border: 2px solid var(--text-primary) !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  padding: 10px 24px !important;
+  transition: var(--transition-smooth) !important;
+  box-shadow: 4px 4px 0px var(--text-primary) !important;
+  cursor: pointer;
+  margin: 0 !important;
+  text-transform: uppercase;
+}
+
+#accountBtn.btn-dark,
+#billingBtn.btn-dark {
+  background: var(--primary-accent) !important;
+  color: var(--text-primary) !important;
+}
+
+#accountBtn.btn-outline-dark,
+#billingBtn.btn-outline-dark {
+  background: #FFFFFF !important;
+  color: var(--text-primary) !important;
+}
+
+#accountBtn:disabled,
+#billingBtn:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  background: #FFFFFF !important;
+  color: var(--text-secondary) !important;
+  box-shadow: none !important;
+  border-color: var(--border-light) !important;
+}
+
+a {
+  color: var(--primary-accent) !important;
+  font-weight: 600;
+  transition: var(--transition-smooth);
+  text-decoration: none !important;
+}
+
+a:hover {
+  color: var(--secondary-accent) !important;
+  text-decoration: underline !important;
+}
+
+/* ==========================================================================
+   SCROLLBAR & MEDIA TWEAKS
+   ========================================================================== */
+::-webkit-scrollbar {
   width: 10px;
 }
 
-::-webkit-scrollbar-track{
-  border: 1px solid rgb(255, 255, 255);
-  border-radius: 8px;
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+  border-left: 1px solid var(--border-light);
 }
 
-::-webkit-scrollbar-thumb{
-  background: rgba(108, 108, 108, 0.558);
+::-webkit-scrollbar-thumb {
+  background: hsla(222, 47%, 20%, 0.8);
   border-radius: 8px;
-}
-::-webkit-scrollbar-thumb:hover{
-  background-color: rgba(108, 108, 108, 0.896);
-}
-.profile-text {
-  text-decoration: none;
-  color: rgb(10, 18, 90); 
+  border: 2px solid var(--bg-deep);
 }
 
-.profile-text:hover {
-  color: rgb(69, 70, 75); 
-  text-decoration: underline;
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-accent);
+}
+
+@media (max-width: 576px) {
+  .form-card,
+  .card {
+    padding: 25px !important;
+    margin-top: 15% !important;
+  }
+
+  .btn-dark {
+    width: 100% !important;
+  }
 }

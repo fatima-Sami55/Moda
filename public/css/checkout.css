@@ -1,231 +1,587 @@
+/* ==========================================================================
+   LOOKBOOK STREETWEAR CHECKOUT & SECURE PAYMENT - REFINED EDITION
+   ========================================================================== */
+
 body {
-    background-color: #fff;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 16px;
-    margin: 0;
-  }
-
-
-.address{
-  background-color: #666;
+  background-color: #F8F7F3 !important; /* Flora Off-white Canvas background */
+  font-family: var(--font-body), sans-serif;
+  font-size: 15px;
+  margin: 0;
+  padding-top: 100px;
+  color: #2D2A31 !important; /* Soft dark slate text */
+  overflow-x: hidden;
 }
 
-  .basket-product {
-    border-bottom: 1px solid #ccc;
-    padding: 1rem 0;
-    position: relative;
-  }
-
-  .product-image {
-    width: 100%;
-    max-width: 120px;
-  }
-
-  .product-details {
-    padding-left: 1rem;
-  }
-
-  .price,
-  .quantity,
-  .subtotal {
-    text-align: center;
-  }
-
-
-  .summary {
-    background-color: #eee;
-    border: 1px solid #aaa;
-    padding: 1rem;
-  }
-
-  .summary-total-items {
-    color: #666;
-    font-size: 0.875rem;
-    text-align: center;
-  }
-
-  .subtotal-title,
-  .total-title,
-  .promo-title,
-  .summary-title {
-    font-weight: bold;
-    text-transform: uppercase;
-  }
-
-  .summary-total {
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    margin: 1rem 0;
-    padding: 0.5rem 0;
-  }
-
-  .summary-checkout {
-    margin-top: 1rem;
-  }
-
-.progress .progress-bar {
-      border-radius: 20px;
-      box-shadow: none;
-      animation: animate-positive 3s;
+/* ==========================================================================
+   PROGRESSBAR STEP INDICATOR BANNER
+   ========================================================================== */
+.progressbar-container {
+  margin: 15px auto;
+  max-width: 680px; /* Snugger banner width */
 }
-  
-    @keyframes animate-positive {
-      0% {
-        width: 0;
-      }
-    }
-
-#form { 
-    text-align: center; 
-    position: relative; 
-    margin-top: 20px
-} 
-  
-#form fieldset { 
-    background: white; 
-    border: 0 none; 
-    border-radius: 0.5rem; 
-    box-sizing: border-box; 
-    width: 100%; 
-    margin: 0; 
-    padding-bottom: 20px; 
-    position: relative
-} 
-  
-.finish { 
-    text-align: center
-} 
-  
 
 #progressbar {
   display: flex;
   justify-content: space-between;
-  flex-wrap: nowrap;
-  margin-bottom: 30px;
   padding-left: 0;
-  counter-reset: step;
-  text-align: center;
-  color: lightgrey;
+  list-style-type: none;
+  position: relative;
+  margin-bottom: 12px;
 }
 
 #progressbar li {
-  list-style-type: none;
   flex: 1;
-  font-size: 15px;
-  font-weight: 400;
+  text-align: center;
+  font-family: var(--font-heading) !important;
+  font-size: 0.95rem !important; /* Compact typography */
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #8C8A90;
   position: relative;
+  transition: var(--transition-smooth);
 }
 
-#progressbar li::before {
-  counter-increment: step;
-  content: counter(step);
-  width: 40px;
-  height: 40px;
-  line-height: 36px;
-  display: block;
-  font-size: 18px;
-  color: #fff;
-  background: lightgray;
+.step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; /* Compact circular tracker step */
+  height: 36px;
+  background-color: #FFFFFF;
+  border: 1.5px solid #1E1C21;
   border-radius: 50%;
-  margin: 0 auto 10px auto;
+  margin: 0 auto 6px auto;
+  font-size: 0.9rem;
+  color: #1E1C21;
+  position: relative;
+  z-index: 5;
+  transition: var(--transition-smooth);
 }
 
-#progressbar li::after {
-  content: '';
-  position: absolute;
+#progressbar li.active .step-icon {
+  background-color: #FE672E !important; /* Solar Yellow active */
+  box-shadow: 2px 2px 0px #1E1C21;
+  color: #FFFFFF !important;
+  border-color: #1E1C21 !important;
+}
+
+#progressbar li.active .step-label {
+  color: #1E1C21 !important;
+  font-weight: 800 !important;
+}
+
+.progress {
+  height: 6px !important; /* Svelte progress bar */
+  background-color: #FAF8F4 !important;
+  border: 1.5px solid #1E1C21 !important;
+  border-radius: 0px !important;
+  overflow: hidden;
+}
+
+.progress-bar {
+  background-color: #FE672E !important; /* Solar Yellow indicator progress */
+  transition: width 0.4s ease;
+  border-radius: 0px !important;
+}
+
+/* ==========================================================================
+   PROGRESSIVE HORIZONTAL SLIDING WIZARD
+   ========================================================================== */
+.wizard-container {
   width: 100%;
-  height: 3px;
-  background-color: lightgray;
-  top: 20px;
-  left: 0;
-  transform: none;
-  z-index: -1;
+  overflow: hidden;
+  border: 1.5px solid #1E1C21 !important;
+  box-shadow: 4px 4px 0px #1E1C21 !important; /* Sleek compact drop-shadow */
+  background: #FFFFFF;
 }
 
-#progressbar li:first-child::after {
-  content: none;
+.wizard-wrapper {
+  display: flex;
+  width: 200%;
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-#progressbar li:last-child::after {
+.wizard-pane {
+  width: 50%;
+  flex-shrink: 0;
+  padding: 24px; /* Snug, clean container breathing margins */
+  background: #FFFFFF;
+}
+
+.pane-title {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 1.35rem !important; /* Compact elegant subheadings */
+  text-transform: uppercase;
+  color: #1E1C21;
+  letter-spacing: -0.01em;
+  border-bottom: 1.5px solid #1E1C21;
+  padding-bottom: 8px;
+}
+
+.btn-back-link {
+  background: none;
+  border: none;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #65626A;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.btn-back-link:hover {
+  color: #6A69FF !important; /* Sporty Blue */
+  transform: translateX(-2px);
+}
+
+/* ==========================================================================
+   STEP 1: DELIVERY ADDRESS & SHIPPING OPTIONS
+   ========================================================================== */
+.card-custom {
+  background: #FFFFFF !important;
+  border: 1.5px solid #1E1C21 !important;
+  border-radius: 0px !important;
+  box-shadow: 3px 3px 0px #1E1C21 !important; /* Sleek shadows */
+  margin-bottom: 20px;
+}
+
+.card-custom .card-body {
+  padding: 20px !important;
+}
+
+.customer-name {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 1.15rem !important;
+  text-transform: uppercase;
+  color: #1E1C21;
+}
+
+.customer-address {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: #55515B; /* Clean contrast charcoal text */
+  line-height: 1.4;
+}
+
+.customer-contact {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: #65626A;
+}
+
+.btn-outline-sporty {
+  background: transparent !important;
+  border: 1.5px solid #6A69FF !important; /* Sporty Blue Outline */
+  color: #1E1C21 !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 6px 20px !important;
+  border-radius: 999px !important;
+  font-size: 0.82rem !important;
+  box-shadow: 2px 2px 0px #1E1C21;
+  transition: var(--transition-smooth);
+  letter-spacing: 0.05em;
+  display: inline-block;
+  text-decoration: none !important;
+}
+
+.btn-outline-sporty:hover {
+  background-color: #6A69FF !important;
+  color: #FFFFFF !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px #1E1C21;
+}
+
+/* Shipping Option Grid */
+.shipping-option-card {
+  background-color: #FAF8F4 !important; /* Elegant light-cream default */
+  border: 1.5px solid #1E1C21 !important;
+  border-radius: 0px !important;
+  padding: 14px !important; /* Snugger padding prevents clutter */
+  cursor: pointer;
+  height: 100%;
+  box-shadow: 2px 2px 0px #1E1C21;
+  transition: var(--transition-smooth);
+}
+
+.shipping-option-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px #1E1C21;
+}
+
+.shipping-option-card.active {
+  background-color: #FFF3E0 !important; /* Soft warm-cream yellow highlight (breaks harsh high-contrast) */
+  box-shadow: 3px 3px 0px #1E1C21;
+  transform: translate(-1px, -1px);
+  border-color: #FE672E !important; /* Accent outline */
+}
+
+.option-name {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 0.98rem !important;
+  text-transform: uppercase;
+  color: #1E1C21;
+}
+
+.option-price {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 1.05rem !important;
+  color: #1E1C21;
+}
+
+.option-price.text-success {
+  color: #198754 !important;
+}
+
+.option-desc {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: #65626A;
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.shipping-option-card.active .option-desc {
+  color: #2D2A31;
+}
+
+.btn-primary-brutal {
+  background-color: #FE672E !important; /* Orange CTA button */
+  border: 1.5px solid #1E1C21 !important;
+  color: #1E1C21 !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 900;
+  font-size: 1.05rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 999px !important;
+  padding: 10px 0 !important;
+  box-shadow: 3px 3px 0px #1E1C21;
+  transition: var(--transition-smooth);
+}
+
+.btn-primary-brutal:hover {
+  background-color: #6A69FF !important;
+  color: #FFFFFF !important;
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px #1E1C21;
+}
+
+/* ==========================================================================
+   STEP 2: PAYMENT DETAILS & CREDIT CARD INPUTS
+   ========================================================================== */
+.card-visual-container {
+  padding: 10px;
+  background-color: #FAF8F4;
+  border: 1.5px dashed #C5C2BA;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-label-brutal {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 0.92rem !important; /* Refined label scale */
+  text-transform: uppercase;
+  color: #55515B; /* Softer charcoal text */
+  margin-bottom: 4px;
+  display: block;
+}
+
+.input-group-brutal {
+  display: flex;
+  border: 1.5px solid #C5C2BA !important; /* Soft sand outline breaks cluttering pure blacks */
+  background-color: #FAF8F4;
+  align-items: stretch;
+  transition: var(--transition-smooth);
+}
+
+.input-group-brutal:focus-within {
+  border-color: #1E1C21 !important; /* Crisp outline focus ONLY */
+  box-shadow: 2.5px 2.5px 0px #1E1C21;
+}
+
+.input-addon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  background-color: #F8F7F3;
+  border-right: 1.5px solid #C5C2BA;
+  color: #65626A;
+  font-size: 0.95rem;
+}
+
+.input-group-brutal:focus-within .input-addon {
+  border-right-color: #1E1C21;
+  color: #1E1C21;
+}
+
+.input-group-brutal .form-control {
+  border: none !important;
+  flex: 1;
+}
+
+.form-control {
+  border: 1.5px solid #C5C2BA !important; /* Soft default border */
+  border-radius: 0px !important;
+  background-color: #FAF8F4 !important;
+  color: #1E1C21 !important;
+  font-family: var(--font-body) !important;
+  font-weight: 600 !important;
+  padding: 10px 14px !important;
+  height: auto !important;
+  font-size: 0.9rem !important;
+  transition: var(--transition-smooth);
+}
+
+.form-control:focus {
+  background-color: #FFFFFF !important;
+  box-shadow: none !important;
+  border-color: #1E1C21 !important;
+}
+
+.invalid-feedback-brutal {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #FE672E !important; /* Orange highlights */
+  margin-top: 4px;
   display: none;
 }
 
-#progressbar li.active::before,
-#progressbar li.active::after {
-  background-color: #2F8D46;
+.form-control.is-invalid + .invalid-feedback-brutal,
+.form-control.is-invalid ~ .invalid-feedback-brutal {
+  display: block;
+}
+
+.card-type-btn {
+  background-color: #FAF8F4;
+  border: 1.5px solid #C5C2BA;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-type-btn img {
+  height: 22px;
+  width: auto;
+}
+
+.card-type-btn:hover {
+  transform: translateY(-1px);
+}
+
+.card-type-btn.selected {
+  background-color: #FFF3E0 !important; /* Selected card soft tint */
+  border-color: #FE672E !important;
+  box-shadow: 2px 2px 0px #1E1C21;
+}
+
+/* ==========================================================================
+   ORDER SUMMARY SIDEBAR (STICKY ON RIGHT)
+   ========================================================================== */
+.summary-card {
+  background: #FFFFFF !important;
+  border: 1.5px solid #1E1C21 !important;
+  box-shadow: 4px 4px 0px #1E1C21 !important; /* Compact shadow */
+  padding: 20px !important; /* Reduced padding prevents visual bulkiness */
+  border-radius: 0px !important;
+}
+
+.sticky-top-summary {
+  position: sticky;
+  top: 130px;
+  z-index: 10;
+}
+
+.summary-heading {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 1.4rem !important; /* Refined headings scale */
+  text-transform: uppercase;
+  color: #1E1C21;
+  letter-spacing: -0.01em;
+  border-bottom: 1.5px solid #1E1C21;
+  padding-bottom: 8px;
+}
+
+.summary-total-items-badge {
+  font-family: var(--font-heading) !important;
+  font-size: 1.05rem !important;
+  text-transform: uppercase;
+  color: #1E1C21;
+}
+
+.badge-count {
+  display: inline-block;
+  background-color: #6A69FF;
+  color: #FFFFFF !important;
+  padding: 2px 8px;
+  font-weight: 900;
+  border: 1.5px solid #1E1C21;
+  box-shadow: 1.5px 1.5px 0px #1E1C21;
+  margin: 0 4px;
+  font-size: 0.95rem;
+}
+
+.breakdown-label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: #65626A;
+}
+
+.breakdown-value {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #1E1C21;
+}
+
+#summary-shipping.text-success {
+  color: #198754 !important;
+}
+
+/* Promo Boxes inside summary */
+.promo-box label {
+  font-size: 0.85rem !important;
+}
+
+.promo-input {
+  padding: 8px 12px !important;
+}
+
+.btn-secondary-brutal {
+  background-color: transparent !important;
+  border: 1.5px solid #6A69FF !important; /* Sporty Blue outline */
+  color: #1E1C21 !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 6px 14px !important;
+  box-shadow: 2px 2px 0px #1E1C21;
+  transition: var(--transition-smooth);
+}
+
+.btn-secondary-brutal:hover {
+  background-color: #6A69FF !important;
+  color: #FFFFFF !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #1E1C21;
+}
+
+.summary-separator {
+  border: none;
+  height: 1.5px;
+  background-color: #1E1C21 !important;
+  opacity: 1 !important;
+}
+
+.grand-total-label {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  color: #1E1C21;
+}
+
+.grand-total-value {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 1.7rem; /* Snugger pricing tag size */
+  color: #FE672E !important; /* Urgent Orange core pricing highlight */
+  line-height: 1;
+}
+
+/* ==========================================================================
+   NEOBRUTALISM CUSTOM TOASTS
+   ========================================================================== */
+.lookbook-toast {
+  background: #FFFFFF !important;
+  border: 1.5px solid #1E1C21 !important;
+  box-shadow: 4px 4px 0px #1E1C21 !important;
+  border-radius: 0px !important;
+  padding: 12px 20px;
+  display: flex;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  visibility: hidden;
+}
+
+.lookbook-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.toast-icon-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid #1E1C21;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 1.5px 1.5px 0px #1E1C21;
+  flex-shrink: 0;
+}
+
+.toast-icon-box i {
+  font-size: 0.95rem;
+}
+
+.toast-title {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 1.1rem !important;
+  text-transform: uppercase;
+  color: #1E1C21;
+}
+
+.toast-text {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: #65626A;
+}
+
+/* ==========================================================================
+   SCROLLBAR & RESPONSIVENESS
+   ========================================================================== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F8F7F3;
+}
+::-webkit-scrollbar-thumb {
+  background: #FAF8F4;
+}
+
+@media (max-width: 991px) {
+  .sticky-top-summary {
+    position: static;
+    margin-top: 25px;
+  }
 }
 
 @media (max-width: 576px) {
-  #progressbar {
-    flex-direction: column;
-    align-items: center;
+  .wizard-pane {
+    padding: 16px;
   }
-
-  #progressbar li {
-    width: 100%;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
-    position: relative;
-  }
-
-  #progressbar li::after {
-    width: 3px !important;
-    height: 50px !important;
-    left: 50% !important;
-    top: 30px !important;
-    transform: translateX(-50%) !important;
-  }
-
-  #progressbar li:first-child::after {
-    content: none !important;
-  }
-
-  #progressbar li:last-child::after {
-    display: none !important;
-  }
-
-  #progressbar li::before {
-    width: 30px;
-    height: 30px;
-    line-height: 26px;
-    font-size: 16px;
-  }
-}
-
-
-@media (max-width: 1278px) {
-  .custom-checkout-layout {
-    flex-direction: column !important;
-        width: 100%;
-  }
-   .custom-checkout-layout > *:not(:last-child) {
-    margin-bottom: 30px;
-        width: 100%;
-  }
-
-  .custom-checkout-layout > .col-md-6,
-  .custom-checkout-layout > .col-md-4 {
-    width: 100%;
-  }
-}
-
-
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  border: 1px solid rgb(255, 255, 255);
-  border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(108, 108, 108, 0.558);
-  border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(108, 108, 108, 0.896);
 }

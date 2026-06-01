@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acess</title>
-   <link rel="icon" type="image/png" href="/image/Acess%20logo/logo.png?v=1.0" />
-  </head>
+  <%- include('../partials/head', {title: 'Moda — About Us'}) %>
   <body>
     <!-- Stylesheets -->
     <link
@@ -25,63 +19,100 @@
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     />
 
-   <!--navbar -->
-  <%- include('../partials/navbar', { page: page }) %>
-   <!--About us div -->
-  <div class="wrapper">
-      <div class="background-container">
-        <div class="bg-1"></div>
-        <div class="bg-2"></div>
+    <!-- Navbar -->
+    <%- include('../partials/navbar', { page: page }) %>
+
+    <!-- About Main Showcase Wrapper -->
+    <main class="about-hero-section">
+      <!-- Title Header Row -->
+      <div class="about-header-row text-start">
+        <h1 class="about-main-title">
+          <span style="white-space: nowrap;"><span class="outlined-word">THE MODA</span> MANIFESTO</span>
+        </h1>
+        <span class="about-subtitle-tag">SUMMER EDITORIAL // EST. 2026</span>
       </div>
-      <div class="about-container">
-        <div class="image-container">
-          <img src="/image/vectors/about.png" alt="" />
+
+      <!-- Asymmetric Grid Container -->
+      <div class="row align-items-start g-5 mb-5">
+        <!-- Left Side: Streetwear Fashion Portrait Frame -->
+        <div class="col-12 col-lg-5 about-image-column">
+          <div class="about-image-frame">
+            <img
+              src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=800&auto=format&fit=crop"
+              alt="Moda Luxury Streetwear Fashion Editorial"
+              class="about-main-image"
+            />
+            <!-- Sticker Overlay -->
+            <div class="about-sticker">
+              <span class="about-sticker-tag">ESTABLISHED</span>
+              <span class="about-sticker-bold">MODA</span>
+              <span class="about-sticker-tag">RETAIL CO.</span>
+            </div>
+          </div>
         </div>
 
-        <div class="text-container">
-          <h1>About us</h1>
-          <p>
-            At Acess, we're passionate about fashion, curating a collection that
-            blends the latest trends with timeless styles for an inspiring
-            shopping experience.
+        <!-- Right Side: Manifesto Narrative & Pillar Cards -->
+        <div class="col-12 col-lg-7 about-text-column">
+          <p class="about-desc-lead">
+            At Moda, we are passionate about curating state-of-the-art fashion that boldly bridges contemporary streetwear culture with premium, high-end timeless luxury.
           </p>
-          <p>
-            Committed to sustainability, we prioritize ethical practices and
-            eco-friendly initiatives in our materials and manufacturing
-            processes, ensuring a positive impact on both customers and the
-            environment.
+          <p class="about-desc-sub">
+            We reject the disposable nature of modern fast-fashion. Instead, we champion a deliberate, curated shopping experience that empowers self-expression through premium streetwear silhouettes.
           </p>
-          <p>
-            Read out our privacy policy and our buisness details to know about
-            us more.
-          </p>
-          <ul>
-          <li style="list-style-type: none; padding-top: 10px">
-            <a href="#" style="color: #0e0e0e; background-color: #f7f5f5"
-              ><i class="fas fa-solid fa-book"></i
-            ></a>
-            <a href="#" style="color: #0e0e0e; background-color: #f7f5f5">
-              <i class="fas fa-solid fa-address-card"></i
-            ></a>
-          </li>
-          </ul>
+
+          <!-- Core Brand Pillars -->
+          <div class="pillar-card shadow-sm">
+            <h4 class="pillar-title">
+              <i class="fa fa-gem"></i> Curated Aesthetics
+            </h4>
+            <p class="pillar-text">
+              Every garment in our catalog is hand-selected to ensure it meets our strict design parameters—blending vibrant colors, premium neobrutalist weights, and bold silhouettes.
+            </p>
+          </div>
+
+          <div class="pillar-card shadow-sm">
+            <h4 class="pillar-title">
+              <i class="fa fa-leaf"></i> Eco-Friendly Initiatives
+            </h4>
+            <p class="pillar-text">
+              We prioritize sustainable sourcing, ethical factory conditions, and eco-conscious raw materials, ensuring that our high-contrast pieces look spectacular while protecting our global circular future.
+            </p>
+          </div>
+
+          <div class="pillar-card shadow-sm">
+            <h4 class="pillar-title">
+              <i class="fa fa-bolt"></i> Seamless logistics
+            </h4>
+            <p class="pillar-text">
+              Backed by our advanced cloud databases and secure Azure platforms, we ensure real-time transaction processing, dynamic notifications, and rapid global shipping on every order.
+            </p>
+          </div>
+
+          <!-- Action Buttons / Documents -->
+          <div class="about-action-row">
+            <a href="/documents/privacy_policy.pdf" target="_blank" class="about-btn about-btn-primary">
+              <i class="fa fa-book me-1"></i> Privacy Policy
+            </a>
+            <a href="/documents/corporate_details.pdf" target="_blank" class="about-btn about-btn-secondary">
+              <i class="fa fa-address-card me-1"></i> Corporate Details
+            </a>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
 
+    <!-- Footer -->
+    <%- include('../partials/footer') %>
   </body>
 
-
-   <!--scripts -->
+  <!-- Scripts -->
   <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"
   ></script>
-
   <script
     src="https://kit.fontawesome.com/542d90fccf.js"
     crossorigin="anonymous"
   ></script>
-
 </html>

@@ -10,10 +10,9 @@ const getCartMiddleware = require("../Middleware/getCart");
 const getWishMiddleware = require("../Middleware/getWishlist");
 const getPurchaseMiddleware = require("../Middleware/getPurchase");
 const { pool } = require("../database/data");
-const {
-  getNoticeCount,
-} = require("../helper_functions/timeBasedUpdate");
-const {getProductRating, findProductByName} = require("../helper_functions/getRating");
+const sql = require("mssql");
+// getNoticeCount import removed
+const {getProductRating, findProductByName, getAllProductRatings} = require("../helper_functions/getRating");
 
 
 router.get("/",getUserMiddleware,getCartMiddleware,getWishMiddleware,getPurchaseMiddleware, async (req, res) => {
@@ -50,15 +49,17 @@ router.get("/",getUserMiddleware,getCartMiddleware,getWishMiddleware,getPurchase
 
     //console.log(req.loggedInUser);
 
+    const ratingsMap = await getAllProductRatings();
     res.render("home", {
       isLoggedIn,
       loggedInUser: req.loggedInUser || null,
       data,
+      ratingsMap,
       page: "home",
       cartItemsCount: req.cartItemsCount || 0,
       wishItemsCount: req.wishItemsCount || 0,
       orderCount: req.purchaseCount || 0,
-      notificationCount: getNoticeCount(),
+      notificationCount: req.notificationCount || 0,
       isVerified: req.loggedInUser ? req.loggedInUser.is_verified : true,
       resendAttempts: attempts,
       email: email,
@@ -99,15 +100,17 @@ router.get("/home",getUserMiddleware,getCartMiddleware,getWishMiddleware,getPurc
 
     //console.log(req.loggedInUser);
 
+    const ratingsMap = await getAllProductRatings();
     res.render("home", {
       isLoggedIn,
       loggedInUser: req.loggedInUser || null,
       data,
+      ratingsMap,
       page: "home",
       cartItemsCount: req.cartItemsCount || 0,
       wishItemsCount: req.wishItemsCount || 0,
       orderCount: req.purchaseCount || 0,
-      notificationCount: getNoticeCount(),
+      notificationCount: req.notificationCount || 0,
       isVerified: req.loggedInUser ? req.loggedInUser.is_verified : true,
       resendAttempts: attempts,
       email: email,
@@ -153,21 +156,73 @@ router.get("/Product",getUserMiddleware,getCartMiddleware,getWishMiddleware,getP
       }
     }
 
-    const ratings = matchedProduct
-      ? getProductRating({
-          id: matchedProduct.id,
-          category: matchedProduct.categories,
-          subcategory: matchedProduct.subcategory || null,
-        })
-      : [];
+    const ratings = [
+      { stars: 5, count: 0 },
+      { stars: 4, count: 0 },
+      { stars: 3, count: 0 },
+      { stars: 2, count: 0 },
+      { stars: 1, count: 0 }
+    ];
+
+    // Fetch dynamic reviews from SQL database
+    let dbReviews = [];
+    try {
+      const reviewsResult = await pool.request()
+        .input("productName", sql.VarChar, decodedName)
+        .query(`
+          SELECT r.*, u.firstname, u.lastname, u.img 
+          FROM reviews r 
+          JOIN users u ON r.user_id = u.id 
+          WHERE r.product_name = @productName
+        `);
+      dbReviews = reviewsResult.recordset;
+
+      // Merge active database reviews with static seed ratings
+      for (const review of dbReviews) {
+        const ratingVal = parseInt(review.rating);
+        const ratingObj = ratings.find(r => r.stars === ratingVal);
+        if (ratingObj) {
+          ratingObj.count += 1;
+        }
+      }
+    } catch (err) {
+      console.error("Error fetching/merging reviews:", err);
+    }
+
+    // Query actual purchases count from database
+    let purchasesCount = 0;
+    try {
+      const purchasesResult = await pool.request()
+        .input("productName", sql.VarChar, decodedName)
+        .query("SELECT SUM(quantity) AS totalPurchases FROM orders WHERE itemName = @productName");
+      purchasesCount = purchasesResult.recordset[0]?.totalPurchases || 0;
+    } catch (err) {
+      console.error("Error fetching purchases count:", err);
+    }
 
     console.log(req.cartItemsCount);
+
+    // Calculate dynamic average rating and reviews count
+    let totalReviews = 0;
+    let sumRating = 0;
+    for (const r of ratings) {
+      totalReviews += r.count;
+      sumRating += r.stars * r.count;
+    }
+    const avgRating = totalReviews > 0 ? (sumRating / totalReviews).toFixed(1) : "0.0";
+
+    const ratingsMap = await getAllProductRatings();
 
     res.render("product", {
       isLoggedIn,
       loggedInUser: req.loggedInUser ?? null,
       data: viewedProduct,
       ratings,
+      dbReviews,
+      avgRating,
+      totalReviews,
+      purchasesCount,
+      ratingsMap,
       randomData1Products,
       randomData2Products,
       randomData3Products,
@@ -176,7 +231,7 @@ router.get("/Product",getUserMiddleware,getCartMiddleware,getWishMiddleware,getP
       cartItemsCount: req.cartItemsCount || 0,
       wishItemsCount: req.wishItemsCount || 0,
       orderCount: req.purchaseCount || 0,
-      notificationCount: getNoticeCount(),
+      notificationCount: req.notificationCount || 0,
     });
 });
 
@@ -191,7 +246,7 @@ router.get("/acessiories", getUserMiddleware, getCartMiddleware, getWishMiddlewa
     cartItemsCount: req.cartItemsCount,
     wishItemsCount: req.wishItemsCount,
     orderCount: req.purchaseCount,
-    notificationCount: getNoticeCount(),
+    notificationCount: req.notificationCount || 0,
   });
 });
 
@@ -208,14 +263,16 @@ router.get("/shop-products", async (req, res) => {
     data = require("../seeds/kids.json");
   }
 
-  res.render("../partials/shop_products", { data });
+  const ratingsMap = await getAllProductRatings();
+  res.render("../partials/shop_products", { data, ratingsMap });
 });
 
 router.get("/shop", getUserMiddleware, getCartMiddleware, getWishMiddleware, getPurchaseMiddleware, async(req, res) => {
   const data1 = require("../seeds/men.json");
   const data2 = require("../seeds/women.json");
   const data3 = require("../seeds/kids.json");
-  res.render("shop", { page: "shop", data1, data2, data3 });
+  const ratingsMap = await getAllProductRatings();
+  res.render("shop", { page: "shop", data1, data2, data3, ratingsMap });
 });
 
 

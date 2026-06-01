@@ -4,10 +4,9 @@ const getUserMiddleware = require("../Middleware/getUser");
 const getCartMiddleware = require("../Middleware/getCart");
 const getWishMiddleware = require("../Middleware/getWishlist");
 const getPurchaseMiddleware = require("../Middleware/getPurchase");
-const {searchProducts} = require("../helper_functions/serach");
-const {
-  getNoticeCount,
-} = require("../helper_functions/timeBasedUpdate");
+const {searchProducts} = require("../helper_functions/search");
+const { getAllProductRatings } = require("../helper_functions/getRating");
+// getNoticeCount import removed
 
 
 router.get( "/search",getUserMiddleware,getCartMiddleware,getWishMiddleware,getPurchaseMiddleware, async (req, res) => {
@@ -28,17 +27,25 @@ router.get( "/search",getUserMiddleware,getCartMiddleware,getWishMiddleware,getP
     }
     // Note: "best-rating" is ignored as per your instruction
 
+    const ratingsMap = await getAllProductRatings();
+    for (const product of searchResults) {
+      const itemRating = ratingsMap[product.name.toLowerCase().trim()] || { avgRating: '0.0', totalReviews: 0 };
+      product.avgRating = itemRating.avgRating;
+      product.totalReviews = itemRating.totalReviews;
+    }
+
     res.render("search", {
       query,
       searchResults,
       sort, // Pass sort option to template
       isLoggedIn,
       loggedInUser: req.loggedInUser,
+      ratingsMap,
       page: "accessories", // Fixed typo: "acessiories" to "accessories"
       cartItemsCount: req.cartItemsCount,
       wishItemsCount: req.wishItemsCount,
       orderCount: req.purchaseCount,
-      notificationCount: getNoticeCount(),
+      notificationCount: req.notificationCount || 0,
     });
 });
 

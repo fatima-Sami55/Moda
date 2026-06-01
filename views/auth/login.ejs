@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acess</title>
-   <link rel="icon" type="image/png" href="/image/Acess%20logo/logo.png?v=1.0" />
-  </head>
+    <%- include('../../partials/head', {title: 'Moda — Login'}) %>
   <body>
 <!-- stylesheets  -->
     <link
@@ -15,7 +9,7 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-    <link href="/css/login.css" rel="stylesheet" type="text/css" />
+    <link href="/css/login.css?v=1.12" rel="stylesheet" type="text/css" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -34,25 +28,7 @@
     </h3>
     <br />
     <form class="row g-3 needs-validation" action="/login" novalidate method="POST">
-      <div class="row">
-        <!-- First Name -->
-        <div class="col-12 col-md-6 mb-2">
-          <label class="form-label">First Name</label>
-          <input name="firstname" type="text" class="form-control" required />
-          <div class="invalid-feedback">
-            First name must not be empty.
-          </div>
-        </div>
-
-        <!-- Last Name -->
-        <div class="col-12 col-md-6 mb-2">
-          <label class="form-label">Last Name</label>
-          <input name="lastname" type="text" class="form-control" required />
-          <div class="invalid-feedback">
-            Last name must not be empty.
-          </div>
-        </div>
-      </div>
+      <!-- Email and Password -->
 
       <!-- Email -->
       <div class="col-md-6">
@@ -74,52 +50,105 @@
 
       <!-- Submit -->
       <div class="col-12 text-center">
-        <button type="submit" class="btn btn-dark mt-3" style="width: 160px">Log in</button>
+        <button type="submit" class="btn btn-dark mt-3" style="min-width: 190px; width: auto; white-space: nowrap; overflow: hidden;">Log in</button>
       </div>
     </form>
   </div>
 </div>
-<!-- redirect link to register form  -->
 <div class="container text-center" style="font-size: 18px; margin-top: 30px;">
   Not a member?
   <a href="/signup" style="text-decoration: none; color: blue;">Register</a>
+  <span class="mx-2 text-muted">|</span>
+  <a href="/forgot-password" style="text-decoration: none; color: #ef4444;">Forgot Password?</a>
 </div>
 
   </body>
 
 <!-- scripts -->
 
- <script>
-  (function () {
-    "use strict";
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector(".needs-validation");
+  if (!form) return;
 
-    const forms = document.querySelectorAll(".needs-validation");
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
 
-    Array.prototype.slice.call(forms).forEach(function (form) {
-      form.addEventListener(
-        "submit",
-        function (event) {
-          let isCustomValid = true;
+    // Reset validation states
+    form.classList.remove("was-validated");
 
-          // Reset previous validation states
-          form.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+    // Client-side HTML5 check
+    if (!form.checkValidity()) {
+      form.classList.add("was-validated");
+      if (window.showToast) {
+        window.showToast("Please fill in all fields correctly.", "error");
+      }
+      return;
+    }
 
-          // ✅ PASSWORD VALIDATION
-          const passwordInput = document.getElementById("inputPassword4");
-          const password = passwordInput.value;
+    const email = form.email.value;
+    const Pass = form.Pass.value;
 
-          // ✅ HTML5 + Custom Combined Validation
-          if (!form.checkValidity() || !isCustomValid) {
-            event.preventDefault();
-            event.stopPropagation();
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+
+    // Show spinner & disable button
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin me-2"></i> Logging in...';
+
+    fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({ email, Pass })
+    })
+      .then(async (response) => {
+        let data;
+        try {
+          data = await response.json();
+        } catch (err) {
+          console.error("JSON Parse Error:", err);
+          if (window.showToast) {
+            window.showToast("Could not parse server response.", "error");
           }
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+          return;
+        }
 
-          form.classList.add("was-validated");
-        },
-        false
-      );
-    });
-  })();
+        if (data.error) {
+          if (window.showToast) {
+            window.showToast(data.error, "error");
+          }
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        } else if (data.success) {
+          if (window.showToast) {
+            window.showToast(data.success, "success");
+          }
+          setTimeout(() => {
+            window.location.href = data.redirect || "/home";
+          }, 1200);
+        } else {
+          if (window.showToast) {
+            window.showToast("Unexpected response from server.", "error");
+          }
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      })
+      .catch((err) => {
+        console.error("Login AJAX Error:", err);
+        if (window.showToast) {
+          window.showToast("Something went wrong. Please try again.", "error");
+        }
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      });
+  });
+});
 </script>
 
   <script

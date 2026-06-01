@@ -2,140 +2,68 @@ const express = require("express");
 const router = express.Router();
 const { pool } = require("../database/data");
 const sql = require("mssql");
-const fs = require("fs");
-const path = require("path");
-const dataPath = path.join(__dirname, "../order_history/purchase.json");
-const data = require(dataPath);
 const getUserMiddleware = require("../Middleware/getUser");
 const getPurchaseMiddleware = require("../Middleware/getPurchase");
 const getOrderMiddleware = require("../Middleware/getOrders");
 const isAuthenticated = require("../Middleware/is_logged_in");
 const checkEmailVerified = require("../Middleware/getEmailVerification");
+const { verifyCsrf } = require("../Middleware/csrf");
 const logEmail = require("../helper_functions/emailLogger");
 const sendEmail = require("../helper_functions/emailWriter");
 const {html2, html3, html4} = require("../helper_functions/emailMessages");
 const {
-  getNoticeCount,
   getCurrentNotifications,
 } = require("../helper_functions/timeBasedUpdate");
 
-router.get("/orders", isAuthenticated, getPurchaseMiddleware,checkEmailVerified, (req, res) => {
-  res.render("orders", {
-    purchase: req.purchase,
-    purchaseCount: req.purchaseCount,
-    page: "orders",
-  });
+router.get("/orders", isAuthenticated, checkEmailVerified, (req, res) => {
+  res.redirect("/user-profile?tab=orders");
 });
 
-router.get("/track-order", isAuthenticated, getOrderMiddleware, getPurchaseMiddleware, checkEmailVerified, async (req, res) => {
-  const currentDate = new Date();
+router.get("/track-order", isAuthenticated, checkEmailVerified, (req, res) => {
   const id = req.query.purchase_id;
-
-  if (!id || !data[id]) {
-    console.error("Order ID not found in JSON file.");
-    return res.status(404).send("Order ID not found.");
-  }
-
-  const orderData = data[id];
-  const previousStatus = orderData.OrderStatus || "Placed";
-
-  const userId = req.session.userId;
-  const fullName = req.session.user.firstname + " " + req.session.user.lastname;
-  const email = req.session.user.email;
-
-  // Define status priority
-  const statusPriority = {
-    "Placed": 0,
-    "arrived": 1,
-    "shipped": 2,
-    "delivered": 3,
-    "reviewed": 4, // if you ever set this later
-  };
-
-  const currentPriority = statusPriority[previousStatus];
-  let newStatus = previousStatus;
-
-  try {
-    if (currentDate >= new Date(orderData.delivery) && currentPriority < statusPriority["delivered"]) {
-      newStatus = "delivered";
-      await sendEmail({ to: email, subject: "Order Delivery - Acess", html: html4 });
-      await logEmail(userId, fullName, email, "order delivery");
-    } else if (currentDate >= new Date(orderData.shipment) && currentPriority < statusPriority["shipped"]) {
-      newStatus = "shipped";
-      await sendEmail({ to: email, subject: "Order Shipment - Acess", html: html3 });
-      await logEmail(userId, fullName, email, "order shipment");
-    } else if (currentDate >= new Date(orderData.arrival) && currentPriority < statusPriority["arrived"]) {
-      newStatus = "arrived";
-      await sendEmail({ to: email, subject: "Order Arrival - Acess", html: html2 });
-      await logEmail(userId, fullName, email, "order arrival at warehouse");
-    }
-
-    // Write new status to DB
-    if (newStatus !== previousStatus) {
-      orderData.OrderStatus = newStatus;
-
-      // Update DB
-      await pool.request()
-        .input("OrderStatus", sql.VarChar, newStatus)
-        .input("PurchaseID", sql.Int, id)
-        .query(`
-          UPDATE purchasedItems 
-          SET OrderStatus = CASE 
-                              WHEN OrderStatus != 'reviewed' THEN @OrderStatus 
-                              ELSE OrderStatus 
-                            END 
-          WHERE PurchaseID = @PurchaseID
-        `);
-
-      // Save updated JSON file
-      fs.writeFileSync(dataPath, JSON.stringify(data, null, 2), "utf8");
-    }
-
-    res.render("track-order", {
-      orders: req.orders,
-      purchase: req.purchase,
-      verified_id: id,
-      data,
-      currentDate,
-    });
-
-  } catch (err) {
-    console.error("Order Tracking Error:", err);
-    res.status(500).send("Error updating order status.");
+  if (id) {
+    res.redirect(`/user-profile?track=${id}`);
+  } else {
+    res.redirect("/user-profile?tab=orders");
   }
 });
 
-router.post("/cancel-order", isAuthenticated,checkEmailVerified, async (req, res) => {
+
+router.post("/cancel-order", isAuthenticated, checkEmailVerified, verifyCsrf, async (req, res) => {
   const { PurchaseID } = req.body;
   const userID = req.session.userId;
-  const data = require("../p.json");
-
-  if (!PurchaseID || !data[PurchaseID]) {
-    return res.json({ success: false, message: "Order ID not found." });
-  }
-
-  const orderData = data[PurchaseID];
-
-  // Check if order already shipped
-  if (new Date() >= new Date(orderData.shipment)) {
-    return res.json({
-      success: false,
-      message: "Cannot cancel order. It has already shipped.",
-    });
-  }
 
   try {
+    // 1. Fetch purchase record, enforcing user ownership
+    const purchaseResult = await pool.request()
+      .input("PurchaseID", sql.Int, PurchaseID)
+      .input("UserID", sql.Int, userID)
+      .query("SELECT * FROM purchaseditems WHERE PurchaseID = @PurchaseID AND userID = @UserID");
+
+    if (purchaseResult.recordset.length === 0) {
+      return res.json({ success: false, message: "Order not found." });
+    }
+
+    const orderData = purchaseResult.recordset[0];
+
+    // Check if order already shipped or delivered
+    const status = (orderData.OrderStatus || 'placed').toLowerCase();
+    if (status === 'shipped' || status === 'delivered' || (orderData.shipmentDate && new Date() >= new Date(orderData.shipmentDate))) {
+      return res.json({
+        success: false,
+        message: "Cannot cancel order. It has already shipped.",
+      });
+    }
+
     // Delete from purchaseditems
     const deletePurchaseResult = await pool.request()
       .input("PurchaseID", sql.Int, PurchaseID)
       .input("UserID", sql.Int, userID)
-      .query("DELETE FROM purchaseditems WHERE PurchaseID = @PurchaseID AND UserID = @UserID");
+      .query("DELETE FROM purchaseditems WHERE PurchaseID = @PurchaseID AND userID = @UserID");
 
     if (deletePurchaseResult.rowsAffected[0] > 0) {
-      delete data[PurchaseID];
-
       // Delete from orders table
-      const deleteOrdersResult = await pool.request()
+      await pool.request()
         .input("PurchaseID", sql.Int, PurchaseID)
         .input("UserID", sql.Int, userID)
         .query("DELETE FROM orders WHERE purchase_id = @PurchaseID AND user_id = @UserID");
@@ -151,15 +79,11 @@ router.post("/cancel-order", isAuthenticated,checkEmailVerified, async (req, res
   }
 });
 
-router.get("/inbox", isAuthenticated, getUserMiddleware,checkEmailVerified, (req, res) => {
-  res.render("inbox", {
-    loggedInUser: req.loggedInUser,
-    page: "inbox",
-    notifications: getNoticeCount(),
-  });
+router.get("/inbox", isAuthenticated, checkEmailVerified, (req, res) => {
+  res.redirect("/user-profile?tab=inbox");
 });
 
-router.post("/delete-notification", isAuthenticated,checkEmailVerified, async (req, res) => {
+router.post("/delete-notification", isAuthenticated, checkEmailVerified, verifyCsrf, async (req, res) => {
   const userId = req.session.userId;
   const { id } = req.body;
 
@@ -170,16 +94,23 @@ router.post("/delete-notification", isAuthenticated,checkEmailVerified, async (r
       .query("DELETE FROM notifications WHERE id = @id AND user_id = @user_id");
 
     console.log("Notification deleted:", result.rowsAffected);
-    res.json({ success: true });
+    
+    // Fetch updated notification list and emit count to client
+    const countResult = await pool.request()
+      .input("user_id", sql.Int, userId)
+      .query("SELECT COUNT(*) AS count FROM notifications WHERE user_id = @user_id");
+    const count = countResult.recordset[0].count;
+
+    res.json({ success: true, notificationCount: count });
   } catch (error) {
     console.error("Error deleting notification:", error);
     res.status(500).json({ success: false, message: "Server error." });
   }
 
-  getCurrentNotifications(); 
+  getCurrentNotifications(userId); 
 });
 
-router.post("/delete-all", isAuthenticated,checkEmailVerified, async (req, res) => {
+router.post("/delete-all", isAuthenticated, checkEmailVerified, verifyCsrf, async (req, res) => {
   const userId = req.session.userId;
 
   try {
@@ -194,49 +125,28 @@ router.post("/delete-all", isAuthenticated,checkEmailVerified, async (req, res) 
     res.status(500).json({ success: false, message: "Server error." });
   }
 
-  getCurrentNotifications(); 
+  getCurrentNotifications(userId); 
 });
 
-router.get("/review", isAuthenticated,checkEmailVerified, async (req, res) => {
-  const userId = req.session.userId;
-
-  try {
-     const result = await pool.request()
-  .input("user_id", sql.Int, userId)
-  .query(`
-    SELECT 
-      o.id,
-      o.itemName,
-      o.itemDescription,
-      o.item_img,
-      o.quantity,
-      o.item_price,
-      o.user_id,
-      o.purchase_id,
-      p.purchasedItemId
-    FROM orders o
-    JOIN purchasedItems p ON o.purchase_id = p.PurchaseID
-    WHERE p.orderStatus = 'delivered' 
-      AND o.user_id = @user_id
-      AND o.review_status = 0
-  `);
-
-    res.render("review", {
-      review: result.recordset,
-      page: "Reviews",
-      reviewCount: result.recordset.length,
-    });
-  } catch (error) {
-    console.error("Error fetching delivered orders:", error);
-    res.status(500).send("Internal Server Error");
-  }
+router.get("/review", isAuthenticated, checkEmailVerified, (req, res) => {
+  res.redirect("/user-profile?tab=reviews");
 });
 
-router.post("/review", isAuthenticated, checkEmailVerified, async (req, res) => {
+router.post("/review", isAuthenticated, checkEmailVerified, verifyCsrf, async (req, res) => {
   const { review, rating, id, productName, purchasedItemId } = req.body;
   const userId = req.session.userId;
 
   try {
+    // IDOR Check: Ensure this order item actually belongs to the user
+    const checkOrder = await pool.request()
+      .input("id", sql.Int, id)
+      .input("userId", sql.Int, userId)
+      .query("SELECT * FROM orders WHERE id = @id AND user_id = @userId");
+
+    if (checkOrder.recordset.length === 0) {
+      return res.status(403).send("Unauthorized review request");
+    }
+
     // Step 1: Insert into reviews
     const insertResult = await pool.request()
       .input("rating", sql.Int, rating)
@@ -307,20 +217,31 @@ router.post("/review", isAuthenticated, checkEmailVerified, async (req, res) => 
   }
 });
 
-router.delete("/review", isAuthenticated, async (req, res) => {
+router.delete("/review", isAuthenticated, verifyCsrf, async (req, res) => {
   const { orderId, purchasedItemId } = req.body;
+  const userId = req.session.userId;
 
   try {
+    // IDOR Check: Ensure this order item actually belongs to the user
+    const checkOrder = await pool.request()
+      .input("orderId", sql.Int, orderId)
+      .input("userId", sql.Int, userId)
+      .query("SELECT * FROM orders WHERE id = @orderId AND user_id = @userId");
+
+    if (checkOrder.recordset.length === 0) {
+      return res.status(403).json({ error: "Unauthorized review deletion request" });
+    }
+
     // Step 1: Set review_status = 0 for this order item
     await pool.request()
       .input("orderId", sql.Int, orderId)
       .query(`
         UPDATE orders
-        SET review_status = 1
+        SET review_status = 0
         WHERE id = @orderId
       `);
 
-    // Step 2: Delete the actual review from `reviews` table (optional but usually expected)
+    // Step 2: Delete the actual review from `reviews` table
     await pool.request()
       .input("order_id", sql.Int, orderId)
       .query(`
@@ -330,18 +251,17 @@ router.delete("/review", isAuthenticated, async (req, res) => {
 
     // Step 3: Check if ALL items in the purchase are now unreviewed
      const purchaseIdResult = await pool.request()
-  .input("orderId", sql.Int, orderId)
-  .query(`
-    SELECT purchase_id FROM orders WHERE id = @orderId
-  `);
+      .input("orderId", sql.Int, orderId)
+      .query(`
+        SELECT purchase_id FROM orders WHERE id = @orderId
+      `);
 
-if (!purchaseIdResult.recordset.length) {
-  console.error("❌ Order not found with id:", orderId);
-  return res.status(404).json({ error: "Order not found. Cannot continue." });
-}
+    if (!purchaseIdResult.recordset.length) {
+      console.error("❌ Order not found with id:", orderId);
+      return res.status(404).json({ error: "Order not found. Cannot continue." });
+    }
 
-const purchaseId = purchaseIdResult.recordset[0].purchase_id;
-    
+    const purchaseId = purchaseIdResult.recordset[0].purchase_id;
 
     const totalItemsResult = await pool.request()
       .input("purchaseId", sql.Int, purchaseId)
@@ -354,7 +274,7 @@ const purchaseId = purchaseIdResult.recordset[0].purchase_id;
     const total = totalItemsResult.recordset[0].total;
     const reviewed = reviewedItemsResult.recordset[0].reviewed;
 
-    // Step 4: If NO items are reviewed, revert purchase status back to 'delivered' or 'not reviewed'
+    // Step 4: If NO items are reviewed, revert purchase status back to 'delivered'
     if (reviewed === 0) {
       await pool.request()
         .input("purchasedItemId", sql.UniqueIdentifier, purchasedItemId)
@@ -375,29 +295,8 @@ const purchaseId = purchaseIdResult.recordset[0].purchase_id;
   }
 });
 
-router.get("/email", isAuthenticated, async(req, res) => {
-      try {
-    console.log(req.session.userId)
-    const userId = req.session.userId;
-    const result = await pool
-      .request()
-      .input("user_id", userId)
-      .query(`
-        SELECT * FROM EmailLogs
-        WHERE userId = @user_id
-        ORDER BY sentAt DESC
-      `);
-    
-    res.render("email", {
-      page: "email",
-      logs: result.recordset
-    });
-  } catch (err) {
-    console.error("❌ Failed to load email logs:", err);
-    res.render("email", { page: "email", logs: [], totalMails: 0 });
-  }
+router.get("/email", isAuthenticated, (req, res) => {
+  res.redirect("/user-profile?tab=email");
 });
-
-
 
 module.exports = router;

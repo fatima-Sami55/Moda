@@ -1,7 +1,7 @@
 // utils/validateSignupInput.js
 const validator = require("validator");
 
-function validateSignupInput(data) {
+function validateSignupInput(data, isEditMode = false) {
   const errors = [];
 
   const {
@@ -16,7 +16,7 @@ function validateSignupInput(data) {
   } = data;
 
   const nameRegex = /^[A-Za-z]+$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,12}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,128}$/;
   const phoneRegex = /^\d{11}$/;
   const cityRegex = /^[A-Za-z]{5,15}$/;
   const zipRegex = /^\d{4}$/;
@@ -37,8 +37,10 @@ function validateSignupInput(data) {
 
   
 
-  if (!passwordRegex.test(Pass)) {
-    errors.push("❌ Password must be 8-12 characters and include uppercase, lowercase, number, and symbol.");
+  if (!isEditMode || (Pass && Pass.trim() !== "")) {
+    if (!passwordRegex.test(Pass)) {
+      errors.push("❌ Password must be 8-128 characters and include uppercase, lowercase, number, and symbol.");
+    }
   }
 
   if (!address || address.trim().length < 13) {

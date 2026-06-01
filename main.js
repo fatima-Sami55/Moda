@@ -2,10 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const port = process.env.PORT;
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 const session = require("express-session");
 const MSSQLStore = require("connect-mssql-v2");
 const methodOverride = require("method-override");
-const flash = require("connect-flash");
 const cookieParser = require("cookie-parser");
 require("events").EventEmitter.defaultMaxListeners = 15;
 const path = require("path");
@@ -33,6 +34,7 @@ const {
   try {
     await poolConnect; // ensure MSSQL is connected
     console.log("✅ MSSQL Connected");
+    await require("./database/migrate")();
 
     // SESSION CONFIG (after DB ready)
     const sessionConfig = {
@@ -48,22 +50,132 @@ const {
           trustServerCertificate: true,
         },
       }),
-      secret: process.env.SESSION_SECRET || "supersecret",
+      secret: (() => {
+        if (!process.env.SESSION_SECRET) {
+          throw new Error("❌ CRITICAL: SESSION_SECRET environment variable is missing!");
+        }
+        return process.env.SESSION_SECRET;
+      })(),
       resave: false,
       saveUninitialized: false,
       cookie: {
         httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       },
     };
 
     //MIDDLEWARE
+    app.set("trust proxy", 1);
+
+    // 🛡️ SECURITY HEADERS (Helmet)
+    app.use(helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: [
+            "'self'",
+            "'unsafe-inline'",
+            "https://cdn.jsdelivr.net",
+            "https://stackpath.bootstrapcdn.com",
+            "https://kit.fontawesome.com",
+            "https://ka-f.fontawesome.com",
+            "https://cdnjs.cloudflare.com",
+            "https://code.jquery.com"
+          ],
+          styleSrc: [
+            "'self'",
+            "'unsafe-inline'",
+            "https://cdn.jsdelivr.net",
+            "https://stackpath.bootstrapcdn.com",
+            "https://fonts.googleapis.com",
+            "https://ka-f.fontawesome.com",
+            "https://cdnjs.cloudflare.com"
+          ],
+          fontSrc: [
+            "'self'",
+            "https://fonts.gstatic.com",
+            "https://stackpath.bootstrapcdn.com",
+            "https://fonts.googleapis.com",
+            "https://ka-f.fontawesome.com",
+            "https://cdnjs.cloudflare.com"
+          ],
+          imgSrc: [
+            "'self'",
+            "data:",
+            "https://res.cloudinary.com",
+            "https://images.unsplash.com",
+            "https://mdbcdn.b-cdn.net",
+            "https://bootdey.com",
+            "http://bootdey.com",
+            "https://*.bootdey.com",
+            "http://*.bootdey.com"
+          ],
+          connectSrc: [
+            "'self'",
+            "ws:",
+            "wss:",
+            "https://cdn.jsdelivr.net",
+            "https://ka-f.fontawesome.com",
+            "https://stackpath.bootstrapcdn.com"
+          ],
+        }
+      }
+    }));
+
+    // 🛡️ GENERAL RATE LIMITER (DoS Protection) - TEMPORARILY DISABLED FOR TESTING
+    /*
+    const generalLimiter = rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 200,
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: "Too many requests from this IP. Please try again in 15 minutes."
+    });
+    app.use(generalLimiter);
+    */
+
+    // 🛡️ AUTH RATE LIMITER (Brute-Force Protection) - TEMPORARILY DISABLED FOR TESTING
+    /*
+    const authLimiter = rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 15,
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: "Too many login/signup attempts. Please try again in 15 minutes."
+    });
+    app.use("/login", authLimiter);
+    app.use("/signup", authLimiter);
+    app.use("/forgot-password", authLimiter);
+    app.use("/reset-password", authLimiter);
+    */
+
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
     app.use(methodOverride("_method"));
     app.use(cookieParser());
     app.use(session(sessionConfig));
-    app.use(flash());
+
+    // Custom lightweight session-based req.flash helper, completely replacing connect-flash dependency
+    app.use((req, res, next) => {
+      req.flash = (type, msg) => {
+        if (!req.session) return "";
+        const sessionKey = `flash_${type}`;
+        if (msg) {
+          req.session[sessionKey] = msg;
+          return msg;
+        } else {
+          const temp = req.session[sessionKey];
+          delete req.session[sessionKey];
+          return temp || "";
+        }
+      };
+      next();
+    });
+
+    const { csrfTokenMiddleware } = require("./Middleware/csrf");
+    app.use(csrfTokenMiddleware);
     app.use((req, res, next) => {
       res.locals.success = req.flash("success");
       res.locals.error = req.flash("error");
@@ -77,7 +189,11 @@ const {
 
     // SOCKET.IO
     io.on("connection", (socket) => {
-      getCurrentNotifications();
+      socket.on("join", (userId) => {
+        socket.join(`user_${userId}`);
+        console.log(`👤 User joined room: user_${userId}`);
+        getCurrentNotifications(userId);
+      });
       socket.on("disconnect", () => {
         console.log("A user disconnected");
       });
@@ -95,6 +211,12 @@ const {
     app.use("/", userProfile);
     app.use("/", info);
     app.use("/", error);
+
+    // 🛡️ GLOBAL ERROR HANDLER
+    app.use((err, req, res, next) => {
+      console.error("🔥 Unhandled Server Error:", err);
+      res.status(500).render("500 page.ejs");
+    });
 
    
     // START SERVER

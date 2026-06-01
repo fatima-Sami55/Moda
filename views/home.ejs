@@ -1,19 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Access</title>
-    <link rel="icon" type="image/png" href="/image/Acess%20logo/logo.png?v=1.0" />
-  </head>
+    <%- include('../partials/head', {title: 'Moda'}) %>
   <body class="<%= isVerified ? '' : 'unverified' %>">
 
     <!-- Stylesheets -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
-    />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -31,98 +21,151 @@
     />
 
     <!-- Email verification flash -->
-     <% if (!isVerified) { %>
-      <div class="fixed-wrapper">
-  <div class="container-fluid" style="padding: 0px;">
-    <div class="alert alert-warning d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2" role="alert">
-      
-      <div class="flex-grow-1">
-        ⚠️ Your account is not verified. <br class="d-md-none" />
-        <%= resendAttempts >= 3
-          ? "(You’ve reached the resend limit for today)"
-          : "Please verify your email to unlock full features." %>
+    <% if (!isVerified) { %>
+    <div class="verification-strip">
+      <div class="container-fluid d-flex align-items-center justify-content-between h-100 px-3 px-md-4">
+        <div class="d-flex align-items-center text-truncate gap-2">
+          <span class="strip-emoji">⚠️</span>
+          <span class="strip-text">
+            <strong>Account Unverified</strong>
+            <%= resendAttempts >= 3
+              ? "(Resend limit reached for today. Check your inbox!)"
+              : "Please verify your email address to unlock full premium features." %>
+          </span>
+        </div>
+        <div class="strip-action">
+          <% if (resendAttempts < 3) { %>
+            <form id="resend-verification-form" class="d-inline">
+              <input type="hidden" name="email" value="<%= email %>">
+              <button type="submit" class="strip-action-btn btn">Resend Email</button>
+            </form>
+          <% } else { %>
+            <button class="strip-action-btn btn disabled" disabled>Resend Disabled</button>
+          <% } %>
+        </div>
       </div>
-
-      <div>
-        <% if (resendAttempts < 3) { %>
-          <form action="/resend-verification" method="POST" class="d-inline">
-            <input type="hidden" name="email" value="<%= email %>">
-            <button type="submit" class="btn btn-sm btn-outline-primary">Resend Email</button>
-          </form>
-        <% } else { %>
-          <button class="btn btn-sm btn-outline-secondary" disabled>Resend Disabled</button>
-        <% } %>
-      </div>
-      
-    </div>
-    </div>
     </div>
     <% } %>
 
     <!-- Navbar -->
     <%- include('../partials/navbar', { page: page, isVerified: isVerified }) %>
-     <% if (isLoggedIn) { %>
-    <!-- Welcome banner -->
-    <div class="banner bg-light">
-  <div class="content">
-    <div class="banner-content">
-      <div class="banner-text">
-        <h2>EXPLORE WITH US</h2>
-        <p class="banner-desc">
-          Step into Style with Acess: Your One-Stop Shop for Fashion,
-          Footwear, and Fabulous Accessories. Transforming everyday shopping
-          into extraordinary experiences
-        </p>
-        <div>
-          <a href="#product">
-            <button class="signup-btn" type="button">
-              <span class="cover"></span>Start your journey!
-            </button>
-          </a>
+    <% if (isLoggedIn) { %>
+    <!-- Reimagined Editorial Hero Section -->
+    <div class="editorial-hero">
+      <div class="container-fluid h-100">
+        <div class="row align-items-center h-100 g-0">
+          
+          <!-- Left Column: High-End Typography & Brand Copy -->
+          <div class="col-12 col-lg-7 editorial-left d-flex align-items-center justify-content-center">
+            <div class="editorial-text-wrapper text-start">
+              <h1 class="editorial-main-title">
+                <span class="outlined-word">FIND</span> YOUR<br />
+                <span style="white-space: nowrap;">TRUE STYLE</span><br />
+                HERE
+              </h1>
+              
+              <!-- Capsule Pill Badge -->
+              <div class="capsule-badge-row">
+                <span class="capsule-pill">SUMMER IS COMING</span>
+              </div>
+              
+              <p class="editorial-desc">
+                Our fashion collection is made with high-quality materials and designed to fit your body like a glove. Shop now to find the perfect pieces for your wardrobe.
+              </p>
+              
+              <!-- Hero Action Buttons: Explore Collection (Round button with arrow) -->
+              <div class="editorial-action-row d-flex align-items-center gap-3 flex-wrap mt-4">
+                <a href="#product" class="sticker-btn">
+                  <span class="arrow-icon">&rarr;</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right Column: Real Human Fashion Portrait & Stickers -->
+          <div class="col-12 col-lg-5 editorial-right position-relative">
+            <!-- Main Photography Showcase Container -->
+            <div class="editorial-image-frame">
+              <img
+                src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop"
+                alt="Human Fashion Summer Showcase"
+                class="editorial-main-image"
+              />
+              
+              <!-- Rotating Summer Sale Sticker -->
+              <div class="summer-sale-sticker">
+                <div class="sticker-inner">
+                  <span class="sticker-tag">SUMMER SALE</span>
+                  <span class="sticker-discount">30% OFF</span>
+                  <span class="sticker-tag">SHOP ACCESS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
-      <img
-        src="../image/vectors/home.png"
-        alt="Home Image"
-        class="banner-image"
-      />
-    </div>
-  </div>
     </div>
 
     <% } if (!isLoggedIn) { %>
-    <!-- Welcome banner -->
-    <div class="banner bg-light">
-  <div class="content">
-    <div class="banner-content">
-      <div class="banner-text">
-        <h2>EXPLORE WITH US</h2>
-        <p class="banner-desc">
-          Step into Style with Acess: Your One-Stop Shop for Fashion,
-          Footwear, and Fabulous Accessories. Transforming everyday shopping
-          into extraordinary experiences
-        </p>
-        <div>
-          <a href="/login">
-            <button class="signup-btn" type="button">
-              <span class="cover"></span>Log in
-            </button>
-          </a>
+    <!-- Reimagined Editorial Hero Section -->
+    <div class="editorial-hero">
+      <div class="container-fluid h-100">
+        <div class="row align-items-center h-100 g-0">
+          
+          <!-- Left Column: High-End Typography & Brand Copy -->
+          <div class="col-12 col-lg-7 editorial-left d-flex align-items-center justify-content-center">
+            <div class="editorial-text-wrapper text-start">
+              <h1 class="editorial-main-title">
+                <span class="outlined-word">FIND</span> YOUR<br />
+                <span style="white-space: nowrap;">TRUE STYLE</span><br />
+                HERE
+              </h1>
+              
+              <!-- Capsule Pill Badge -->
+              <div class="capsule-badge-row">
+                <span class="capsule-pill">SUMMER IS COMING</span>
+              </div>
+              
+              <p class="editorial-desc">
+                Our fashion collection is made with high-quality materials and designed to fit your body like a glove. Shop now to find the perfect pieces for your wardrobe.
+              </p>
+              
+              <!-- Hero Action Buttons: Sign Up & Log In -->
+              <div class="editorial-action-row d-flex align-items-center gap-3 flex-wrap mt-4">
+                <a href="/signup" class="hero-cta-btn cta-signup text-decoration-none">
+                  Sign Up
+                </a>
+                <a href="/login" class="hero-cta-btn cta-login text-decoration-none">
+                  Log In
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right Column: Real Human Fashion Portrait & Stickers -->
+          <div class="col-12 col-lg-5 editorial-right position-relative">
+            <!-- Main Photography Showcase Container -->
+            <div class="editorial-image-frame">
+              <img
+                src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop"
+                alt="Human Fashion Summer Showcase"
+                class="editorial-main-image"
+              />
+              
+              <!-- Rotating Summer Sale Sticker -->
+              <div class="summer-sale-sticker">
+                <div class="sticker-inner">
+                  <span class="sticker-tag">SUMMER SALE</span>
+                  <span class="sticker-discount">30% OFF</span>
+                  <span class="sticker-tag">SHOP ACCESS</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <a href="/signup">
-            <button class="signup-btn" type="button">
-              <span class="cover"></span>Sign up
-            </button>
-          </a>
         </div>
       </div>
-      <img
-        src="../image/vectors/home.png"
-        alt="Home Image"
-        class="banner-image"
-      />
-    </div>
-  </div>
     </div>
     <% } %>
 
@@ -131,48 +174,42 @@
     <section class="product" id="product" style="padding-bottom: 70px">
       <h1
         class="product-category"
-        style="padding-top: 40px; text-align: center; color: white"
+        style="padding-top: 40px; text-align: center;"
       >
         Products gallery
       </h1>
-      <hr class="w-50 mx-auto text-light" style="margin-bottom: 30px" />
-      <div class="container product-container bg-light">
-        <div class="row g-3 align-items-stretch">
+      <hr class="w-25 mx-auto" style="border-color: #1A1A1A !important; margin-bottom: 30px; opacity: 0.15;" />
+      <div class="container product-container">
+        <div class="row g-5 align-items-stretch">
           <% data.forEach(item => { %>
-          <div class="col-12 col-sm-6 col-md-4 mb-4 d-flex">
+          <div class="col-12 col-sm-6 col-md-4 mb-5 d-flex">
             <div
-              class="product-card shadow-lg p-3 mb-5 bg-dark rounded text-light w-100 d-flex flex-column justify-content-between"
+              class="product-card w-100 d-flex flex-column justify-content-between"
               id="<%= item.id%>"
             >
-              <h1
-                class="badge text-bg-secondary"
-                style="
-                  color: rgb(255, 255, 255);
-                  background-color: red;
-                  float: left;
-                "
-              >
-                Best selling
-              </h1>
+              <span class="badge-best-selling">Best Selling</span>
               <div class="product-image">
                 <img src="<%= item.image%>" class="product-thumb" alt="" />
               </div>
               <div class="product-info">
                 <h4 class="product-brand"><%= item.name%></h4>
                 <p class="product-short-description"><%= item.description%></p>
-                <label style="font-size: 30px; color: #ffc23c">
-                  <span class="icon">★</span>
-                  <span class="icon">★</span>
-                  <span class="icon">★</span>
-                  <span class="icon">★</span>
-                  <span class="icon">★</span>
-                </label>
-                <span class="price" style="color: green"
-                  >$<%= item.price%></span
-                >
-                <a href="/Product">
-                  <button class="card-btn">View product!</button>
-                </a>
+                <div class="text-warning mb-2 card-rating-trigger" style="font-size: 1.1rem; cursor: pointer;" title="View reviews">
+                  <% const itemRating = (typeof ratingsMap !== 'undefined' && ratingsMap[item.name.toLowerCase().trim()]) || { avgRating: '0.0', totalReviews: 0 }; %>
+                  <% const avg = parseFloat(itemRating.avgRating || 0); %>
+                  <% for (let i = 1; i <= 5; i++) { %>
+                    <% if (i <= Math.floor(avg)) { %>
+                      <i class="fa fa-star"></i>
+                    <% } else if (i - 0.5 <= avg) { %>
+                      <i class="fa fa-star-half-o"></i>
+                    <% } else { %>
+                      <i class="fa fa-star-o"></i>
+                    <% } %>
+                  <% } %>
+                  <span class="text-muted ms-1" style="font-size: 0.8rem;">(<%= itemRating.totalReviews %>)</span>
+                </div>
+                <span class="price">$<%= item.price%></span>
+                <a href="/Product" class="card-btn">View product!</a>
               </div>
             </div>
           </div>
@@ -181,10 +218,10 @@
       </div>
     </section>
     <!-- Timeline -->
-    <section class="bg-light">
+    <section class="timeline-section">
       <div class="container py-5">
-        <h1 style="text-align: center">Why Choose Us</h1>
-        <hr class="w-50 mx-auto text-dark" style="margin-bottom: 50px" />
+        <h1 style="text-align: center;">Why Choose Us</h1>
+        <hr class="w-25 mx-auto" style="border-color: #1A1A1A !important; margin-bottom: 50px; opacity: 0.15;" />
         <div class="main-timeline">
           <div class="timeline left">
             <div class="card">
@@ -271,10 +308,10 @@
       <div class="container my-5 py-5">
         <div class="row d-flex justify-content-center">
           <div class="col-md-12">
-            <h1 style="color: white; text-align: center; line-height: 90px">
+            <h1 style="text-align: center; line-height: 90px">
               Testimonials
             </h1>
-            <hr class="w-50 mx-auto text-light" style="margin-bottom: 50px" />
+            <hr class="w-25 mx-auto" style="border-color: #1A1A1A !important; margin-bottom: 50px; opacity: 0.15;" />
 
             <div class="card">
               <div class="card-body px-4 py-5">
@@ -448,21 +485,22 @@
       </div>
     </section>
      <!-- Sponsers -->
-    <section class="bg-light py-5 py-xl-6" style="margin-top: -50px">
+    <section class="sponsors-section py-5 py-xl-6" style="margin-top: -50px">
       <div class="container mb-5 mb-md-6">
         <div class="row justify-content-md-center">
           <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 text-center">
-            <h2 class="mb-4 display-5">Sponsers</h2>
-            <p class="text-secondary mb-4 mb-md-5">
+            <h2 class="product-category" style="text-align: center; margin-bottom: 10px;">Sponsors</h2>
+            <hr class="w-25 mx-auto" style="border-color: #1A1A1A !important; margin-bottom: 30px; opacity: 0.15;" />
+            <p class="text-secondary mb-4 mb-md-5" style="font-size: 15px; line-height: 1.65;">
               Proudly supported by industry-leading partners who believe in our
               vision for trendsetting fashion and sustainable style.
             </p>
-            <hr class="w-50 mx-auto mb-0 text-secondary" />
           </div>
         </div>
       </div>
       <div class="container overflow-hidden">
-        <div class="row gy-5 gy-md-6">
+        <div class="sponsors-grid-container">
+          <div class="row gy-5 gy-md-6">
           <div class="col-6 col-md-3 align-self-center text-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -470,7 +508,7 @@
               width="190"
               height="95"
               fill="currentColor"
-              class="text-dark"
+              class="text-secondary"
             >
               <path
                 d="M502.9 266v69.7c0 62.1-50.3 112.4-112.4 112.4-61.8 0-112.4-49.8-112.4-111.3v-70.2l34.3 16 51.1-15.2V338c0 14.7 12 26.5 26.7 26.5S417 352.7 417 338v-72h85.9zm-224.7-58.2l34.3 16 51.1-15.2V173c0-60.5-51.1-109-112.1-109-60.8 0-112.1 48.2-112.1 108.2v162.4c0 14.9-12 26.7-26.7 26.7S86 349.5 86 334.6V266H0v69.7C0 397.7 50.3 448 112.4 448c61.6 0 112.4-49.5 112.4-110.8V176.9c0-14.7 12-26.7 26.7-26.7s26.7 12 26.7 26.7v30.9z"
@@ -484,7 +522,7 @@
               width="190"
               height="95"
               fill="currentColor"
-              class="text-dark"
+              class="text-secondary"
             >
               <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
               <path
@@ -499,7 +537,7 @@
               width="190"
               height="95"
               fill="currentColor"
-              class="text-dark"
+              class="text-secondary"
             >
               <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
               <path
@@ -514,7 +552,7 @@
               width="190"
               height="95"
               fill="currentColor"
-              class="text-dark"
+              class="text-secondary"
             >
               <path
                 d="M616 160h-67.3C511.2 70.7 422.9 8 320 8 183 8 72 119 72 256c0 16.4 1.6 32.5 4.7 48H24c-13.3 0-24 10.8-24 24 0 13.3 10.7 24 24 24h67.3c37.5 89.3 125.8 152 228.7 152 137 0 248-111 248-248 0-16.4-1.6-32.5-4.7-48H616c13.3 0 24-10.8 24-24 0-13.3-10.7-24-24-24zm-96 96c0 110.5-89.5 200-200 200-75.7 0-141.6-42-175.5-104H424c13.3 0 24-10.8 24-24 0-13.3-10.7-24-24-24H125.8c-3.8-15.4-5.8-31.4-5.8-48 0-110.5 89.5-200 200-200 75.7 0 141.6 42 175.5 104H216c-13.3 0-24 10.8-24 24 0 13.3 10.7 24 24 24h298.2c3.8 15.4 5.8 31.4 5.8 48zm-304-24h208c13.3 0 24 10.7 24 24 0 13.2-10.7 24-24 24H216c-13.3 0-24-10.7-24-24 0-13.2 10.7-24 24-24z"
@@ -528,7 +566,7 @@
               height="65"
               viewBox="0 0 125 65"
               fill="currentColor"
-              class="text-dark"
+              class="text-secondary"
             >
               <path
                 d="M122.61,13.9c-1.32,0-2.4,1.13-2.4,2.52s1.07,2.52,2.4,2.52c1.32,0,2.39-1.13,2.39-2.52h0c0-1.4-1.07-2.52-2.39-2.52Zm0,4.74c-1.16,0-2.11-.99-2.11-2.22h0c0-1.23,.94-2.22,2.11-2.22h0c1.16,0,2.1,.99,2.1,2.21,0,1.22-.93,2.22-2.09,2.22h0Zm1.23-2.88c0-.24-.1-.49-.3-.61-.2-.13-.43-.14-.65-.14h-1.17v2.82h.33v-1.3h.6l.77,1.3h.39l-.81-1.3c.48-.01,.85-.22,.85-.77h0Zm-1.29,.5h-.5v-1h.77c.33,0,.7,.05,.7,.49,0,.57-.58,.51-.96,.51ZM42.33,58.01l-15.62-8.02c-.34-.19-.52-.66-.51-.98l.04-4.43c0-.31,.06-.63,.45-.93,1.67-1.12,6.84-4.13,12.19-12.33,7.12-10.93,0-20.1-11.12-17.61-9.88,2.22-19.94,7.85-24.3,10.9C-.43,27.34,.11,30.64,0,33.59c.22,1.25,.65,1.14,1.62-.11,7.24-7.04,18.25-12.38,20.3-13.29s6.91-3.98,12.64-2.61c5.5,1.31,4.16,9.17,2.48,12.49-1.84,3.63-7.07,8.92-9.45,10.22-.9,.5-1.24,0-1.24-.8l.38-17.1c0-1.14-.49-1.65-1.57-1.25l-1.73,.91c-1.19,.74-1.13,1.02-1.24,1.93l-.26,19.71c0,.43-.2,.77-.42,.87l-5.64,3.33c-1.3,.68-.97,1.7,0,2.05l4.54,2.27c1.08,.45,1.4,.79,1.4,1.93l-.16,9.54c4.05-.85,4.32-2.9,4.43-4.26v-2.9c.11-.68,.49-.91,1.03-.79l13.18,6.7c1.19,.57,1.84,.34,2.7-1.25,.86-1.59,.97-2.38-.65-3.18h0Zm23.02-24.07c-1.83,1.11-2.68,3.19-1.96,4.51,.72,1.31,2.9,1.53,4.73,.42,1.83-1.11,2.62-3.14,1.9-4.45-.72-1.31-2.84-1.59-4.68-.48Zm-6.76,1.41c-.5,.64-1.46,2.58-2,3.78-.54,1.19-1.67,3.89-2.81,3.89-1.2,0-1.35-3.12-1.35-4.26s-.65-1.31-.97-1.25-1.24,.4-1.51,1.59c-.27,1.19-1.73,6.36-3.35,6.36-1.03,0-1.78-3.12-1.84-4.09-.05-.96-.49-1.76-1.4-1.76-.65,0-1.46,.34-1.78,.74s-.38,1.02-2.11,.62c-1.57-.06-3.08,.8-4.91,4.03-1.11,1.95-2,5.58-.32,7.04,1.57,1.36,4.32-1.08,5.13-2.1,.81-1.02,1.51-1.76,1.84-2.33,.32-.57,.65-.51,.81,.06,.16,.57,1.08,2.78,2.27,2.73,1.19-.06,2.7-1.02,4.48-4.32,.32-.68,.81-.62,.92-.06,.11,.57,.81,2.44,2,2.44s2.4-1.89,3.02-3.01c.43-.77,1.08-.4,1.08,.34s-.32,18.17-.32,18.17c0,.79,.3,1.02,.84,1.02h2.35c.43,0,.81-.4,.81-1.02l.49-28.26c0-.68-.73-1.16-1.35-.37h0Zm-18.36,11.13c-.49,.85-1.78,3.12-2.92,2.73-.59-.34,.2-2.61,.59-3.41,.59-1.19,2.34-3.09,3.13-2.61,.76,.45-.32,2.44-.81,3.29h0ZM122.52,29.06c-.22,.2-.57,.54-1.35,.17-1.35-.57-1.46-3.24-2.16-5.68-.63-2.19-2.15-2.06-2.7-1.05l-1.65,2.78c-.3,.57-.94,1.87-1.59,1.87-.76,0-.42-1.14-.38-2.27,.03-.77-.43-1.73-1.19-1.73-.86,0-1.78,1.39-2.48,2.98-.49,1.11-1.76,5.37-3.35,5.37-1.03,0-1.13-3.12-1.19-4.09s-.38-2.16-1.3-2.16c-.62,0-1.03,.34-1.35,.74-.32,.4-.38,.74-1.51,.57-1.57-.06-4.16,1.48-5.99,4.71-1.11,1.95-2.44,6.04-.76,7.5,1.57,1.36,4.37-1.82,5.18-2.84,.81-1.02,1.51-1.76,1.84-2.33,.32-.57,.65-.51,.81,.06,.16,.57,1.08,2.78,2.27,2.73,1.19-.06,2.16-.34,3.94-3.64,.32-.68,.92-.77,1.03-.2s.22,2.07,1.35,2.07c1.94,0,4.15-4.97,4.7-6.13,.49-1.02,1.27-.74,1.54,.03,.39,1.1,.73,4.63,2.83,4.63s3.54-2.36,3.97-3.1c.49-.74,.23-1.68-.51-.99h0Zm-22.89,3.41c-.49,.85-1.57,2.73-2.7,2.33-.59-.34,.14-1.99,.54-2.78,.59-1.19,2.33-3.12,3.13-2.64,.75,.45-.49,2.24-.97,3.1h0Zm-10.43-2.98s-4.59-3.52-5.89-5.11c-.87-1.07-.27-1.87,.27-2.33,3.24-2.27,8.31-5.79,10.31-11.25,1.92-5.26-1.08-9.83-3.24-10.56-2.96-1.01-9.23,1.02-12.37,7.16-2.03,3.97-2.97,5.28-3.24,16.07-.05,2.04-.11,4.37-.11,6.93s-.27,9.48-.54,10.79c-1.03,3.07,2.05,1.25,3.46,.06,1.4-1.19,1.3-2.98,1.3-3.75,0-.97,.05-18,.54-21.81,.3-2.37,.65-6.76,3.02-10.56,2.38-3.81,4.81-2.27,5.45-1.65,.65,.62,1.57,2.22,1.08,5.45-.75,5.02-6.26,10.51-7.67,12.21-1.4,1.7-1.08,3.18-.27,4.37,.58,.85,2,2.5,3.46,4.03,1.46,1.53,1.3,2.9,1.08,3.92-.76,3.07-8.64,11.36-8.64,11.36-1.67,1.87,.05,4.94,.65,5.96,.6,1.02,1.35,.68,1.84-.17,1.94-3.8,10.31-13.01,10.31-13.01,2.43-3.24,1.41-6.36-.81-8.12h0Z"
@@ -543,7 +581,7 @@
               width="190"
               height="95"
               fill="currentColor"
-              class="text-dark"
+              class="text-secondary"
             >
               <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
               <path
@@ -558,7 +596,7 @@
               height="65"
               viewBox="0 0 65 65"
               fill="currentColor"
-              class="text-dark"
+              class="text-secondary"
             >
               <path
                 d="M32.5,0c17.9,0,32.5,14.6,32.5,32.5s-14.6,32.5-32.5,32.5S0,50.4,0,32.5,14.6,0,32.5,0h0Zm0,5.86c14.67,0,26.64,11.97,26.64,26.64s-11.97,26.64-26.64,26.64S5.86,47.17,5.86,32.5,17.83,5.86,32.5,5.86h0Zm15.61,44.09h-12.99V24.44h6.21v20.32h6.78v5.2Zm-15.48-16.37c0,4.65-3.1,7.18-7.53,7.18h-.91c-4.4,0-7.59-2.26-7.59-6.98V14.85h6.21v19.26c0,1.35,.54,2.02,1.62,2.02h.34c1.38,0,1.65-1.32,1.65-2.43V14.85h6.21v18.73h0Zm-11.67,12.39c0,2,1.63,3.62,3.62,3.62s3.62-1.63,3.62-3.62-1.61-3.62-3.62-3.62c-2,0-3.62,1.63-3.62,3.62h0Zm.68,0c0-1.71,1.33-3.07,2.94-3.07s2.94,1.37,2.94,3.07-1.3,3.07-2.94,3.07c-1.62,0-2.94-1.38-2.94-3.07Zm1.62,1.78h.67v-1.5h.55c.77,0,.79,.34,.8,.67,.02,.6,.01,.68,.13,.83h.69c-.14-.2-.11-.3-.14-.86-.02-.36-.05-.78-.52-.87v-.02c.54-.22,.61-.58,.61-.83,0-.94-.81-1.05-1.19-1.05h-1.61v3.62h0Zm.67-3.13h.7c.43,0,.74,.11,.74,.55,0,.26-.1,.58-.66,.58h-.78v-1.13h0Z"
@@ -573,7 +611,7 @@
               height="65"
               viewBox="0 0 150 65"
               fill="currentColor"
-              class="text-dark"
+              class="text-secondary"
             >
               <path
                 d="M76.42,3.33c-3.06,3.64-11.77,15.4-12.77,16.92-1.91,2.92-2.08,4.33-2.14,5.27-.06,.92-.06,2.59,1.5,3.95,2.61,2.25,6.26,1.88,9.51,1.88h26.72c1.14,0,1.48-.33,2.1-1.12,2.14-3.15,3.09-6.58,3.09-9.64,0-6.56-4.41-14.82-15.56-18.55l-1.26,1.74c8.85,4.06,12.51,9.37,12.51,16.79,.06,1.99-.49,4.15-1.84,6.14h-25.99c-1.56,0-1.78-1.7-1.22-2.66,2.23-3.83,4.71-7.52,7.44-11.03,2.63-3.39,5.21-6.56,7.93-9.87,.73-.92,.24-1.81-1.22-2.1-3.04-.62-6.21-1.05-10.05-1.05-21.32,0-29.12,11.83-29.12,20.6,0,9.51,7.86,20.54,29.18,20.54,11.83,0,19.58-3.68,24.06-8.41h-4.52c-3.92,3.5-10.65,5.98-19.54,5.98-18.06,0-24.71-9.8-24.71-18.24,.13-7.54,7.27-17.93,25.16-18.28,.68-.02,1.2,.58,.73,1.14h0Zm64.13,54.29c1.07,.15,1.89,.96,1.89,1.92,0,1.09-1.01,1.96-2.25,1.96h-22.91v-14.47h-6.75v14.51h-12.41c-3.36,0-4.05-1.97-4.05-3.79v-10.81h-11.19c-1.11,.72-2.18,1.52-3.32,2.19l-6.64,3.95-8.62-6.09h-13.43v3.64h4.86v-1.99l11.42,7.92-7.8,4.73h-8.48v3.64h9.81c1.05-.69,2.04-1.41,3.13-2.05l6.82-4,8.66,5.98h9.86l-13.03-9.47,6.69-4.22c1.43-.91,2.93-1.67,4.39-2.5v9.53c0,4.02,1.07,6.81,9.45,6.81l47.34-.11c3.66,.05,6-2.39,6-5.34s-2.7-5.35-6-5.35h-17.1c.23-2.01,2.02-3.69,3.84-3.69h17.31l-.05-3.5h-18.36c-5.81,0-10.46,4.66-10.59,10.07-.02,.38,.24,.62,.68,.62l20.83-.08h0Zm-89.68-.05v-3.71h3.34v3.71h-3.34Zm0-10.58h-12.68c-3.43,0-6.08,.87-8.02,2.35-3.51,2.68-4.63,5.51-4.59,6.78h4.57c-2.01,1.45-3.36,3.19-4.07,5.2H11.08c-2.7,0-4.44-1.85-4.44-3.64v-10.81H0v11.23c0,4.04,3.98,6.83,10.35,6.83H50.87v-3.64h-16.09c.08-1.85,2.12-3.71,3.97-3.71h12.11v-3.71h-16.28c-.22-1.09,1.88-3.22,3.49-3.22h12.79v-3.64h0Z"
@@ -581,170 +619,13 @@
               />
             </svg>
           </div>
+          </div>
         </div>
       </div>
     </section>
-    <!-- Newsletter -->
-    <div class="container-fluid newsletter-container">
-      <div class="row w-100">
-        <div
-          class="col-md-6 d-flex flex-column align-items-center justify-content-center"
-        >
-          <h1>Subscribe to our newsletter!</h1>
-          <hr class="w-50 mx-auto text-light" style="margin-bottom: 50px" />
-          <div class="d-flex justify-content-center">
-            <div class="input-group">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Enter your email"
-              />
-              <button class="btn btn-dark" type="button">DO IT</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 d-flex flex-column align-items-center">
-         <img
-  src="../image/vectors/email.png"
-  alt="Email Icon"
-  class="img-fluid newsletter-image"
-/>
-        </div>
-      </div>
-    </div>
+
     <!-- Footer -->
-    <footer id="footer" class="footer-1">
-      <div class="main-footer widgets-dark typo-light">
-        <div class="container">
-          <div class="row row-f">
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <div class="widget subscribe no-box">
-                <h1 class="widget-title">
-                  Acess<span style="background-color: #2f3841"></span>
-                </h1>
-                <p>
-                  Our company sales the besh clothes in the house. You will get
-                  everything here according to your need and wish.
-                </p>
-              </div>
-            </div>
-
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <div class="widget no-box">
-                <h5 class="widget-title">
-                  Quick Links<span style="background-color: #2f3841"></span>
-                </h5>
-                <ul class="thumbnail-widget">
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Get Started</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Top Fashion</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Highly Sell</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Event/Sales</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content"><a href="#.">News</a></div>
-                  </li>
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Acessioreies</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content"><a href="#.">About</a></div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <div class="widget no-box">
-                <h5 class="widget-title">
-                  Get Started<span style="background-color: #2f3841"></span>
-                </h5>
-                <p>Get your favourite acessiories here.</p>
-                <a class="btn" href="/acessiories">Buy here</a>
-              </div>
-            </div>
-
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <div class="widget no-box">
-                <h5 class="widget-title">
-                  Contact Us<span style="background-color: #2f3841"></span>
-                </h5>
-
-                <p>
-                  <a href="mailto:info@domain.com" title="glorythemes"
-                    >info@domain.com</a
-                  >
-                </p>
-                <ul class="social-footer2">
-                  <li class="">
-                    <a title="youtube" target="_blank" href=""
-                      ><img
-                        alt="youtube"
-                        width="30"
-                        height="30"
-                        src="data:image/png;base64,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"
-                    /></a>
-                  </li>
-                  <li class="">
-                    <a href="" target="_blank" title="Facebook"
-                      ><img
-                        alt="Facebook"
-                        width="30"
-                        height="30"
-                        src="data:image/png;base64,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"
-                    /></a>
-                  </li>
-                  <li class="">
-                    <a href="" target="_blank" title="Twitter"
-                      ><img
-                        alt="Twitter"
-                        width="30"
-                        height="30"
-                        src="data:image/png;base64,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"
-                    /></a>
-                  </li>
-                  <li class="">
-                    <a title="instagram" target="_blank" href=""
-                      ><img
-                        alt="instagram"
-                        width="30"
-                        height="30"
-                        src="data:image/png;base64,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"
-                    /></a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-copyright">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12 text-center">
-              <p>Copyright Acess © 2023. All rights reserved.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <%- include('../partials/footer') %>
   </body>
 
 
@@ -786,6 +667,72 @@
 
       window.location.href = url.toString();
     });
+  });
+
+  document.querySelectorAll(".card-rating-trigger").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const productCard = event.target.closest(".product-card");
+      if (!productCard) return;
+      const itemName = productCard.querySelector(".product-brand").innerText.trim();
+      const itemImage = productCard.querySelector(".product-thumb").src;
+      const itemDescription = productCard.querySelector(".product-short-description").innerText.trim();
+      const itemPrice = productCard.querySelector(".price").innerText.replace("$", "").trim();
+      const url = new URL("/Product", window.location.origin);
+      url.searchParams.set("name", encodeURIComponent(itemName));
+      url.searchParams.set("img", encodeURIComponent(itemImage));
+      url.searchParams.set("desc", encodeURIComponent(itemDescription));
+      url.searchParams.set("price", encodeURIComponent(itemPrice));
+      window.location.href = url.toString() + "#reviews";
+    });
+  });
+
+  // Handle AJAX verification email resend on home page
+  document.addEventListener("DOMContentLoaded", function () {
+    const resendForm = document.getElementById("resend-verification-form");
+    if (resendForm) {
+      resendForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const submitBtn = resendForm.querySelector("button");
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending...";
+
+        try {
+          const response = await fetch("/resend-verification", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams(new FormData(resendForm)).toString()
+          });
+
+          const data = await response.json();
+          if (data.error) {
+            if (window.showToast) {
+              window.showToast(data.error, "error");
+            }
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+          } else if (data.success) {
+            if (window.showToast) {
+              window.showToast(data.success, "success");
+            }
+            setTimeout(() => {
+              window.location.reload();
+            }, 1200);
+          }
+        } catch (err) {
+          console.error("Resend Verification Error:", err);
+          if (window.showToast) {
+            window.showToast("Failed to send verification. Please try again.", "error");
+          }
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      });
+    }
   });
 </script>
 

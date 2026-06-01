@@ -1,313 +1,619 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acess</title>
-    <link rel="icon" type="image/png" href="/image/Acess%20logo/logo.png?v=1.0" />
-  </head>
+  <%- include('../partials/head', {title: 'Acess - Checkout'}) %>
   <body>
-  <!-- stylesheets -->
+    <!-- stylesheets -->
     <link rel="stylesheet" href="../css/checkout.css" />
     <link
       rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
-      integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
     <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      rel="stylesheet"
     />
-    
-<!-- Progressbar -->
-    <div class="container">
+
+    <!-- Navbar -->
+    <%- include('../partials/navbar_carts', {page: 'checkout'}) %>
+
+    <!-- Progress Tracker Banner -->
+    <div class="container mt-5 pt-4">
       <div class="row justify-content-center">
-        <div class="col-11 col-sm-9 text-center p-0 mt-3 mb-2">
-          <div class="px-0 pt-4 pb-0 mt-3 mb-3">
-            <div class="container" style="text-align: center">
-              <ul id="progressbar">
-                <li class="active" id="step1">
-                  <strong class="step-label">Addrees and shipment details</strong>
-                </li>
-                <li id="step2"><strong class="step-label">Payment details</strong></li>
-              </ul>
+        <div class="col-12 col-md-10 text-center">
+          <div class="progressbar-container my-4">
+            <ul id="progressbar">
+              <li class="active" id="step1">
+                <span class="step-icon"><i class="fa fa-truck"></i></span>
+                <strong class="step-label">1. Shipment Details</strong>
+              </li>
+              <li id="step2">
+                <span class="step-icon"><i class="fa fa-credit-card"></i></span>
+                <strong class="step-label">2. Secure Payment</strong>
+              </li>
+            </ul>
+            <div class="progress mt-3">
+              <div
+                id="progress-bar-indicator"
+                class="progress-bar"
+                style="width: 50%;"
+              ></div>
             </div>
-            <form id="form" style="text-align: center">
-              <div class="progress">
-                <div
-                  class="progress-bar bg-success"
-                  style="width: 50%; border-radius: 20px"
-                ></div>
-              </div>
-              <br />
-            </form>
           </div>
         </div>
       </div>
     </div>
-<!-- delivery address + checkout details -->
-    <main class="container mt-5">
-      <div class="row custom-checkout-layout">
-        <div class="col-md-6">
-          <div class="card card-custom">
-            <div class="card-body">
-              <h1>Delivery address</h1>
-              <h5 class="card-title">
-                <%= loggedInUser.firstname %> <%= loggedInUser.lastname %>
-              </h5>
-              <p class="card-text">
-                <%= loggedInUser.address %> <%= loggedInUser.city %> <%=
-                loggedInUser.province %>
-              </p>
-              <p class="card-text">
-                <small class="text-muted"
-                  >Email: <%= loggedInUser.email %><br />Phone: <%=
-                  loggedInUser.phone %></small
-                >
-              </p>
-              <a href="/edit-profile">Edit address</a>
+
+    <!-- main layout container -->
+    <main class="container mb-5 pb-5">
+      <div class="row g-5">
+        
+        <!-- Left Panel: Progressive Form Wizard (Slides horizontally) -->
+        <div class="col-12 col-lg-8">
+          <div class="wizard-container">
+            <div class="wizard-wrapper" id="wizard-wrapper">
+              
+              <!-- STEP 1 PANEL: SHIPPING -->
+              <div class="wizard-pane" id="pane-shipping">
+                <!-- Delivery Address Details Card -->
+                <div class="card card-custom mb-4">
+                  <div class="card-body">
+                    <h2 class="pane-title mb-4">Delivery Address</h2>
+                    <h5 class="customer-name mb-2">
+                      <%= loggedInUser.firstname %> <%= loggedInUser.lastname %>
+                    </h5>
+                    <p class="customer-address mb-3">
+                      <%= loggedInUser.address %>, <%= loggedInUser.city %>, <%= loggedInUser.province %>
+                    </p>
+                    <p class="customer-contact mb-4">
+                      <span class="d-block mb-1"><strong>Email:</strong> <%= loggedInUser.email %></span>
+                      <span><strong>Phone:</strong> <%= loggedInUser.phone %></span>
+                    </p>
+                    <a href="/edit-profile" class="btn btn-outline-sporty">
+                      <i class="fa fa-edit me-2"></i> Edit Address
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Shipping Delivery Option Grid Selector -->
+                <div class="card card-custom">
+                  <div class="card-body">
+                    <h2 class="pane-title mb-4">Select Shipping Service</h2>
+                    
+                    <div class="row g-3">
+                      <!-- Collection option -->
+                      <div class="col-12 col-md-6">
+                        <div class="shipping-option-card active" data-value="collection" data-cost="0">
+                          <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="option-name">Standard Collection</span>
+                            <span class="option-price text-success">FREE</span>
+                          </div>
+                          <p class="option-desc">Pick up order directly at our retail store.</p>
+                        </div>
+                      </div>
+                      
+                      <!-- First class option -->
+                      <div class="col-12 col-md-6">
+                        <div class="shipping-option-card" data-value="first-class" data-cost="15">
+                          <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="option-name">Royal Mail 1st Class</span>
+                            <span class="option-price">$15.00</span>
+                          </div>
+                          <p class="option-desc">Fast, secure home delivery within 1-2 days.</p>
+                        </div>
+                      </div>
+                      
+                      <!-- Second class option -->
+                      <div class="col-12 col-md-6">
+                        <div class="shipping-option-card" data-value="second-class" data-cost="20">
+                          <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="option-name">Royal Mail 2nd Class</span>
+                            <span class="option-price">$20.00</span>
+                          </div>
+                          <p class="option-desc">Standard, economical home shipping within 3-5 days.</p>
+                        </div>
+                      </div>
+                      
+                      <!-- Special delivery option -->
+                      <div class="col-12 col-md-6">
+                        <div class="shipping-option-card" data-value="signed-for" data-cost="30">
+                          <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="option-name">Royal Mail Special Delivery</span>
+                            <span class="option-price">$30.00</span>
+                          </div>
+                          <p class="option-desc">Premium tracked, next-day delivery before 1 PM.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <input type="hidden" id="selected-shipping-method" value="collection" required />
+                    
+                    <button type="button" class="btn btn-primary-brutal w-100 mt-4 py-3" id="continue-to-payment-btn">
+                      Continue to Payment <i class="fa fa-arrow-right ms-2"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- STEP 2 PANEL: PAYMENT -->
+              <div class="wizard-pane" id="pane-payment">
+                <div class="card card-custom">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                      <h2 class="pane-title mb-0">Secure Payment</h2>
+                      <button type="button" class="btn-back-link" id="back-to-shipping-btn">
+                        <i class="fa fa-arrow-left me-2"></i> Back to Shipping
+                      </button>
+                    </div>
+
+                    <form id="payment-form" class="needs-validation" novalidate>
+                      <div class="text-center mb-4 card-visual-container">
+                        <img src="../image/vectors/credit card.png" alt="Credit Card" class="img-fluid visual-card-img" style="max-height: 140px;" />
+                      </div>
+
+                      <div class="form-group mb-3">
+                        <label for="cardNumber" class="form-label-brutal">Card Number</label>
+                        <div class="input-group-brutal">
+                          <span class="input-addon"><i class="fa fa-credit-card"></i></span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="cardNumber"
+                            placeholder="Enter 16-digit card number"
+                            required
+                            pattern="^\d{16}$"
+                            maxlength="16"
+                          />
+                        </div>
+                        <div class="invalid-feedback-brutal" id="cardNumberError">
+                          Card number must be exactly 16 digits.
+                        </div>
+                      </div>
+
+                      <div class="form-group mb-3">
+                        <label for="cardName" class="form-label-brutal">Cardholder Name</label>
+                        <div class="input-group-brutal">
+                          <span class="input-addon"><i class="fa fa-user"></i></span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="cardName"
+                            placeholder="Enter cardholder name"
+                            required
+                          />
+                        </div>
+                        <div class="invalid-feedback-brutal" id="cardNameError">
+                          Cardholder name is required.
+                        </div>
+                      </div>
+
+                      <div class="row g-3">
+                        <div class="form-group col-6 mb-3">
+                          <label for="expiryDate" class="form-label-brutal">Expiry Date</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="expiryDate"
+                            placeholder="MM/YY"
+                            required
+                            pattern="^(0[1-9]|1[0-2])\/\d{2}$"
+                            maxlength="5"
+                          />
+                          <div class="invalid-feedback-brutal" id="expiryDateError">
+                            Valid expiry MM/YY is required.
+                          </div>
+                        </div>
+                        
+                        <div class="form-group col-6 mb-3">
+                          <label for="cvv" class="form-label-brutal">CVC</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="cvv"
+                            placeholder="CVC"
+                            required
+                            pattern="^\d{3}$"
+                            maxlength="3"
+                          />
+                          <div class="invalid-feedback-brutal" id="cvvError">
+                            CVC must be 3 digits.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group mb-4">
+                        <label class="form-label-brutal mb-2">Card Type</label>
+                        <div class="card-type-icons-container d-flex gap-3">
+                          <div class="card-type-btn" data-type="visa">
+                            <img src="/image/logos/visa.svg" alt="Visa" />
+                          </div>
+                          <div class="card-type-btn" data-type="mastercard">
+                            <img src="/image/logos/mastercard.svg" alt="MasterCard" />
+                          </div>
+                        </div>
+                        <input type="hidden" id="selected-card-type" name="cardType" required />
+                        <div class="invalid-feedback-brutal" id="cardTypeError" style="display: none;">
+                          Please select a card type.
+                        </div>
+                      </div>
+
+                      <button type="submit" class="btn btn-primary-brutal w-100 py-3 mt-2" id="confirm-payment-btn">
+                        Confirm & Place Order <i class="fa fa-lock ms-2"></i>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
-          <div
-            id="loggedInUserData"
-            data-address="<%= loggedInUser.address %>"
-            data-city="<%= loggedInUser.city %>"
-            data-province="<%= loggedInUser.province %>"
-            data-quantity="<%= cartItemsCount %>"
-          ></div>
         </div>
 
-        <aside class="col-md-4">
-          <div class="summary">
-            <div class="summary-total-items">
-              Total <span class="total-items"><%=cartItemsCount %></span> Items
-              in your Bag
+        <!-- Right Panel: Persistent Order Summary Sidebar -->
+        <aside class="col-12 col-lg-4">
+          <div class="summary-card sticky-top-summary">
+            <h3 class="summary-heading mb-4">Order Summary</h3>
+            
+            <div class="summary-total-items-badge mb-4">
+              Total <span class="badge-count" id="summary-badge-count"><%= cartItemsCount %></span> Items
             </div>
-            <div class="summary-subtotal">
-              <div class="subtotal-title">Subtotal</div>
-              <div class="subtotal-value final-value" id="basket-subtotal">
-                $0.00
+            
+            <!-- Price breakdowns -->
+            <div class="summary-breakdowns">
+              <div class="breakdown-row d-flex justify-content-between mb-3">
+                <span class="breakdown-label">Subtotal</span>
+                <span class="breakdown-value" id="summary-subtotal">$0.00</span>
               </div>
-              <hr />
+              
+              <div class="breakdown-row d-flex justify-content-between mb-3" id="shipping-breakdown-row">
+                <span class="breakdown-label">Shipping</span>
+                <span class="breakdown-value" id="summary-shipping">-</span>
+              </div>
+              
+              <div class="breakdown-row d-flex justify-content-between mb-3 text-danger d-none" id="promo-breakdown-row">
+                <span class="breakdown-label">Promo Discount</span>
+                <span class="breakdown-value" id="summary-discount">-$0.00</span>
+              </div>
             </div>
-            <div class="summary-promo">
-              <div class="promo-title">Promo code</div>
-              <input
-                type="text"
-                class="form-control"
-                id="promo-code"
-                placeholder="Enter promo code"
-              />
-              <button
-                class="btn btn-info btn-block mt-2"
-                id="apply-promo"
-                style="width: 34%; margin: 10px 0px 10px 0px"
-              >
-                Apply
-              </button>
-              <div class="promo-value final-value" id="promo-discount"></div>
-              <hr />
-            </div>
-            <div class="summary-delivery">
-              <div class="summary-title">Shipping</div>
-              <select
-                name="delivery-collection"
-                class="summary-delivery-selection form-control"
-                id="shipping-total"
-                required
-              >
-                <option value="0" selected="selected">
-                  Select Collection or Delivery
-                </option>
-                <option value="collection">Collection ($10)</option>
-                <option value="first-class">Royal Mail 1st Class ($15)</option>
-                <option value="second-class">Royal Mail 2nd Class ($20)</option>
-                <option value="signed-for">
-                  Royal Mail Special Delivery ($30)
-                </option>
-              </select>
-              <div
-                class="shipping-value final-value"
-                id="shipping-final"
-                style="margin-top: 20px"
-              ></div>
-            </div>
-            <div class="summary-total">
-              <div class="total-title">Total</div>
-              <div class="total-value final-value" id="basket-total">$0.00</div>
-            </div>
-            <div class="summary-checkout">
-              <a href="/safe-checkout" style="text-decoration: none">
-                <button class="btn btn-warning btn-block" id="checkout-button">
-                  Go to Secure Checkout
+
+            <!-- Promo Input Box -->
+            <div class="promo-box mt-4 mb-4">
+              <label for="promo-code" class="form-label-brutal small-label">Promo Code</label>
+              <div class="d-flex gap-2">
+                <input
+                  type="text"
+                  class="form-control promo-input"
+                  id="promo-code"
+                  placeholder="Enter code (10 or 20)"
+                />
+                <button type="button" class="btn btn-secondary-brutal px-3" id="apply-promo-btn">
+                  Apply
                 </button>
-              </a>
+              </div>
+              <div class="promo-feedback mt-2 small text-success font-weight-bold" id="promo-msg"></div>
+            </div>
+
+            <hr class="summary-separator my-4" />
+
+            <!-- Final Grand Total -->
+            <div class="grand-total-row d-flex justify-content-between align-items-center mb-2">
+              <span class="grand-total-label">Grand Total</span>
+              <span class="grand-total-value" id="summary-grand-total">$0.00</span>
             </div>
           </div>
         </aside>
 
-        <div
-          class="modal fade"
-          id="staticBackdrop"
-          data-bs-backdrop="static"
-          data-bs-keyboard="false"
-          tabindex="-1"
-          aria-labelledby="staticBackdropLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="confirmDeleteModalLabel">
-                  Cannot procced
-                </h5>
-              </div>
-              <div class="modal-body">
-                <p>Select a shipping method first!</p>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </main>
-<!-- redirection section to shop page -->
-    <div class="container" style="margin-top: 50px">
-     <div class="alert alert-light text-center mt-4" role="alert">
-      Not ready to checkout? <a href="/shop" class="alert-link">Browse more items in the shop</a>.
-   </div>
+
+    <!-- Browse shop bottom redirect -->
+    <div class="container my-5 pt-3">
+      <div class="alert alert-light text-center border-2 shadow-sm rounded-0 py-4" style="background-color: var(--bg-surface); border: 2px solid var(--text-primary);">
+        Not ready to checkout? <a href="/shop" class="alert-link font-weight-bold" style="color: var(--secondary-accent);">Browse more items in the shop</a>.
+      </div>
     </div>
 
-    <!-- scripts -->
+    <!-- Hidden Profile Metadata helper -->
+    <div
+      id="loggedInUserData"
+      data-address="<%= loggedInUser.address %>"
+      data-city="<%= loggedInUser.city %>"
+      data-province="<%= loggedInUser.province %>"
+      data-quantity="<%= cartItemsCount %>"
+    ></div>
 
+
+
+    <!-- Scripts -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
 
-    <script>
-      function calculateTotal() {
-        const promoCode = document.getElementById("promo-code").value.trim();
-        let discount = 0;
-        if (promoCode === "10") {
-          discount = 10;
-        } else if (promoCode === "20") {
-          discount = 20;
-        }
-
-        const subtotalElement = document.getElementById("basket-subtotal");
-        const totalElement = document.getElementById("basket-total");
-        const promoDiscountElement = document.getElementById("promo-discount");
-        promoDiscountElement.innerText =
-          discount > 0 ? `Discount: -$${discount.toFixed(2)}` : "";
-
-        const shippingSelectElement = document.getElementById("shipping-total");
-        const shippingfinal = document.getElementById("shipping-final");
-        const selectedShippingOption =
-          shippingSelectElement.options[shippingSelectElement.selectedIndex];
-        let shippingCost = 0;
-        if (selectedShippingOption.value !== "0") {
-          shippingCost = parseFloat(
-            selectedShippingOption.text.match(/\$(\d+)/)[1]
-          );
-          shippingfinal.innerText = `Shipping fee: +$${shippingCost.toFixed(
-            2
-          )}`;
-        } else {
-          shippingfinal.innerText = "";
-        }
-
-        let subtotal = parseFloat(subtotalElement.innerText.replace("$", ""));
-        let total = subtotal + shippingCost - discount;
-
-        totalElement.innerText = `$${total.toFixed(2)}`;
-
-        // Store discount and shippingCost in data attributes for later use
-        totalElement.dataset.discount = discount;
-        totalElement.dataset.shippingCost = shippingCost;
-      }
-
-      document
-        .getElementById("apply-promo")
-        .addEventListener("click", calculateTotal);
-      document
-        .getElementById("shipping-total")
-        .addEventListener("change", function () {
-          calculateTotal();
-        });
-    </script>
-
+    <!-- Unified Progressive Flow Logic -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        const basketSubtotalElement =
-          document.getElementById("basket-subtotal");
-        const totalElement = document.getElementById("basket-total");
-        const cartTotal = localStorage.getItem("cartTotal") || "0.00";
-        basketSubtotalElement.innerText = "$" + cartTotal;
-        totalElement.innerText = "$" + cartTotal;
-      });
-    </script>
+        // Elements
+        const summarySubtotal = document.getElementById("summary-subtotal");
+        const summaryShipping = document.getElementById("summary-shipping");
+        const summaryDiscount = document.getElementById("summary-discount");
+        const summaryGrandTotal = document.getElementById("summary-grand-total");
+        
+        const applyPromoBtn = document.getElementById("apply-promo-btn");
+        const promoCodeInput = document.getElementById("promo-code");
+        const promoMsg = document.getElementById("promo-msg");
+        const promoRow = document.getElementById("promo-breakdown-row");
 
-    <script>
-      document
-        .getElementById("checkout-button")
-        .addEventListener("click", function (event) {
-          event.preventDefault(); // Prevent default form submission
+        const shippingCards = document.querySelectorAll(".shipping-option-card");
+        const shippingMethodInput = document.getElementById("selected-shipping-method");
 
-          const shippingSelectElement =
-            document.getElementById("shipping-total");
-          if (shippingSelectElement.value === "0") {
-            var myModal = new bootstrap.Modal(
-              document.getElementById("staticBackdrop")
-            );
-            myModal.show();
+        const continueToPaymentBtn = document.getElementById("continue-to-payment-btn");
+        const backToShippingBtn = document.getElementById("back-to-shipping-btn");
+        const wizardWrapper = document.getElementById("wizard-wrapper");
+
+        const step1Li = document.getElementById("step1");
+        const step2Li = document.getElementById("step2");
+        const progressBarIndicator = document.getElementById("progress-bar-indicator");
+
+        // Forms & Validations
+        const paymentForm = document.getElementById("payment-form");
+        const cardNumberInput = document.getElementById("cardNumber");
+        const cardNameInput = document.getElementById("cardName");
+        const expiryInput = document.getElementById("expiryDate");
+        const cvvInput = document.getElementById("cvv");
+        const cardTypeInput = document.getElementById("selected-card-type");
+        const cardTypeError = document.getElementById("cardTypeError");
+        const cardTypeBtns = document.querySelectorAll(".card-type-btn");
+        const confirmPaymentBtn = document.getElementById("confirm-payment-btn");
+
+        // Price calculations parameters
+        let subtotal = parseFloat(localStorage.getItem("cartTotal")) || 0.00;
+        let discount = 0.00;
+        let shippingCost = 0.00;
+
+        // Initialize Pricing Summary
+        summarySubtotal.innerText = `$${subtotal.toFixed(2)}`;
+        summaryShipping.innerText = "FREE";
+        summaryShipping.classList.add("text-success");
+        updateTotals();
+
+        // 1. Promo Code Handler
+        applyPromoBtn.addEventListener("click", function() {
+          const promo = promoCodeInput.value.trim().toUpperCase();
+          if (promo === "10") {
+            discount = 10.00;
+            promoMsg.innerText = "Promo applied successfully! $10.00 Discount.";
+            promoMsg.style.color = "#FE672E"; // Neon Orange
+            promoRow.classList.remove("d-none");
+          } else if (promo === "20") {
+            discount = 20.00;
+            promoMsg.innerText = "Promo applied successfully! $20.00 Discount.";
+            promoMsg.style.color = "#FE672E";
+            promoRow.classList.remove("d-none");
+          } else {
+            discount = 0.00;
+            promoMsg.innerText = "Invalid promo code.";
+            promoMsg.style.color = "#6A69FF"; // Blue-Violet
+            promoRow.classList.add("d-none");
+          }
+          updateTotals();
+        });
+
+        // 2. Shipping Service Selection Grid
+        shippingCards.forEach(card => {
+          card.addEventListener("click", function() {
+            shippingCards.forEach(c => c.classList.remove("active"));
+            card.classList.add("active");
+            
+            shippingCost = parseFloat(card.getAttribute("data-cost")) || 0.00;
+            shippingMethodInput.value = card.getAttribute("data-value");
+            
+            if (shippingCost === 0) {
+              summaryShipping.innerText = "FREE";
+              summaryShipping.classList.add("text-success");
+            } else {
+              summaryShipping.innerText = `$${shippingCost.toFixed(2)}`;
+              summaryShipping.classList.remove("text-success");
+            }
+            updateTotals();
+          });
+        });
+
+        // Update Totals helper
+        function updateTotals() {
+          let grandTotal = subtotal + shippingCost - discount;
+          if (grandTotal < 0) grandTotal = 0;
+
+          summaryDiscount.innerText = `-$${discount.toFixed(2)}`;
+          summaryGrandTotal.innerText = `$${grandTotal.toFixed(2)}`;
+
+          // Store temporarily in element data attributes
+          summaryGrandTotal.dataset.discount = discount;
+          summaryGrandTotal.dataset.shippingCost = shippingCost;
+        }
+
+        // 3. Step Sliding Transitions
+        continueToPaymentBtn.addEventListener("click", function() {
+          if (continueToPaymentBtn.disabled) return;
+          if (!shippingMethodInput.value) {
+            showToast("Selection Required: Please select a shipping service option card before proceeding.", "error");
             return;
           }
 
+          // Save shipping and totals in localStorage for final POST payload
           const loggedInUserData = document.getElementById("loggedInUserData");
-          const loggedInUser = {
-            address: loggedInUserData.dataset.address,
-            city: loggedInUserData.dataset.city,
-            province: loggedInUserData.dataset.province,
-          };
-
-          const cartItemsCount = loggedInUserData.dataset.quantity;
-          const totalElement = document.getElementById("basket-total");
-          const address = `${loggedInUser.address}, ${loggedInUser.city}, ${loggedInUser.province}`;
-          const quantity = cartItemsCount;
-          const Shipping = shippingSelectElement.value;
-
-          // Retrieve discount and shipping cost from data attributes
-          const discount = parseFloat(totalElement.dataset.discount) || 0;
-          const shippingCost =
-            parseFloat(totalElement.dataset.shippingCost) || 0;
+          const address = `${loggedInUserData.dataset.address}, ${loggedInUserData.dataset.city}, ${loggedInUserData.dataset.province}`;
+          const quantity = loggedInUserData.dataset.quantity;
 
           const formData = {
-            TotalPrice: totalElement.innerText.replace("$", ""),
+            TotalPrice: summaryGrandTotal.innerText.replace("$", ""),
             OrderStatus: "placed",
             ShippingAddress: address,
             Quantity: quantity,
-            PurchaseDate: new Date().toDateString(),
+            PurchaseDate: new Date().toISOString(),
             shipping: shippingCost,
-            Discount: discount,
+            Discount: discount
+          };
+          localStorage.setItem("purchasedDetails", JSON.stringify(formData));
+
+          // Brief debounce to prevent rapid clicks
+          continueToPaymentBtn.disabled = true;
+          setTimeout(() => { continueToPaymentBtn.disabled = false; }, 800);
+
+          // Animate Progress Bar
+          step2Li.classList.add("active");
+          progressBarIndicator.style.width = "100%";
+
+          // Horizontal Pane slide
+          wizardWrapper.style.transform = "translateX(-50%)";
+        });
+
+        backToShippingBtn.addEventListener("click", function() {
+          // Animate progress bar indicator back
+          step2Li.classList.remove("active");
+          progressBarIndicator.style.width = "50%";
+
+          // Slide back
+          wizardWrapper.style.transform = "translateX(0)";
+        });
+
+        // 4. Card Type Buttons Selectors
+        cardTypeBtns.forEach(btn => {
+          btn.addEventListener("click", function() {
+            cardTypeBtns.forEach(b => b.classList.remove("selected"));
+            btn.classList.add("selected");
+            
+            cardTypeInput.value = btn.getAttribute("data-type");
+            cardTypeError.style.display = "none";
+          });
+        });
+
+        // 5. Final Payment Submit & Validation
+        paymentForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          
+          let isValid = true;
+          const cardNumber = cardNumberInput.value.trim();
+          const cardName = cardNameInput.value.trim();
+          const cvv = cvvInput.value.trim();
+          const expiry = expiryInput.value.trim();
+          const cardType = cardTypeInput.value.trim();
+
+          // Validation card number
+          if (!/^\d{16}$/.test(cardNumber)) {
+            cardNumberInput.classList.add("is-invalid");
+            isValid = false;
+          } else {
+            cardNumberInput.classList.remove("is-invalid");
+            cardNumberInput.classList.add("is-valid");
+          }
+
+          // Validation holder name
+          if (!cardName) {
+            cardNameInput.classList.add("is-invalid");
+            isValid = false;
+          } else {
+            cardNameInput.classList.remove("is-invalid");
+            cardNameInput.classList.add("is-valid");
+          }
+
+          // Validation CVV
+          if (!/^\d{3}$/.test(cvv)) {
+            cvvInput.classList.add("is-invalid");
+            isValid = false;
+          } else {
+            cvvInput.classList.remove("is-invalid");
+            cvvInput.classList.add("is-valid");
+          }
+
+          // Validation expiry MM/YY and >= 1 year from now
+          let expiryValid = false;
+          const match = expiry.match(/^(0[1-9]|1[0-2])\/(\d{2})$/);
+          if (match) {
+            const inputMonth = parseInt(match[1]);
+            const inputYear = parseInt("20" + match[2]);
+            const now = new Date();
+            const oneYearLater = new Date(now.getFullYear() + 1, now.getMonth());
+            const cardDate = new Date(inputYear, inputMonth - 1);
+            if (cardDate >= oneYearLater) {
+              expiryValid = true;
+            }
+          }
+
+          if (!expiryValid) {
+            expiryInput.classList.add("is-invalid");
+            isValid = false;
+          } else {
+            expiryInput.classList.remove("is-invalid");
+            expiryInput.classList.add("is-valid");
+          }
+
+          // Card type check
+          if (!cardType) {
+            cardTypeError.style.display = "block";
+            isValid = false;
+          } else {
+            cardTypeError.style.display = "none";
+          }
+
+          if (!isValid) {
+            return;
+          }
+
+          // Disable button to prevent spamming and show loading spinner
+          confirmPaymentBtn.disabled = true;
+          confirmPaymentBtn.innerHTML = 'Processing Payment... <i class="fa fa-spinner fa-spin ms-2"></i>';
+
+          // Constructed data body for AJAX POST matching exactly server routing expectations
+          const quantities = localStorage.getItem("quantities");
+          const purchasedDetails = JSON.parse(localStorage.getItem("purchasedDetails") || "{}");
+
+          const submitBody = {
+            cardType: cardType,
+            quantities: quantities,
+            ShippingAddress: purchasedDetails.ShippingAddress,
+            PurchaseDate: purchasedDetails.PurchaseDate,
+            _csrf: "<%= csrfToken %>"
           };
 
-          localStorage.setItem("purchasedDetails", JSON.stringify(formData));
-          window.location.href = "/safe-checkout";
+          // Send payment AJAX fetch request
+          fetch("/safe-checkout", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(submitBody)
+          })
+          .then(async response => {
+            if (response.ok) return response.json();
+            const msg = await response.text();
+            throw new Error(msg || "Payment gateway processing failed.");
+          })
+          .then(data => {
+            showToast("ORDER PLACED! Your order has been verified and shipping is scheduled.", "success");
+            // Clear checkout variables
+            localStorage.removeItem("quantities");
+            localStorage.removeItem("purchasedDetails");
+            localStorage.removeItem("cartTotal");
+
+            setTimeout(() => {
+              window.location.href = "/orders";
+            }, 1800);
+          })
+          .catch(error => {
+            console.error("Secure Checkout error:", error);
+            showToast("Payment Failed: " + (error.message || "Checkout error. Try again."), "error");
+            
+            // Re-enable button on failure to allow user to retry
+            confirmPaymentBtn.disabled = false;
+            confirmPaymentBtn.innerHTML = 'Confirm & Place Order <i class="fa fa-lock ms-2"></i>';
+          });
         });
+
+
+      });
     </script>
-
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
   </body>
 </html>

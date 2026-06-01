@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acess</title>
-    <link rel="icon" type="image/png" href="/image/Acess%20logo/logo.png?v=1.0" />
-  </head>
+  <%- include('../partials/head', {title: 'Page Not Found — Moda'}) %>
   <body>
     <link href="/css/404 page.css" rel="stylesheet" type="text/css" />
 
-    <div class="container image-container" style="text-align: center">
-      <div class="container">
+    <main class="error-container">
+      <!-- High Impact Error Code -->
+      <h1 class="error-code">404</h1>
+
+      <!-- Illustration Area -->
+      <div class="illustration-wrapper">
         <img
-          src="../image/vectors/404.png"
-          alt="404 page"
-          style="height: 700px; width: 700px"
+          src="/image/vectors/404.png"
+          alt="Shrugging Character - Page Not Found"
+          class="illustration-img"
         />
       </div>
 
-      <P
-        >Looks like you have lost. Head back to our
-        <a href="/home" style="color: blue">Home page</a></P
-      >
-    </div>
+      <!-- Text Blocks -->
+      <h2 class="error-title">Whoops! You seem lost.</h2>
+      <p class="error-text">
+        The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. Let's get you back on track!
+      </p>
+
+      <!-- Return Button -->
+      <a href="/home" class="home-btn">Return Home</a>
+    </main>
   </body>
 </html>

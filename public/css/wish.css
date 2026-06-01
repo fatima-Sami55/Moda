@@ -1,59 +1,350 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Playwrite+MX:wght@100..400&display=swap');
+/* ==========================================================================
+   LOOKBOOK STREETWEAR WISHLIST STYLESHEET - PREMIUM CAPSULE EDITION
+   ========================================================================== */
 
 html {
-    height: auto;
-    width: auto;
-    margin: 0;
+  height: 100%;
+  width: auto;
+  margin: 0;
+  scroll-behavior: smooth !important;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial;
-
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+/* 
+   THE FOOTER ANTI-OVERLAP LIFELINE:
+   Using standard flexbox layout on the body ensures that the main content container
+   stretches to absorb all remaining viewport space, locking the footer to the bottom.
+*/
 body {
-    height: auto;
-    width: auto;
-    margin: 0;
-    scroll-behavior: smooth !important;
+  min-height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background-color: #F8F7F3 !important; /* Elegant light cream background canvas (matches cart!) */
+  color: var(--text-primary) !important; /* Pitch Black */
+  padding-top: 100px;
 }
 
-.wish-container-empty{
-    padding-top: 150px;
+/* Page Containers */
+.wish-container {
+  flex: 1 0 auto !important; /* Crucial: Absorbs all empty vertical space to push the footer down */
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
 }
 
-.wish-container{
-    padding-top: 100px;
-    margin-top: 0 auto
+.wish-container-empty {
+  flex: 1 0 auto !important; /* Absorbs vertical space inside empty state too */
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-
-
-@media (max-width: 576px) {
-  .wish-container .btn {
-    width: 100%;
-    margin-bottom: 0.5rem;
-  }
+/* Footer Pin & Spacing Customizations */
+footer#footer {
+  flex-shrink: 0 !important;
+  margin-top: auto !important; /* Anchors the footer to the absolute bottom of the layout */
+  padding-top: 80px !important; /* Generous spacing above the footer element to push its border and widgets down cleanly */
 }
 
+.wish-main-title {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 1.8rem !important;
+  text-transform: uppercase;
+  color: var(--text-primary) !important;
+  letter-spacing: -0.03em;
+}
 
+.wishlist-count-text {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   EMPTY WISHLIST SHOWCASE
+   ========================================================================== */
+.wish-container-empty {
+  margin-top: 50px !important;
+  margin-bottom: 50px !important;
+}
+
+.empty-wishlist-showcase {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-align: center;
+}
+
+.empty-wishlist-img {
+  max-height: 180px;
+  object-fit: contain;
+  margin-bottom: 24px;
+}
+
+.empty-wishlist-heading {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 1.4rem !important;
+  text-transform: uppercase;
+  color: var(--text-primary) !important;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+.empty-wishlist-sub {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.empty-wishlist-showcase .btn-warning {
+  background-color: var(--primary-accent) !important; /* Solar Orange */
+  border: 1.5px solid var(--text-primary) !important;
+  color: var(--text-primary) !important;
+  border-radius: 999px !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 0.85rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 12px 32px !important;
+  box-shadow: none !important;
+  transition: var(--transition-smooth);
+  display: inline-block;
+  text-decoration: none !important;
+}
+
+.empty-wishlist-showcase .btn-warning:hover {
+  background-color: var(--text-primary) !important;
+  color: var(--bg-deep) !important;
+  transform: translateY(-2px);
+  box-shadow: none !important;
+}
+
+/* ==========================================================================
+   ACTIVE WISHLIST - PREMIUM CAPSULE LIST (STYLO REFERENCE MATCH)
+   ========================================================================== */
+
+.wishlist-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Aligned cards with dynamic spacing gaps */
+  margin-top: 10px;
+  margin-bottom: 80px !important; /* Ample margins above footer */
+  min-height: calc(100vh - 90px - 340px) !important; /* Forces layout wrapper to fill viewport under few items */
+}
+
+/* 
+   Capsule Cards: White backgrounds, ultra-rounded edges, very soft subtle shadows
+   No thick neobrutalist borders, no flat off-set black drop shadows.
+*/
+.wishlist-item-row {
+  background: #FFFFFF !important; /* Pristine Soft White backdrop */
+  border-radius: 0px !important; /* Sharp rectangular neobrutalist corners */
+  padding: 24px !important;
+  border: 2px solid var(--text-primary) !important; /* Bold streetwear outline border */
+  box-shadow: 6px 6px 0px rgba(31, 30, 35, 0.15) !important; /* Bold solid offset shadow */
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.wishlist-item-row:hover {
+  transform: translate(-3px, -3px) !important; /* Dynamic elevation */
+  box-shadow: 9px 9px 0px rgba(31, 30, 35, 0.2) !important; /* Elevated shadow */
+  background: #FFFFFF !important;
+}
+
+/* Left Image Column Wrapper (.c-img) */
+.c-img {
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  position: relative;
+}
+
+/* Product Thumbnail (Flush layout, filling container with object-fit contain) */
+.wishlist-item-img {
+  width: 100% !important;
+  height: 110px !important;
+  object-fit: contain !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 0px !important; /* Sharp rectangular thumbnail */
+  border: 1px solid rgba(31, 30, 35, 0.1) !important; /* Subtle border for layout integrity */
+  box-shadow: none !important;
+  transition: var(--transition-smooth);
+}
+
+.wishlist-item-row:hover .wishlist-item-img {
+  transform: scale(1.03);
+}
+
+/* Floating Heart Icon Overlay sitting flush on top-right image bounds */
+.wishlist-heart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--primary-accent) !important; /* Neon Orange */
+  color: #FFFFFF !important;
+  border: 1.5px solid var(--text-primary) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  box-shadow: 2px 2px 0px var(--text-primary);
+  transition: var(--transition-smooth) !important;
+  z-index: 5;
+}
+
+.wishlist-item-row:hover .wishlist-heart-badge {
+  background: var(--secondary-accent) !important; /* Sporty electric violet */
+  transform: scale(1.18) rotate(12deg);
+  box-shadow: 3px 3px 0px var(--text-primary);
+}
+
+/* Star Ratings List */
+.wishlist-stars {
+  display: flex;
+  gap: 3px;
+  font-size: 0.75rem;
+}
+
+.wishlist-stars i {
+  color: #FE672E !important; /* Vivid Burn Orange consistent rating star colors */
+}
+
+/* Content Details */
+.wishlist-item-name {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 1.08rem !important;
+  color: var(--text-primary) !important;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin-bottom: 2px !important;
+}
+
+.wishlist-item-desc {
+  font-family: var(--font-body) !important;
+  font-size: 0.88rem !important;
+  color: var(--text-secondary) !important;
+  line-height: 1.5;
+}
+
+.wishlist-item-price {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 1.15rem !important;
+  color: var(--primary-accent) !important; /* Neon Orange Price Tag */
+  letter-spacing: -0.01em;
+}
+
+/* Sporty Curated Style Tag */
+.wishlist-curated-tag {
+  font-family: var(--font-heading) !important;
+  font-size: 0.65rem !important;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--secondary-accent) !important; /* Electric Violet-Blue */
+  background: rgba(106, 105, 255, 0.06) !important;
+  border: 1px solid rgba(106, 105, 255, 0.16) !important;
+  border-radius: 999px !important;
+  padding: 3px 10px !important;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.wishlist-item-row:hover .wishlist-curated-tag {
+  background: rgba(106, 105, 255, 0.12) !important;
+  border-color: rgba(106, 105, 255, 0.28) !important;
+}
+
+/* ==========================================================================
+   MINIMAL ACTIONS & BUTTON TRIGGERS
+   ========================================================================== */
+
+.wishlist-action-btn {
+  font-family: var(--font-heading) !important;
+  font-size: 0.8rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  border: 2px solid var(--text-primary) !important; /* Bold outline border */
+  background: var(--primary-accent) !important; /* Vivid streetwear orange */
+  color: var(--text-primary) !important; /* Pitch black text */
+  border-radius: 0px !important; /* Sharp rectangular edges */
+  padding: 10px 24px !important;
+  box-shadow: 3px 3px 0px var(--text-primary) !important; /* Solid flat shadow */
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.wishlist-action-btn:hover {
+  background: #7C3AED !important; /* Electric Purple Hover state! */
+  color: #FFFFFF !important; /* White text on purple hover */
+  transform: translate(-1.5px, -1.5px) !important;
+  box-shadow: 5px 5px 0px var(--text-primary) !important;
+}
+
+.wishlist-remove-btn {
+  background: none !important;
+  border: none !important;
+  color: #8C8A90 !important; /* Clean neutral slate text */
+  font-family: var(--font-body) !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important; /* Bold uppercase style matching cart */
+  text-transform: uppercase !important;
+  letter-spacing: normal !important;
+  padding: 0 !important;
+  transition: var(--transition-smooth) !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.wishlist-remove-btn:hover {
+  color: var(--primary-accent) !important; /* Neon orange trigger highlighting */
+  text-decoration: underline !important;
+}
+
+/* Scrollbars overrides */
 ::-webkit-scrollbar {
-    width: 10px;
+  width: 8px;
 }
-
 ::-webkit-scrollbar-track {
-    border: 1px solid rgb(255, 255, 255);
-    border-radius: 8px;
+  background: var(--bg-deep);
 }
-
 ::-webkit-scrollbar-thumb {
-    background: rgba(108, 108, 108, 0.558);
-    border-radius: 8px;
+  background: var(--bg-surface);
 }
-
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(108, 108, 108, 0.896);
+  background-color: var(--primary-accent);
 }

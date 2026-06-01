@@ -22,7 +22,7 @@ const html1 = `
 
     <div style="margin-top: 30px; font-size: 14px; color: #777; text-align: center;">
       <p>If you have any questions, just reply to this email—we’re happy to help.</p>
-      <p>&copy; ${new Date().getFullYear()} Acess. All rights reserved.</p>
+      <p>&copy; ${new Date().getFullYear()} Moda. All rights reserved.</p>
     </div>
   </div>
     `;
@@ -51,7 +51,7 @@ const html2 = `
 
   <div style="margin-top: 30px; font-size: 14px; color: #777; text-align: center;">
     <p>Need help? Just reply to this email.</p>
-    <p>&copy; ${new Date().getFullYear()} Acess. All rights reserved.</p>
+    <p>&copy; ${new Date().getFullYear()} Moda. All rights reserved.</p>
   </div>
 </div>
 `;
@@ -80,7 +80,7 @@ const html3 = `
 
   <div style="margin-top: 30px; font-size: 14px; color: #777; text-align: center;">
     <p>Questions? Just reply to this email—we’ve got your back.</p>
-    <p>&copy; ${new Date().getFullYear()} Acess. All rights reserved.</p>
+    <p>&copy; ${new Date().getFullYear()} Moda. All rights reserved.</p>
   </div>
 </div>
 `;
@@ -109,7 +109,7 @@ const html4 = `
 
   <div style="margin-top: 30px; font-size: 14px; color: #777; text-align: center;">
     <p>If you have any questions, just reply to this email—we’re happy to help.</p>
-    <p>&copy; ${new Date().getFullYear()} Acess. All rights reserved.</p>
+    <p>&copy; ${new Date().getFullYear()} Moda. All rights reserved.</p>
   </div>
 </div>
 `;

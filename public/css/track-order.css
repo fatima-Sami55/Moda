@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap");
 html {
   height: auto;
   width: auto;
@@ -1323,28 +1322,7 @@ footer.light .footer-copyright {
   color: rgb(12, 12, 12);
 }
 
-footer ul.social-footer2 {
-  margin: 0;
-  padding: 0;
-  width: auto;
-}
 
-footer ul.social-footer2 li {
-  background-color: #141313;
-  display: inline-block;
-  padding: 0;
-}
-
-footer ul.social-footer2 li a:hover {
-  background-color: #aeaeae;
-}
-
-footer ul.social-footer2 li a {
-  display: block;
-  height: 30px;
-  width: 30px;
-  text-align: center;
-}
 
 footer .btn {
   background-color: #000000;
@@ -1384,4 +1362,121 @@ footer .btn.active {
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: rgba(108, 108, 108, 0.896);
+}
+
+/* Lookbook Overrides */
+body {
+  background-color: var(--bg-deep) !important;
+}
+
+section {
+  background-color: var(--bg-deep) !important;
+}
+
+h2 {
+  font-family: var(--font-heading) !important;
+  font-size: 2.2rem !important;
+  text-transform: uppercase;
+  color: var(--text-primary) !important;
+  margin-bottom: 20px !important;
+}
+
+h3 {
+  font-family: var(--font-heading) !important;
+  font-size: 1.6rem !important;
+  text-transform: uppercase;
+  color: var(--text-primary) !important;
+  margin-bottom: 15px !important;
+}
+
+.border-gray-200 {
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 0px !important;
+  background-color: #FFFFFF !important;
+  box-shadow: 6px 6px 0px var(--text-primary) !important;
+}
+
+.bg-white {
+  background-color: #FFFFFF !important;
+}
+
+/* Timeline elements */
+ol.border-s {
+  border-left: 3px solid var(--text-primary) !important;
+  padding-left: 0 !important;
+}
+
+li.ms-6 {
+  margin-left: 1.5rem !important;
+}
+
+li.ms-6 span.absolute {
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 50% !important;
+  background-color: var(--bg-surface) !important;
+  left: -14px !important;
+  top: 0 !important;
+}
+
+li.ms-6 svg {
+  fill: var(--text-primary) !important;
+  width: 14px;
+  height: 14px;
+}
+
+li.ms-6.text-primary-700 span.absolute {
+  background-color: var(--primary-accent) !important; /* Active step is yellow */
+  box-shadow: 2px 2px 0px var(--text-primary);
+}
+
+h4, h6 {
+  font-family: var(--font-heading) !important;
+  font-size: 1.2rem !important;
+  text-transform: uppercase;
+  color: var(--text-primary) !important;
+}
+
+/* Cancel order button */
+#cancelOrderButton {
+  background-color: var(--secondary-accent) !important; /* Burn Orange */
+  border: 2px solid var(--text-primary) !important;
+  color: #FFFFFF !important;
+  border-radius: 999px !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 10px 24px !important;
+  box-shadow: 3px 3px 0px var(--text-primary);
+  transition: var(--transition-smooth);
+}
+
+#cancelOrderButton:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px var(--text-primary);
+}
+
+/* Modal formatting */
+.modal-content {
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 0px !important;
+  box-shadow: 10px 10px 0px var(--text-primary) !important;
+  background-color: #FFFFFF !important;
+}
+
+.modal-header {
+  border-bottom: 2px solid var(--text-primary) !important;
+  background-color: var(--secondary-accent) !important;
+  border-radius: 0px !important;
+}
+
+.modal-header .modal-title {
+  font-family: var(--font-heading) !important;
+  font-size: 1.5rem !important;
+  text-transform: uppercase;
+  color: #FFFFFF !important;
+}
+
+.modal-footer {
+  border-top: 1px solid var(--border-light) !important;
 }

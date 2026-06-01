@@ -3,6 +3,7 @@ const router = express.Router();
 const { pool } = require("../database/data");
 const isAuthenticated = require("../Middleware/is_logged_in");
 const checkEmailVerified = require("../Middleware/getEmailVerification");
+const { verifyCsrf } = require("../Middleware/csrf");
 
 // GET /add-to-cart
 router.get("/add-to-cart", isAuthenticated,checkEmailVerified, async (req, res, next) => {
@@ -21,11 +22,11 @@ router.get("/add-to-cart", isAuthenticated,checkEmailVerified, async (req, res, 
 });
 
 // POST /add-to-cart
-router.post("/add-to-cart", isAuthenticated,checkEmailVerified, async (req, res, next) => {
-  const { itemName, itemImage, itemDescription, itemPrice } = req.body;
+router.post("/add-to-cart", isAuthenticated,checkEmailVerified, verifyCsrf, async (req, res, next) => {
+  const { itemName, itemImage, itemDescription } = req.body;
   const userId = req.session.userId;
 
-    if (!itemName || !itemImage || !itemDescription || !itemPrice) {
+  if (!itemName || !itemImage || !itemDescription) {
     // Respond with JSON if AJAX, else fallback
     if (req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest') {
       return res.status(400).json({ error: "All fields are required" });
@@ -33,6 +34,18 @@ router.post("/add-to-cart", isAuthenticated,checkEmailVerified, async (req, res,
     req.flash("error", "All fields are required");
     return res.redirect("/add-to-cart");
   }
+
+  // Backend price lookup to prevent client-side manipulation
+  const { findProductByName } = require("../helper_functions/getRating");
+  const product = findProductByName(itemName);
+  if (!product) {
+    if (req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest') {
+      return res.status(400).json({ error: "Invalid product name" });
+    }
+    req.flash("error", "Invalid product name");
+    return res.redirect("/add-to-cart");
+  }
+  const itemPrice = product.price;
 
   try {
     // Check if item already in cart
@@ -78,14 +91,16 @@ router.post("/add-to-cart", isAuthenticated,checkEmailVerified, async (req, res,
 });
 
 // DELETE item from cart
-router.post("/delete/:itemId", isAuthenticated,checkEmailVerified, async (req, res, next) => {
+router.post("/delete/:itemId", isAuthenticated,checkEmailVerified, verifyCsrf, async (req, res, next) => {
   const itemId = parseInt(req.params.itemId);
+  const userId = req.session.userId;
 
   try {
     const result = await pool
       .request()
       .input("id", itemId)
-      .query("DELETE FROM cart_items WHERE id = @id");
+      .input("userId", userId)
+      .query("DELETE FROM cart_items WHERE id = @id AND user_id = @userId");
 
     if (result.rowsAffected[0] > 0) {
       req.flash("success", "Item deleted successfully");

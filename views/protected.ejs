@@ -1,28 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acess</title>
-    <link rel="icon" type="image/png" href="/image/Acess%20logo/logo.png?v=1.0" />
-  </head>
+  <%- include('../partials/head', {title: 'Authentication Required — Moda'}) %>
   <body>
     <link href="/css/protected.css" rel="stylesheet" type="text/css" />
 
-    <div class="container image-container" style="text-align: center">
-      <div class="container">
+    <main class="protected-container">
+      <!-- Restriction Badge -->
+      <span class="gate-badge">
+        <span>🔒</span> Access Restricted
+      </span>
+
+      <!-- Illustration Area -->
+      <div class="illustration-wrapper">
         <img
-          src="../image/vectors/protected.png"
-          alt="404 page"
-          style="height: 650px; width: 650px"
+          src="/image/vectors/protected.png"
+          alt="Locked Gate - Authentication Required"
+          class="illustration-img"
         />
       </div>
 
-      <P
-        ><a href="/signup" style="color: blue">Sign up</a> or
-        <a href="/login" style="color: blue">Login</a> to continue!</P
-      >
-    </div>
+      <!-- Text Blocks -->
+      <h2 class="protected-title">Member Access Only</h2>
+      <p class="protected-text">
+        The destination you are trying to reach requires standard member credentials. Register a new account or log in to unleash your full fashion potential!
+      </p>
+
+      <!-- Auth Action Panel -->
+      <div class="auth-actions">
+        <a href="/login" class="btn-auth btn-login">Login</a>
+        <a href="/signup" class="btn-auth btn-signup">Sign Up</a>
+      </div>
+    </main>
   </body>
 </html>

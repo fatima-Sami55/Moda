@@ -1,0 +1,152 @@
+<div id="toast-container" style="position: fixed; bottom: 30px; right: 30px; z-index: 99999; display: flex; flex-direction: column; gap: 15px; max-width: 380px; width: calc(100% - 60px); pointer-events: none;"></div>
+
+<style>
+  .custom-toast {
+    pointer-events: auto;
+    color: #1F1E23 !important;
+    border: 3px solid #1F1E23 !important;
+    border-radius: 0px !important;
+    padding: 16px 20px !important;
+    font-family: 'Montserrat', 'Inter', sans-serif !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.05em !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  .custom-toast.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .custom-toast.hide {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.9);
+  }
+
+  .toast-close-btn {
+    border: 2px solid #1F1E23 !important;
+    background: #FFFFFF !important;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #1F1E23;
+    font-weight: 900;
+    transition: all 0.15s ease;
+    border-radius: 0px !important;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .toast-close-btn:hover {
+    background: #1F1E23 !important;
+    color: #FFFFFF !important;
+    transform: translate(-1px, -1px);
+    box-shadow: 2px 2px 0px #FE672E !important;
+  }
+
+  .toast-close-btn:active {
+    transform: translate(0, 0);
+    box-shadow: none !important;
+  }
+</style>
+
+<script>
+  (function() {
+    // Global Neobrutalist Toast Notification Helper
+    window.showToast = function(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = 'custom-toast';
+      
+      const isSuccess = type === 'success';
+      const bgColor = isSuccess ? '#FFFAF0' : '#FFECEC';
+      const shadowColor = isSuccess ? '#FE672E' : '#6A69FF';
+      
+      toast.style.cssText = `
+        background-color: ${bgColor} !important;
+        box-shadow: 5px 5px 0px #1F1E23 !important;
+        border-color: #1F1E23 !important;
+      `;
+
+      // Visual glow hover effect
+      toast.addEventListener('mouseenter', () => {
+        toast.style.boxShadow = `6px 6px 0px ${shadowColor}`;
+      });
+      toast.addEventListener('mouseleave', () => {
+        toast.style.boxShadow = '5px 5px 0px #1F1E23';
+      });
+
+      const icon = isSuccess ? '✨' : '⚠️';
+      toast.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 12px; flex-grow: 1;">
+          <span style="font-size: 1.2rem; flex-shrink: 0;">${icon}</span>
+          <span style="line-height: 1.4;">${message}</span>
+        </div>
+        <button class="toast-close-btn" title="Dismiss">×</button>
+      `;
+
+      const closeBtn = toast.querySelector('.toast-close-btn');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          dismissToast(toast);
+        });
+      }
+
+      container.appendChild(toast);
+
+      // Trigger reflow & animate in
+      requestAnimationFrame(() => {
+        toast.classList.add('show');
+      });
+
+      // Auto dismiss after 4.5 seconds
+      const autoDismissTimeout = setTimeout(() => {
+        dismissToast(toast);
+      }, 4500);
+
+      function dismissToast(el) {
+        clearTimeout(autoDismissTimeout);
+        el.classList.remove('show');
+        el.classList.add('hide');
+        el.addEventListener('transitionend', () => {
+          el.remove();
+        });
+      }
+    };
+  })();
+</script>
+
+<!-- Server-side flashed messages auto-triggers -->
+<% if (typeof success !== 'undefined' && success && success.length > 0) { %>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      window.showToast("<%= success %>", "success");
+    });
+  </script>
+<% } %>
+
+<% if (typeof error !== 'undefined' && error && error.length > 0) { %>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const rawError = <%- JSON.stringify(error) %>;
+      const errorMsg = Array.isArray(rawError) ? rawError[0] : rawError;
+      if (errorMsg) {
+        window.showToast(errorMsg, "error");
+      }
+    });
+  </script>
+<% } %>

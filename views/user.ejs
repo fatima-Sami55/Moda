@@ -1,18 +1,9 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
   <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Acess</title>
-      <link rel="icon" type="image/png" href="/image/Acess%20logo/logo.png?v=1.0" />
-    </head>
+      <%- include('../partials/head', {title: 'Moda — Profile'}) %>
     <body class="<%= isVerified ? '' : 'unverified' %>">
       <!-- stylesheets -->
-      <link rel="stylesheet" href="/css/user.css" />
-      <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
-    />
+      <link rel="stylesheet" href="/css/user.css?v=<%= Date.now() %>" />
       <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -27,371 +18,871 @@
       
 <!-- Email verification flash -->
    <% if (!isVerified) { %>
-      <div class="fixed-wrapper">
-  <div class="container-fluid" style="padding: 0px;">
-    <div class="alert alert-warning d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2" role="alert">
-      
-      <div class="flex-grow-1">
-        ⚠️ Your account is not verified. <br class="d-md-none" />
-        <%= resendAttempts >= 3
-          ? "(You’ve reached the resend limit for today)"
-          : "Please verify your email to unlock full features." %>
-      </div>
-
-      <div>
-        <% if (resendAttempts < 3) { %>
-          <form action="/resend-verification" method="POST" class="d-inline">
-            <input type="hidden" name="email" value="<%= email %>">
-            <button type="submit" class="btn btn-sm btn-outline-primary">Resend Email</button>
-          </form>
-        <% } else { %>
-          <button class="btn btn-sm btn-outline-secondary" disabled>Resend Disabled</button>
-        <% } %>
-      </div>
-      
-    </div>
-    </div>
-    </div>
-    <% } %>
+   <div class="verification-strip">
+     <div class="container-fluid d-flex align-items-center justify-content-between h-100 px-3 px-md-4">
+       <div class="d-flex align-items-center text-truncate gap-2">
+         <span class="strip-emoji">⚠️</span>
+         <span class="strip-text">
+           <strong>Account Unverified</strong>
+           <%= resendAttempts >= 3
+             ? "(Resend limit reached for today. Check your inbox!)"
+             : "Please verify your email address to unlock full premium features." %>
+         </span>
+       </div>
+       <div class="strip-action">
+         <% if (resendAttempts < 3) { %>
+           <form id="resend-verification-form" class="d-inline">
+             <input type="hidden" name="email" value="<%= email %>">
+             <button type="submit" class="strip-action-btn btn">Resend Email</button>
+           </form>
+         <% } else { %>
+           <button class="strip-action-btn btn disabled" disabled>Resend Disabled</button>
+         <% } %>
+       </div>
+     </div>
+   </div>
+   <% } %>
 <!-- Navbar -->
       <%- include('../partials/navbar_carts', {page:page}) %>
 <!-- user dashboard section -->
       <section class="user-dashboard">
   <div class="container py-2">
     <div class="row">
-      <!-- Left Column: User Profile Summary -->
+      <!-- Left Column: User Profile Summary (Sidebar Card) -->
       <div class="col-lg-4">
-        <!-- Profile Card -->
-        <div class="card mb-4">
-          <div class="card-body text-center">
-            <!-- Profile Image -->
+        <div class="sidebar-card-wrapper mb-5">
+          <!-- Sidebar Profile Header (Avatar next to name and email) -->
+          <div class="sidebar-profile-header d-flex align-items-center mb-4">
             <img
               src="<%= loggedInUser.img %>"
               alt="avatar"
-              class="rounded-circle img-fluid"
-              style="width: 150px; height: 150px"
+              class="rounded-circle sidebar-avatar me-3"
+              style="width: 50px; height: 50px; object-fit: cover;"
             />
-            <!-- Username -->
-            <h5 class="my-3">@<%= loggedInUser.firstname %></h5>
-            <!-- Date Joined -->
-            <p class="text-muted mb-1">
-              Date joined: <%= new Date(loggedInUser.date_joined).toLocaleDateString() %>
-            </p>
-            <!-- Location -->
-            <p class="text-muted mb-4">
-              <%= loggedInUser.city %> <%= loggedInUser.province %>
-            </p>
-            <!-- Edit/Delete Account Buttons -->
-            <div class="d-flex justify-content-center mb-2">
-              <!-- Edit Button -->
-              <a href="/edit-profile">
-                <button
-                  type="button"
-                  class="btn btn-dark"
-                  data-mdb-button-init
-                  data-mdb-ripple-init
-                >
-                  Edit ACCOUNT
-                </button>
-              </a>
-              <!-- Hidden Form for DELETE request -->
-              <form
-                id="delete-profile-form"
-                action="/user-profile"
-                method="post"
-                style="display: none"
-              >
-                <input type="hidden" name="_method" value="DELETE" />
-              </form>
-              <!-- Delete Button (Triggers Modal) -->
-              <button
-                type="button"
-                class="btn btn-danger ms-1"
-                data-mdb-button-init
-                data-mdb-ripple-init
-                data-bs-toggle="modal"
-                data-bs-target="#staticBackdrop"
-                aria-controls="staticBackdrop"
-              >
-                DELETE ACCOUNT
-              </button>
+            <div class="sidebar-user-details">
+              <h6 class="sidebar-user-name mb-0"><%= loggedInUser.firstname %> <%= loggedInUser.lastname %></h6>
+              <span class="sidebar-user-email text-muted text-break"><%= loggedInUser.email %></span>
             </div>
           </div>
-        </div>
 
-        <!-- Quick Links Card -->
-        <div class="card mb-4 mb-lg-0">
-          <div class="card-body p-0">
-            <ul class="list-group list-group-flush rounded-3">
-              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <i class="fas fa-solid fa-envelope fa-beat fa-lg text-warning"></i>
-                <p class="mb-0"><a href="/email">/mail</a></p>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <i class="fas fa-solid fa-bell fa-lg fa-beat text-danger"></i>
-                <p class="mb-0"><a href="/inbox">/notifications</a></p>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <i class="fas fa-solid fa-inbox fa-beat fa-lg text-info"></i>
-                <p class="mb-0"><a href="/orders">/orders</a></p>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <i class="fas fa-thin fa-message fa-beat fa-lg" style="color: #667BC6;"></i>
-                <p class="mb-0"><a href="/review">/reviews</a></p>
-              </li>
-            </ul>
+          <!-- Stats Board capsule inside the sidebar card -->
+          <div class="sidebar-stats-capsule mb-4">
+            <div class="stat-column text-center" style="cursor: pointer;" data-sidebar-tab="orders" title="View Orders">
+              <span class="stat-count"><%= stats.orders %></span>
+              <span class="stat-lbl">Orders</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-column text-center" style="cursor: pointer;" data-sidebar-tab="reviews" title="View Reviews">
+              <span class="stat-count"><%= stats.reviews %></span>
+              <span class="stat-lbl">Reviews</span>
+            </div>
           </div>
+
+          <hr class="sidebar-divider my-4" />
+
+          <!-- Sidebar settings navigation menu list -->
+          <div class="sidebar-menu-list">
+            <a href="/user-profile" class="sidebar-menu-item active" data-sidebar-tab="settings">
+              <i class="fa-regular fa-user me-3"></i>
+              <span>My Profile</span>
+            </a>
+            <a href="/orders" class="sidebar-menu-item" data-sidebar-tab="orders">
+              <i class="fa-solid fa-box-open me-3"></i>
+              <span>Order History</span>
+            </a>
+            <a href="/review" class="sidebar-menu-item" data-sidebar-tab="reviews">
+              <i class="fa-regular fa-star me-3"></i>
+              <span>My Reviews</span>
+            </a>
+            <a href="/email" class="sidebar-menu-item" data-sidebar-tab="email">
+              <i class="fa-regular fa-envelope me-3"></i>
+              <span>Email Inbox</span>
+            </a>
+            <a href="/inbox" class="sidebar-menu-item" data-sidebar-tab="inbox">
+              <i class="fa-regular fa-bell me-3"></i>
+              <span>Notifications</span>
+            </a>
+          </div>
+
+          <hr class="sidebar-divider my-4" />
+
+          <!-- Log Out at the bottom of the card -->
+          <a href="/logout" class="sidebar-logout-item">
+            <i class="fa-solid fa-arrow-right-from-bracket me-3"></i>
+            <span>Log Out</span>
+          </a>
         </div>
       </div>
 
-      <!-- Right Column: Detailed Info and Stats -->
+      <!-- Right Column: Unified Settings & Tabbed Workspace -->
       <div class="col-lg-8">
-        <!-- Personal Info Card -->
-        <div class="card mb-4">
-          <div class="card-body">
-            <div class="row mb-3">
-              <div class="col-sm-4 fw-bold">Full Name</div>
-              <div class="col-sm-8"><%= loggedInUser.firstname %> <%= loggedInUser.lastname %></div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-4 fw-bold">Email</div>
-              <div class="col-sm-8 text-break"><%= loggedInUser.email %></div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-4 fw-bold">Phone</div>
-              <div class="col-sm-8"><%= loggedInUser.phone %></div>
-            </div>
-            <div class="row">
-              <div class="col-sm-4 fw-bold">Address</div>
-              <div class="col-sm-8 text-break">
-                <%= loggedInUser.address %> <%= loggedInUser.city %> <%= loggedInUser.province %>
-              </div>
-            </div>
-          </div>
+        <!-- Elegant Title and description matching image -->
+        <h1 class="main-profile-title">My Profile</h1>
+        <p class="main-profile-desc">Manage your account settings, orders, and stats board.</p>
+
+        <!-- Horizontal tab navigation exactly as image -->
+        <div class="profile-tabs-nav mb-5">
+          <button class="profile-tab-btn active" id="tab-settings-btn" data-tab="settings">Profile</button>
+          <button class="profile-tab-btn" id="tab-orders-btn" data-tab="orders">Orders</button>
+          <button class="profile-tab-btn" id="tab-reviews-btn" data-tab="reviews">Reviews</button>
+          <button class="profile-tab-btn" id="tab-email-btn" data-tab="email">Email Inbox</button>
+          <button class="profile-tab-btn" id="tab-inbox-btn" data-tab="inbox">Notifications</button>
         </div>
 
-        <!-- Stats Card -->
-        <div class="row">
-          <div class="col-12">
-            <div class="card mb-4 mb-md-0" style="height: auto;">
-              <div class="card-body">
-                <!-- Stats Header -->
-                <h4 class="mb-4 text-dark font-italic">📊 Your Stats Board</h4>
+        <!-- Settings tab workspace -->
+        <div id="settings-tab-pane" class="profile-tab-content active">
+          <!-- Edit Personal Information Header -->
+          <h4 class="settings-section-heading mb-4">Edit Personal Information</h4>
 
-                <!-- Stat Items -->
-                <div class="card shadow-sm border-0">
-                  <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        🛒 Orders Placed
-                        <span class="badge bg-success rounded-pill fs-6"><%= stats.orders %></span>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        ✍️ Reviews Given
-                        <span class="badge bg-info rounded-pill fs-6"><%= stats.reviews %></span>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        💖 Wishlist Items
-                        <span class="badge bg-warning text-dark rounded-pill fs-6"><%= stats.wishlist %></span>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        🔔 Notifications
-                        <span class="badge bg-danger rounded-pill fs-6"><%= stats.notifications %></span>
-                      </li>
-                    </ul>
+          <form id="edit-profile-form" enctype="multipart/form-data" novalidate>
+            <!-- Hidden CSRF token field -->
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            
+            <!-- Circular Avatar and details with round edit buttons -->
+            <div class="avatar-edit-block d-flex align-items-center mb-5">
+              <img
+                src="<%= loggedInUser.img %>"
+                alt="avatar"
+                id="profile-avatar-preview"
+                class="rounded-circle me-4"
+                style="width: 100px; height: 100px; object-fit: cover;"
+              />
+              <div class="avatar-info-box me-auto">
+                <h5 class="avatar-user-name mb-1"><%= loggedInUser.firstname %> <%= loggedInUser.lastname %></h5>
+                <span class="avatar-user-email text-muted"><%= loggedInUser.email %></span>
+              </div>
+              
+              <div class="avatar-actions-pills d-flex gap-2">
+                <!-- Round Camera Upload Button -->
+                <button type="button" class="btn-avatar-action-round" id="avatar-upload-trigger" title="Change Profile Picture">
+                  <i class="fa-solid fa-camera"></i>
+                </button>
+                
+                <!-- Round Delete Account Button -->
+                <button
+                  type="button"
+                  class="btn-avatar-action-round btn-avatar-delete"
+                  title="Delete Account"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+
+              <!-- Hidden Input file selector -->
+              <input type="file" id="avatar-file-input" name="img" style="display: none;" accept="image/*" />
+            </div>
+
+            <!-- Form alert container -->
+            <div id="alertContainer" class="mb-4"></div>
+
+            <!-- First and Last Name input pill row -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label-custom">First Name</label>
+                <div class="input-pill-wrapper">
+                  <input type="text" name="firstname" class="input-pill" value="<%= loggedInUser.firstname %>" required />
+                  <i class="fa-solid fa-pen input-icon"></i>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label-custom">Last Name</label>
+                <div class="input-pill-wrapper">
+                  <input type="text" name="lastname" class="input-pill" value="<%= loggedInUser.lastname %>" required />
+                  <i class="fa-solid fa-pen input-icon"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Email field -->
+            <div class="mb-4">
+              <label class="form-label-custom">Email</label>
+              <div class="input-pill-wrapper">
+                <input type="email" name="email" class="input-pill" value="<%= loggedInUser.email %>" required />
+                <i class="fa-solid fa-pen input-icon"></i>
+              </div>
+            </div>
+
+            <!-- Phone Number field -->
+            <div class="mb-4">
+              <label class="form-label-custom">Phone Number</label>
+              <div class="input-pill-wrapper">
+                <input type="text" name="phone" class="input-pill" value="<%= loggedInUser.phone %>" required />
+                <i class="fa-solid fa-pen input-icon"></i>
+              </div>
+            </div>
+
+            <!-- Shipping Address field -->
+            <div class="mb-4">
+              <label class="form-label-custom">Shipping Address</label>
+              <div class="input-pill-wrapper">
+                <input type="text" name="address" class="input-pill" value="<%= loggedInUser.address %>" required />
+                <i class="fa-solid fa-pen input-icon"></i>
+              </div>
+            </div>
+
+            <!-- City, Province, Zip row -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-5">
+                <label class="form-label-custom">City</label>
+                <div class="input-pill-wrapper">
+                  <input type="text" name="city" class="input-pill" value="<%= loggedInUser.city %>" required />
+                  <i class="fa-solid fa-pen input-icon"></i>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label-custom">Province</label>
+                <div class="input-pill-wrapper">
+                  <select name="province" class="input-pill-select" required>
+                    <option value="Punjab" <%= loggedInUser.province === 'Punjab' ? 'selected' : '' %>>Punjab</option>
+                    <option value="Sindh" <%= loggedInUser.province === 'Sindh' ? 'selected' : '' %>>Sindh</option>
+                    <option value="Kpk" <%= loggedInUser.province === 'Kpk' ? 'selected' : '' %>>Kpk</option>
+                    <option value="Blochistan" <%= loggedInUser.province === 'Blochistan' ? 'selected' : '' %>>Blochistan</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label-custom">Zip Code</label>
+                <div class="input-pill-wrapper">
+                  <input type="text" name="zip" class="input-pill" value="<%= loggedInUser.zip %>" required />
+                  <i class="fa-solid fa-pen input-icon"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Change Password Section -->
+            <h4 class="settings-section-heading mb-4 mt-5">Change Password</h4>
+            
+            <div class="mb-4">
+              <label class="form-label-custom">New Password (leave empty to keep current)</label>
+              <div class="input-pill-wrapper">
+                <input type="password" id="password-input" name="Pass" class="input-pill" placeholder="Enter new password" />
+                <i class="fa-regular fa-eye-slash input-icon-pwd" style="cursor: pointer;"></i>
+              </div>
+            </div>
+
+            <!-- Solid orange pill submit button matching image -->
+            <div class="mt-5">
+              <button type="submit" class="btn-profile-submit-pill">Update profile</button>
+            </div>
+          </form>
+          
+          <!-- Hidden delete profile form -->
+          <form id="delete-profile-form" action="/user-profile?_method=DELETE" method="POST" style="display: none;">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          </form>
+        </div>
+
+        <!-- Order History tab workspace -->
+        <div id="orders-tab-pane" class="profile-tab-content">
+          <h4 class="settings-section-heading mb-4 text-start">Your Order History</h4>
+          
+          <div id="orders-list-subpane">
+            <% if (purchases.length === 0) { %>
+              <div class="tab-summary-info-card text-center p-5">
+                <div class="mb-4">
+                  <!-- SVG Orders Illustration (Orange climbing ladder to phone) -->
+                  <svg viewBox="0 0 200 200" width="180" height="180" class="empty-illustration">
+                    <!-- Soft organic background blob -->
+                    <path d="M35 75 Q 15 125 65 165 T 165 155 Q 185 85 125 45 T 35 75" fill="#E0F7FA" opacity="0.8" />
+                    <!-- Smartphone -->
+                    <rect x="55" y="25" width="70" height="125" rx="8" fill="#ECEFF1" stroke="#1F1E23" stroke-width="2.5" />
+                    <rect x="60" y="32" width="60" height="102" rx="4" fill="#FFFFFF" stroke="#1F1E23" stroke-width="1.5" />
+                    <line x1="82" y1="28" x2="98" y2="28" stroke="#1F1E23" stroke-width="2" stroke-linecap="round" />
+                    <circle cx="90" cy="140" r="3.5" fill="#1F1E23" />
+                    <!-- Screen lines -->
+                    <line x1="68" y1="48" x2="95" y2="48" stroke="#CFD8DC" stroke-width="3.5" stroke-linecap="round" />
+                    <line x1="68" y1="60" x2="90" y2="60" stroke="#CFD8DC" stroke-width="3.5" stroke-linecap="round" />
+                    <line x1="68" y1="72" x2="82" y2="72" stroke="#CFD8DC" stroke-width="3.5" stroke-linecap="round" />
+                    <!-- Yellow Ladder -->
+                    <line x1="108" y1="85" x2="108" y2="185" stroke="#FBC02D" stroke-width="4" stroke-linecap="round" />
+                    <line x1="130" y1="85" x2="130" y2="185" stroke="#FBC02D" stroke-width="4" stroke-linecap="round" />
+                    <line x1="108" y1="108" x2="130" y2="108" stroke="#FBC02D" stroke-width="3" stroke-linecap="round" />
+                    <line x1="108" y1="128" x2="130" y2="128" stroke="#FBC02D" stroke-width="3" stroke-linecap="round" />
+                    <line x1="108" y1="148" x2="130" y2="148" stroke="#FBC02D" stroke-width="3" stroke-linecap="round" />
+                    <line x1="108" y1="168" x2="130" y2="168" stroke="#FBC02D" stroke-width="3" stroke-linecap="round" />
+                    <!-- Cute orange fruit character -->
+                    <circle cx="120" cy="78" r="23" fill="#FFAB91" stroke="#1F1E23" stroke-width="2.5" />
+                    <!-- Leaf stem -->
+                    <path d="M123 55 C125 45, 135 48, 126 56 Z" fill="#81C784" stroke="#1F1E23" stroke-width="1.5" />
+                    <line x1="120" y1="56" x2="124" y2="48" stroke="#1F1E23" stroke-width="1.5" />
+                    <!-- Eyes & Smile -->
+                    <circle cx="111" cy="76" r="2.5" fill="#1F1E23" />
+                    <circle cx="122" cy="76" r="2.5" fill="#1F1E23" />
+                    <path d="M113 83 Q116.5 86.5 120 83" fill="none" stroke="#1F1E23" stroke-width="2" stroke-linecap="round" />
+                    <!-- Pencil in hand -->
+                    <rect x="91" y="65" width="18" height="5" rx="1" fill="#FFEB3B" stroke="#1F1E23" stroke-width="1.5" transform="rotate(-35 91 65)" />
+                    <!-- Stick arms & legs -->
+                    <path d="M102 85 Q97 90 102 96" fill="none" stroke="#1F1E23" stroke-width="2" stroke-linecap="round" />
+                    <path d="M136 84 Q141 90 138 98" fill="none" stroke="#1F1E23" stroke-width="2" stroke-linecap="round" />
+                    <ellipse cx="113" cy="101" rx="3.5" ry="4.5" fill="#FFAB91" stroke="#1F1E23" stroke-width="1.5" />
+                    <ellipse cx="126" cy="101" rx="3.5" ry="4.5" fill="#FFAB91" stroke="#1F1E23" stroke-width="1.5" />
+                  </svg>
+                </div>
+                <h5 class="mb-2">No orders placed yet</h5>
+                <p class="text-muted mb-0">Browse our collection and curate your streetwear style.</p>
+              </div>
+            <% } else { %>
+              <div class="orders-list-wrapper d-flex flex-column gap-4">
+                <% purchases.forEach(p => { %>
+                  <div class="order-card-premium p-4 bg-white border border-light" data-purchase-id="<%= p.PurchaseID %>">
+                    <div class="order-card-header d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2 text-start">
+                      <div>
+                        <h6 class="order-card-id mb-1">Receipt ID: <strong><%= p.PurchaseID %></strong></h6>
+                        <span class="order-card-date text-muted small"><%= new Date(p.PurchaseDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+                      </div>
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="order-status-badge badge-<%= (p.OrderStatus || 'placed').toLowerCase() %>"><%= p.OrderStatus || 'Placed' %></span>
+                        <button type="button" class="btn-track-order-round btn-track-trigger" data-purchase-id="<%= p.PurchaseID %>" title="Track Order">
+                          <i class="fa-solid fa-truck-fast"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="order-card-details row g-3 text-start">
+                      <div class="col-6 col-md-3">
+                        <span class="detail-label text-muted d-block small">Total Amount</span>
+                        <span class="detail-val fw-bold text-dark">$<%= p.TotalPrice %></span>
+                      </div>
+                      <div class="col-6 col-md-2">
+                        <span class="detail-label text-muted d-block small">Quantity</span>
+                        <span class="detail-val text-dark"><%= p.Quantity %></span>
+                      </div>
+                      <div class="col-6 col-md-3">
+                        <span class="detail-label text-muted d-block small">Payment Method</span>
+                        <span class="detail-val text-dark text-capitalize"><%= p.PaymentMethod %></span>
+                      </div>
+                      <div class="col-12 col-md-4">
+                        <span class="detail-label text-muted d-block small">Shipping Address</span>
+                        <span class="detail-val text-dark text-break"><%= p.ShippingAddress %></span>
+                      </div>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+            <% } %>
+          </div>
+
+          <!-- Detailed Order Tracking Sub-panes (Slide-in) -->
+          <% purchases.forEach(p => { %>
+            <div class="order-tracking-subpane d-none" id="track-pane-<%= p.PurchaseID %>">
+              <button type="button" class="btn btn-outline-dark mb-4 back-to-orders-btn" data-purchase-id="<%= p.PurchaseID %>">
+                <i class="fa-solid fa-arrow-left me-2"></i> Back to Orders
+              </button>
+              
+              <h4 class="settings-section-heading mb-4 text-start">Track Order #<%= p.PurchaseID %></h4>
+              
+              <div class="row g-4">
+                <!-- Product details column -->
+                <div class="col-lg-7">
+                  <div class="order-details-card p-4 border bg-white mb-4 shadow-sm">
+                    <h6 class="font-heading mb-3 text-start uppercase" style="font-size: 0.85rem;">Items in this order</h6>
+                    <div class="order-items-divider-list">
+                      <% orders.forEach(order => { %>
+                        <% if (order.purchase_id === p.PurchaseID) { %>
+                          <div class="py-3 d-flex align-items-center gap-3 text-start">
+                            <img src="<%= order.item_img %>" alt="<%= order.itemName %>" class="border border-2 border-dark" style="width: 60px; height: 60px; object-fit: cover; border-radius: 0px !important; box-shadow: 2px 2px 0px rgba(31, 30, 35, 0.1) !important;" />
+                            <div class="flex-grow-1">
+                              <h6 class="mb-0 text-dark small"><strong><%= order.itemName %></strong></h6>
+                              <span class="text-muted small">Qty: <%= order.quantity %> &bull; Price: $<%= order.item_price %></span>
+                            </div>
+                          </div>
+                        <% } %>
+                      <% }) %>
+                    </div>
+                    
+                    <hr class="my-3 border-2 border-dark" style="opacity: 0.15;" />
+                    
+                    <!-- Pricing Summary -->
+                    <div class="small text-start">
+                      <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Original Price</span>
+                        <% 
+                           let shippingFee = parseFloat(p.shipping_fee || 0); 
+                           let discount = parseFloat(p.Discount || 0); 
+                           let totalPrice = parseFloat(p.TotalPrice || 0); 
+                           let diff = shippingFee - discount; 
+                           let basePrice = totalPrice - diff; 
+                        %>
+                        <span class="fw-bold">$<%= basePrice.toFixed(2) %></span>
+                      </div>
+                      <div class="d-flex justify-content-between mb-2 text-danger">
+                        <span>Shipping Fee</span>
+                        <span>+$<%= shippingFee.toFixed(2) %></span>
+                      </div>
+                      <div class="d-flex justify-content-between mb-2 text-success">
+                        <span>Discount</span>
+                        <span>-$<%= discount.toFixed(2) %></span>
+                      </div>
+                      <div class="d-flex justify-content-between font-bold text-dark pt-2 border-top border-dark" style="font-size: 1rem;">
+                        <span>Total Amount</span>
+                        <span>$<%= totalPrice.toFixed(2) %></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <!-- Motivational Footer -->
-                <div class="text-center mt-3">
-                  <small class="text-muted">Keep going! Your journey's just getting started 🚀</small>
+                <!-- Tracking Timeline column -->
+                <div class="col-lg-5">
+                  <div class="tracking-timeline-card p-4 border bg-white shadow-sm">
+                    <h6 class="font-heading mb-4 text-start uppercase" style="font-size: 0.85rem;">Shipping Status</h6>
+                    
+                    <% 
+                       const orderData = data[p.PurchaseID] || {}; 
+                       const oStatus = (p.OrderStatus || 'Placed').toLowerCase();
+                    %>
+                    
+                    <ul class="timeline-steps">
+                      <!-- Step 4: Delivered -->
+                      <li class="timeline-step <%= oStatus === 'delivered' || oStatus === 'reviewed' ? 'completed' : '' %>">
+                        <div class="step-icon">
+                          <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="step-content text-start">
+                          <span class="step-date"><%= orderData.delivery || 'In Transit' %></span>
+                          <h6 class="step-title">Delivered</h6>
+                          <p class="step-desc">Your order was delivered successfully.</p>
+                        </div>
+                      </li>
+
+                      <!-- Step 3: Shipped -->
+                      <li class="timeline-step <%= oStatus === 'delivered' || oStatus === 'reviewed' || oStatus === 'shipped' ? 'completed' : '' %>">
+                        <div class="step-icon">
+                          <i class="fa-solid fa-truck"></i>
+                        </div>
+                        <div class="step-content text-start">
+                          <span class="step-date"><%= orderData.shipment || 'Pending' %></span>
+                          <h6 class="step-title">Shipped</h6>
+                          <p class="step-desc">Your package is with the carrier.</p>
+                        </div>
+                      </li>
+
+                      <!-- Step 2: Arrived Warehouse -->
+                      <li class="timeline-step <%= oStatus === 'delivered' || oStatus === 'reviewed' || oStatus === 'shipped' || oStatus === 'arrived' ? 'completed' : '' %>">
+                        <div class="step-icon">
+                          <i class="fa-solid fa-warehouse"></i>
+                        </div>
+                        <div class="step-content text-start">
+                          <span class="step-date"><%= orderData.arrival || 'Pending' %></span>
+                          <h6 class="step-title">Arrived Warehouse</h6>
+                          <p class="step-desc">Package arrived at local warehouse center.</p>
+                        </div>
+                      </li>
+
+                      <!-- Step 1: Placed -->
+                      <li class="timeline-step completed">
+                        <div class="step-icon">
+                          <i class="fa-solid fa-receipt"></i>
+                        </div>
+                        <div class="step-content text-start">
+                          <span class="step-date"><%= orderData.placement %></span>
+                          <h6 class="step-title">Order Placed</h6>
+                          <p class="step-desc">Payment processed and order confirmed.</p>
+                        </div>
+                      </li>
+                    </ul>
+
+                    <% if (oStatus === 'placed' || oStatus === 'arrived') { %>
+                      <div class="mt-4 pt-3 border-top border-dark text-start">
+                        <button type="button" class="btn btn-sm btn-danger cancel-order-timeline-btn" style="border-radius: 0px !important;" data-purchase-id="<%= p.PurchaseID %>">
+                          <i class="fa-solid fa-trash me-2"></i> Cancel Order
+                        </button>
+                      </div>
+                    <% } %>
+                  </div>
                 </div>
               </div>
             </div>
+          <% }) %>
+        </div>
+
+        <!-- My Reviews tab workspace -->
+        <div id="reviews-tab-pane" class="profile-tab-content">
+          <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2 text-start">
+            <h4 class="settings-section-heading mb-0">Your Product Reviews</h4>
+            <div class="reviews-subnav-pills d-flex gap-2">
+              <button class="btn-review-pill active" id="btn-pending-reviews">
+                To Review (<%= pendingReviews.length %>)
+              </button>
+              <button class="btn-review-pill" id="btn-submitted-reviews">
+                My Reviews (<%= submittedReviews.length %>)
+              </button>
+            </div>
           </div>
-        </div> <!-- End Stats Row -->
+
+          <!-- Pending Reviews Container -->
+          <div id="pending-reviews-container">
+            <% if (pendingReviews.length === 0) { %>
+              <div class="tab-summary-info-card text-center p-5">
+                <div class="mb-4">
+                  <!-- SVG Reviews Illustration (Feather pen in inkpot under hanging lamp) -->
+                  <svg viewBox="0 0 200 200" width="180" height="180" class="empty-illustration">
+                    <!-- Lamp Cord and Dome -->
+                    <line x1="100" y1="0" x2="100" y2="42" stroke="#1F1E23" stroke-width="2" />
+                    <path d="M65 42 C65 15, 135 15, 135 42 Z" fill="#F5F5F0" stroke="#1F1E23" stroke-width="2.5" />
+                    <line x1="65" y1="42" x2="135" y2="42" stroke="#1F1E23" stroke-width="2.5" />
+                    <!-- Glowing yellow bulb -->
+                    <circle cx="100" cy="49" r="7" fill="#FFCA28" stroke="#1F1E23" stroke-width="1.5" />
+                    <!-- Glowing Cone of light -->
+                    <defs>
+                      <linearGradient id="glow-cone-1" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#FFF9C4" stop-opacity="0.5" />
+                        <stop offset="100%" stop-color="#FFF9C4" stop-opacity="0" />
+                      </linearGradient>
+                    </defs>
+                    <polygon points="100,50 15,190 185,190" fill="url(#glow-cone-1)" />
+                    <!-- Ray lines -->
+                    <line x1="82" y1="62" x2="62" y2="82" stroke="#FFCA28" stroke-dasharray="3 3" stroke-width="1.5" />
+                    <line x1="100" y1="67" x2="100" y2="92" stroke="#FFCA28" stroke-dasharray="3 3" stroke-width="1.5" />
+                    <line x1="118" y1="62" x2="138" y2="82" stroke="#FFCA28" stroke-dasharray="3 3" stroke-width="1.5" />
+                    <!-- Glass inkpot -->
+                    <rect x="78" y="135" width="44" height="44" rx="6" fill="#FFFFFF" stroke="#1F1E23" stroke-width="2.5" />
+                    <!-- Ink inside -->
+                    <rect x="83" y="152" width="34" height="24" rx="2" fill="#1F1E23" />
+                    <!-- Red label across -->
+                    <rect x="78" y="152" width="44" height="13" fill="#E53935" stroke="#1F1E23" stroke-width="1.5" />
+                    <circle cx="100" cy="158.5" r="2.5" fill="#FFFFFF" />
+                    <!-- Neck of the pot -->
+                    <path d="M88 127 L112 127 L107 135 L93 135 Z" fill="#F5F5F0" stroke="#1F1E23" stroke-width="2" />
+                    <!-- White quill feather pen -->
+                    <path d="M96 142 Q105 110 135 85 Q125 93 112 120 L96 142" fill="#FFFFFF" stroke="#1F1E23" stroke-width="2" />
+                    <!-- Quill spine -->
+                    <path d="M98 140 C108 115 125 97 134 86" fill="none" stroke="#1F1E23" stroke-width="1.5" />
+                    <!-- Quill feather cuts -->
+                    <line x1="114" y1="114" x2="122" y2="110" stroke="#1F1E23" stroke-width="1" />
+                    <line x1="119" y1="106" x2="128" y2="102" stroke="#1F1E23" stroke-width="1" />
+                    <line x1="124" y1="98" x2="132" y2="94" stroke="#1F1E23" stroke-width="1" />
+                  </svg>
+                </div>
+                <h5 class="mb-2">No pending reviews</h5>
+                <p class="text-muted mb-0">All your delivered items have been reviewed. Thank you for your feedback!</p>
+              </div>
+            <% } else { %>
+              <div class="reviews-list-wrapper d-flex flex-column gap-3">
+                <% pendingReviews.forEach(item => { %>
+                  <div class="pending-review-card p-4 rounded-3 bg-white border border-light">
+                    <div class="row align-items-center text-start">
+                      <div class="col-3 col-sm-2 text-center text-sm-start">
+                        <img src="<%= item.item_img %>" alt="<%= item.itemName %>" class="img-fluid rounded-3 border" style="max-height: 80px; object-fit: cover;" />
+                      </div>
+                      <div class="col-9 col-sm-6">
+                        <h6 class="item-review-name mb-1"><strong><%= item.itemName %></strong></h6>
+                        <p class="item-review-desc text-muted small mb-1 text-truncate"><%= item.itemDescription %></p>
+                        <span class="item-review-price text-dark fw-bold">$<%= item.item_price %> &bull; Qty: <%= item.quantity %></span>
+                      </div>
+                      <div class="col-12 col-sm-4 text-sm-end mt-3 mt-sm-0">
+                        <button class="btn-write-review-pill" data-item-id="<%= item.id %>">
+                          Write Review
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Inline Review Form -->
+                    <div class="inline-review-form mt-4 p-4 bg-light rounded-3 d-none text-start" id="review-form-<%= item.id %>">
+                      <h6 class="mb-3">Submit your review for <strong><%= item.itemName %></strong></h6>
+                      <form class="submit-review-form" data-item-id="<%= item.id %>">
+                        <input type="hidden" name="id" value="<%= item.id %>" />
+                        <input type="hidden" name="productName" value="<%= item.itemName %>" />
+                        <input type="hidden" name="purchasedItemId" value="<%= item.purchasedItemId %>" />
+                        
+                        <!-- Star rating selector -->
+                        <div class="rating-stars-wrapper mb-3">
+                          <label class="form-label-custom d-block">Rating</label>
+                          <div class="stars-select d-flex gap-1" id="stars-select-<%= item.id %>">
+                            <% [1, 2, 3, 4, 5].forEach(star => { %>
+                              <i class="fa-regular fa-star star-option" data-value="<%= star %>" data-item-id="<%= item.id %>" data-star-val="<%= star %>" style="font-size: 1.25rem; color: #FE672E; cursor: pointer;"></i>
+                            <% }) %>
+                          </div>
+                          <input type="hidden" name="rating" id="rating-val-<%= item.id %>" value="" required />
+                        </div>
+
+                        <!-- Comment input -->
+                        <div class="mb-3">
+                          <label class="form-label-custom">Your Comments</label>
+                          <textarea name="review" class="form-control" rows="3" placeholder="Share your experience with this item..." style="border: 2px solid var(--text-primary); border-radius: 0px !important; padding: 12px 20px; font-family: var(--font-body); font-size: 0.92rem; background-color: #FFFFFF;" required></textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                          <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 btn-close-review-form" data-item-id="<%= item.id %>">Cancel</button>
+                          <button type="submit" class="btn-profile-submit-pill" style="padding: 8px 24px; font-size: 0.72rem;">Submit Review</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+            <% } %>
+          </div>
+
+          <!-- Submitted Reviews Container -->
+          <div id="submitted-reviews-container" class="d-none">
+            <% if (submittedReviews.length === 0) { %>
+              <div class="tab-summary-info-card text-center p-5">
+                <div class="mb-4">
+                  <!-- SVG Reviews Illustration (Feather pen in inkpot under hanging lamp) -->
+                  <svg viewBox="0 0 200 200" width="180" height="180" class="empty-illustration">
+                    <!-- Lamp Cord and Dome -->
+                    <line x1="100" y1="0" x2="100" y2="42" stroke="#1F1E23" stroke-width="2" />
+                    <path d="M65 42 C65 15, 135 15, 135 42 Z" fill="#F5F5F0" stroke="#1F1E23" stroke-width="2.5" />
+                    <line x1="65" y1="42" x2="135" y2="42" stroke="#1F1E23" stroke-width="2.5" />
+                    <!-- Glowing yellow bulb -->
+                    <circle cx="100" cy="49" r="7" fill="#FFCA28" stroke="#1F1E23" stroke-width="1.5" />
+                    <!-- Glowing Cone of light -->
+                    <defs>
+                      <linearGradient id="glow-cone-2" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#FFF9C4" stop-opacity="0.5" />
+                        <stop offset="100%" stop-color="#FFF9C4" stop-opacity="0" />
+                      </linearGradient>
+                    </defs>
+                    <polygon points="100,50 15,190 185,190" fill="url(#glow-cone-2)" />
+                    <!-- Ray lines -->
+                    <line x1="82" y1="62" x2="62" y2="82" stroke="#FFCA28" stroke-dasharray="3 3" stroke-width="1.5" />
+                    <line x1="100" y1="67" x2="100" y2="92" stroke="#FFCA28" stroke-dasharray="3 3" stroke-width="1.5" />
+                    <line x1="118" y1="62" x2="138" y2="82" stroke="#FFCA28" stroke-dasharray="3 3" stroke-width="1.5" />
+                    <!-- Glass inkpot -->
+                    <rect x="78" y="135" width="44" height="44" rx="6" fill="#FFFFFF" stroke="#1F1E23" stroke-width="2.5" />
+                    <!-- Ink inside -->
+                    <rect x="83" y="152" width="34" height="24" rx="2" fill="#1F1E23" />
+                    <!-- Red label across -->
+                    <rect x="78" y="152" width="44" height="13" fill="#E53935" stroke="#1F1E23" stroke-width="1.5" />
+                    <circle cx="100" cy="158.5" r="2.5" fill="#FFFFFF" />
+                    <!-- Neck of the pot -->
+                    <path d="M88 127 L112 127 L107 135 L93 135 Z" fill="#F5F5F0" stroke="#1F1E23" stroke-width="2" />
+                    <!-- White quill feather pen -->
+                    <path d="M96 142 Q105 110 135 85 Q125 93 112 120 L96 142" fill="#FFFFFF" stroke="#1F1E23" stroke-width="2" />
+                    <!-- Quill spine -->
+                    <path d="M98 140 C108 115 125 97 134 86" fill="none" stroke="#1F1E23" stroke-width="1.5" />
+                    <!-- Quill feather cuts -->
+                    <line x1="114" y1="114" x2="122" y2="110" stroke="#1F1E23" stroke-width="1" />
+                    <line x1="119" y1="106" x2="128" y2="102" stroke="#1F1E23" stroke-width="1" />
+                    <line x1="124" y1="98" x2="132" y2="94" stroke="#1F1E23" stroke-width="1" />
+                  </svg>
+                </div>
+                <h5 class="mb-2">No reviews written yet</h5>
+                <p class="text-muted mb-0">Your submitted reviews will appear here once you write them.</p>
+              </div>
+            <% } else { %>
+              <div class="reviews-list-wrapper d-flex flex-column gap-3">
+                <% submittedReviews.forEach(rev => { %>
+                  <div class="submitted-review-card p-4 rounded-3 bg-white border border-light text-start">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <div>
+                        <h6 class="submitted-product-name mb-1"><strong><%= rev.product_name %></strong></h6>
+                        <div class="submitted-stars text-warning-custom mb-2">
+                          <% for(let i = 1; i <= 5; i++) { %>
+                            <i class="fa-<%= i <= rev.rating ? 'solid' : 'regular' %> fa-star" style="color: #FE672E;"></i>
+                          <% } %>
+                        </div>
+                      </div>
+                      <button class="wishlist-remove-btn delete-review-btn border-0 bg-transparent text-muted small p-0" data-order-id="<%= rev.order_id %>" data-purchased-item-id="<%= rev.PurchasedItemID %>" title="Delete Review">
+                        <i class="fa-regular fa-trash-can me-1"></i> Delete
+                      </button>
+                    </div>
+                    <p class="submitted-comment text-dark mb-0 bg-light p-3 rounded-3 small text-muted">
+                      <%= rev.review %>
+                    </p>
+                  </div>
+                <% }) %>
+              </div>
+            <% } %>
+          </div>
+        </div>
+
+        <!-- Email Inbox tab workspace -->
+        <div id="email-tab-pane" class="profile-tab-content">
+          <h4 class="settings-section-heading mb-4 text-start">Your Email Logs</h4>
+          <% if (emailLogs.length === 0) { %>
+            <div class="tab-summary-info-card text-center p-5">
+              <div class="mb-4">
+                <!-- SVG Email Illustration (Hand holding envelope with red 0) -->
+                <svg viewBox="0 0 200 200" width="180" height="180" class="empty-illustration">
+                  <!-- Solid blue canvas -->
+                  <rect width="200" height="200" fill="#1565C0" rx="8" />
+                  <!-- Dark-skinned Hand holding envelope -->
+                  <!-- Arm and wrist -->
+                  <path d="M40 180 C40 150, 70 125, 90 125 C105 125, 115 115, 125 130 L160 98 L175 112 L132 148 L122 180 Z" fill="#8D5524" stroke="#1F1E23" stroke-width="2.5" />
+                  <!-- Fingers wrapping around -->
+                  <path d="M82 112 C78 102, 68 105, 73 115" fill="#8D5524" stroke="#1F1E23" stroke-width="2" />
+                  <path d="M95 102 C90 92, 80 95, 85 105" fill="#8D5524" stroke="#1F1E23" stroke-width="2" />
+                  <path d="M107 97 C102 87, 92 90, 97 100" fill="#8D5524" stroke="#1F1E23" stroke-width="2" />
+                  <path d="M120 95 C115 85, 105 88, 110 98" fill="#8D5524" stroke="#1F1E23" stroke-width="2" />
+                  <!-- White fingernails -->
+                  <path d="M81 106 Q82 103 83 106" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
+                  <path d="M94 96 Q95 93 96 96" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
+                  <path d="M106 91 Q107 88 108 91" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
+                  <path d="M119 89 Q120 86 121 89" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
+                  <!-- Envelope -->
+                  <rect x="75" y="60" width="75" height="50" rx="3" fill="#FFFFFF" stroke="#1F1E23" stroke-width="2.5" transform="rotate(-18 112 85)" />
+                  <!-- Envelope flap lines -->
+                  <path d="M75 60 L112 85 L149 68" fill="none" stroke="#1F1E23" stroke-width="2.5" />
+                  <!-- Red circular badge with white 0 -->
+                  <circle cx="152" cy="85" r="15" fill="#E53935" stroke="#1F1E23" stroke-width="2.5" />
+                  <text x="152" y="90" font-family="var(--font-heading)" font-size="16" font-weight="900" fill="#FFFFFF" text-anchor="middle">0</text>
+                </svg>
+              </div>
+              <h5 class="mb-2">Your inbox is empty</h5>
+              <p class="text-muted mb-0">No email correspondences have been logged yet.</p>
+            </div>
+          <% } else { %>
+            <div class="email-logs-wrapper d-flex flex-column gap-3">
+              <% emailLogs.forEach(log => { %>
+                <div class="email-log-card p-4 bg-white">
+                  <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2 text-start">
+                    <span class="email-log-subject fw-bold text-dark">
+                      <i class="fa-regular fa-envelope text-primary me-2"></i>
+                      <%= log.purpose ? log.purpose.toUpperCase() : 'Streetwear Update - Acess' %>
+                    </span>
+                    <span class="email-log-date text-muted small"><%= new Date(log.sentAt).toLocaleString() %></span>
+                  </div>
+                  <div class="email-log-details small text-muted text-start mt-2">
+                    <span class="d-block">Recipient: <strong><%= log.userName || (loggedInUser.firstname + ' ' + loggedInUser.lastname) %></strong> (<%= log.userEmail || loggedInUser.email %>)</span>
+                    <span class="d-block mt-2">
+                      Type: 
+                      <span class="badge bg-dark text-white text-uppercase" style="border-radius: 0px; border: 1.5px solid var(--text-primary); font-size: 0.65rem;">
+                        <%= log.purpose || 'Notification' %>
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+        </div>
+
+        <!-- Notifications tab workspace -->
+        <div id="inbox-tab-pane" class="profile-tab-content">
+          <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2 text-start">
+            <h4 class="settings-section-heading mb-0">Your Notifications</h4>
+            <% if (notifications.length > 0) { %>
+              <button class="wishlist-remove-btn clear-all-notifs-btn">
+                <i class="fa-regular fa-trash-can me-1"></i> Clear All
+              </button>
+            <% } %>
+          </div>
+          <% if (notifications.length === 0) { %>
+            <div class="tab-summary-info-card text-center p-5">
+              <div class="mb-4">
+                <!-- SVG Inbox Illustration (Mailbox with speech bubble question mark) -->
+                <svg viewBox="0 0 200 200" width="180" height="180" class="empty-illustration">
+                  <!-- Lavender circle background -->
+                  <circle cx="100" cy="100" r="75" fill="#E1BEE7" />
+                  <!-- Post -->
+                  <rect x="86" y="115" width="8" height="68" fill="#5D4037" stroke="#1F1E23" stroke-width="2" />
+                  <!-- Mailbox body -->
+                  <path d="M48 115 L115 115 L115 75 C115 55, 48 55, 48 75 Z" fill="#2196F3" stroke="#1F1E23" stroke-width="2.5" />
+                  <!-- Mailbox door open facing right -->
+                  <ellipse cx="115" cy="95" rx="8" ry="20" fill="#1976D2" stroke="#1F1E23" stroke-width="2" />
+                  <!-- Red Mailbox flag -->
+                  <rect x="62" y="75" width="18" height="6" rx="1.5" fill="#E53935" stroke="#1F1E23" stroke-width="2" transform="rotate(-90 62 75)" />
+                  <!-- Dotted trail -->
+                  <path d="M115 95 Q145 115 155 140" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-dasharray="4 4" stroke-linecap="round" />
+                  <!-- Paper plane flying out -->
+                  <path d="M155 140 L163 125 L143 133 Z" fill="#FFFFFF" stroke="#1F1E23" stroke-width="1.5" />
+                  <!-- Yellow speech bubble with question mark -->
+                  <path d="M125 55 A 18 18 0 1 0 148 30 L152 23 L142 27 A 18 18 0 0 0 125 55" fill="#FFD54F" stroke="#1F1E23" stroke-width="2" />
+                  <text x="133" y="45" font-family="var(--font-heading)" font-weight="900" font-size="20" fill="#FFFFFF" stroke="#1F1E23" stroke-width="1">?</text>
+                </svg>
+              </div>
+              <h5 class="mb-2">You're all caught up!</h5>
+              <p class="text-muted mb-0">No new notifications at this moment.</p>
+            </div>
+          <% } else { %>
+            <div class="notifications-list-wrapper d-flex flex-column gap-3">
+              <% notifications.forEach(notif => { %>
+                <div class="notification-card p-4 bg-white d-flex justify-content-between align-items-center gap-3 text-start" id="notif-card-<%= notif.id %>">
+                  <div class="d-flex align-items-center gap-3">
+                    <div style="background-color: var(--bg-surface); border: 2px solid var(--text-primary); padding: 8px; display: flex; align-items: center; justify-content: center;">
+                      <i class="fa-regular fa-bell text-primary" style="font-size: 1.1rem;"></i>
+                    </div>
+                    <div>
+                      <p class="notif-message mb-1 text-dark small"><strong><%= notif.message %></strong></p>
+                      <span class="notif-date text-muted small" style="font-size: 0.72rem;"><%= new Date(notif.created_at || new Date()).toLocaleString() %></span>
+                    </div>
+                  </div>
+                  <button class="wishlist-remove-btn dismiss-notif-btn border-0 bg-transparent text-muted small p-0" data-notif-id="<%= notif.id %>" title="Dismiss Notification">
+                    <i class="fa-regular fa-circle-xmark" style="font-size: 1.25rem; color: #C0392B;"></i>
+                  </button>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+        </div>
+
       </div> <!-- End Right Column -->
     </div> <!-- End Row -->
   </div> <!-- End Container -->
         </section>
 <!-- Alert for account deletion -->
-      <div
-        class="modal fade"
-        id="staticBackdrop"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabindex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-              <h5 class="modal-title" id="confirmDeleteModalLabel">
-                Confirm Deletion
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <p>Are you sure you want to delete your account?</p>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                class="btn btn-danger"
-                onclick="submitDeleteProfileForm()"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
- <!-- Footer -->
-    <footer id="footer">
-      <div class="main-footer widgets-dark typo-light">
-        <div class="container" style="padding-top: 40px">
-          <div class="row row-f">
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <div class="widget subscribe no-box">
-                <h1 class="widget-title">
-                  Acess<span style="background-color: #2f3841"></span>
-                </h1>
-                <p>
-                  Our company sales the besh clothes in the house. You will get
-                  everything here according to your need and wish.
-                </p>
-              </div>
-            </div>
+<!-- Custom Fullscreen Delete Confirmation Overlay -->
+<div id="delete-confirm-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(31, 30, 35, 0.96); backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
+  <div style="background-color: #FFFAF0; border: 3px solid #1F1E23; box-shadow: 8px 8px 0px #1F1E23; max-width: 450px; width: 100%; padding: 40px 30px; text-align: center; border-radius: 0px !important;">
+    <span style="font-size: 3rem; display: block; margin-bottom: 15px;">⚠️</span>
+    <h3 style="font-family: var(--font-heading) !important; font-weight: 900; font-size: 1.25rem; color: #1F1E23; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 15px;">Irreversible Action</h3>
+    <p style="font-family: var(--font-body); color: #4A494F; font-size: 0.92rem; line-height: 1.6; margin-bottom: 25px;">
+      Are you absolutely sure you want to delete your account? All your order history, reviews, and profile data will be permanently wiped.
+    </p>
+    
+    <div class="mb-4 text-start">
+      <label style="font-family: var(--font-heading); font-weight: 800; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: #1F1E23; display: block; margin-bottom: 8px;">Type <strong style="color: #E53935;">DELETE</strong> to confirm</label>
+      <input type="text" id="delete-confirm-input" class="input-pill" style="border: 2px solid #1F1E23 !important; border-radius: 0px !important; width: 100%; padding: 10px 16px; font-weight: 700; text-transform: uppercase; background-color: #FFFFFF;" placeholder="Type DELETE here" />
+    </div>
 
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <div class="widget no-box">
-                <h5 class="widget-title">
-                  Quick Links<span style="background-color: #2f3841"></span>
-                </h5>
-                <ul class="thumbnail-widget">
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Get Started</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Top Fashion</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Highly Sell</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Event/Sales</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content"><a href="#.">News</a></div>
-                  </li>
-                  <li>
-                    <div class="thumb-content">
-                      <a href="#.">Acessioreies</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="thumb-content"><a href="#.">About</a></div>
-                  </li>
-                </ul>
-              </div>
-            </div>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <button type="button" id="confirm-delete-btn" class="btn" style="background-color: #E53935 !important; border: 2px solid #1F1E23 !important; border-radius: 0px !important; color: #FFFFFF !important; font-family: var(--font-heading) !important; font-weight: 800 !important; font-size: 0.78rem !important; text-transform: uppercase !important; padding: 12px !important; width: 100%; box-shadow: 3px 3px 0px #1F1E23 !important; cursor: not-allowed !important; opacity: 0.5;" disabled>
+        Yes, Delete Account
+      </button>
+      <button type="button" id="cancel-delete-btn" class="btn" style="background-color: #ECEFF1 !important; border: 2px solid #1F1E23 !important; border-radius: 0px !important; color: #1F1E23 !important; font-family: var(--font-heading) !important; font-weight: 800 !important; font-size: 0.78rem !important; text-transform: uppercase !important; padding: 12px !important; width: 100%; box-shadow: 3px 3px 0px #1F1E23 !important; cursor: pointer !important;">
+        No, Keep Account
+      </button>
+    </div>
+  </div>
+</div>
 
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <div class="widget no-box">
-                <h5 class="widget-title">
-                  Get Started<span style="background-color: #2f3841"></span>
-                </h5>
-                <p>Get your favourite acessiories here.</p>
-                <a class="btn" href="/acessiories">Buy here</a>
-              </div>
-            </div>
+<!-- Custom Fullscreen Cancel Order Confirmation Overlay -->
+<div id="cancel-order-confirm-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(31, 30, 35, 0.96); backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
+  <div style="background-color: #FFFAF0; border: 3px solid #1F1E23; box-shadow: 8px 8px 0px #1F1E23; max-width: 450px; width: 100%; padding: 40px 30px; text-align: center; border-radius: 0px !important;">
+    <span style="font-size: 3rem; display: block; margin-bottom: 15px;">📦</span>
+    <h3 style="font-family: var(--font-heading) !important; font-weight: 900; font-size: 1.25rem; color: #1F1E23; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 15px;">Cancel Order</h3>
+    <p style="font-family: var(--font-body); color: #4A494F; font-size: 0.92rem; line-height: 1.6; margin-bottom: 25px;">
+      Are you absolutely sure you want to cancel this order? This action cannot be undone.
+    </p>
 
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <div class="widget no-box">
-                <h5 class="widget-title">
-                  Contact Us<span style="background-color: #2f3841"></span>
-                </h5>
+    <!-- Hidden field to hold purchase ID to cancel -->
+    <input type="hidden" id="cancel-order-purchase-id" value="" />
 
-                <p>
-                  <a href="mailto:info@domain.com" title="glorythemes"
-                    >info@domain.com</a
-                  >
-                </p>
-                <ul class="social-footer2">
-                  <li class="">
-                    <a title="youtube" target="_blank" href=""
-                      ><img
-                        alt="youtube"
-                        width="30"
-                        height="30"
-                        src="data:image/png;base64,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"
-                    /></a>
-                  </li>
-                  <li class="">
-                    <a href="" target="_blank" title="Facebook"
-                      ><img
-                        alt="Facebook"
-                        width="30"
-                        height="30"
-                        src="data:image/png;base64,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"
-                    /></a>
-                  </li>
-                  <li class="">
-                    <a href="" target="_blank" title="Twitter"
-                      ><img
-                        alt="Twitter"
-                        width="30"
-                        height="30"
-                        src="data:image/png;base64,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"
-                    /></a>
-                  </li>
-                  <li class="">
-                    <a title="instagram" target="_blank" href=""
-                      ><img
-                        alt="instagram"
-                        width="30"
-                        height="30"
-                        src="data:image/png;base64,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"
-                    /></a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <button type="button" id="confirm-cancel-order-btn" class="btn" style="background-color: #E53935 !important; border: 2px solid #1F1E23 !important; border-radius: 0px !important; color: #FFFFFF !important; font-family: var(--font-heading) !important; font-weight: 800 !important; font-size: 0.78rem !important; text-transform: uppercase !important; padding: 12px !important; width: 100%; box-shadow: 3px 3px 0px #1F1E23 !important; cursor: pointer !important;">
+        Yes, Cancel Order
+      </button>
+      <button type="button" id="cancel-cancel-order-btn" class="btn" style="background-color: #ECEFF1 !important; border: 2px solid #1F1E23 !important; border-radius: 0px !important; color: #1F1E23 !important; font-family: var(--font-heading) !important; font-weight: 800 !important; font-size: 0.78rem !important; text-transform: uppercase !important; padding: 12px !important; width: 100%; box-shadow: 3px 3px 0px #1F1E23 !important; cursor: pointer !important;">
+        No, Keep Order
+      </button>
+    </div>
+  </div>
+</div>
 
-      <div class="footer-copyright">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12 text-center">
-              <p>Copyright Acess © 2023. All rights reserved.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+<!-- Custom Fullscreen Clear All Notifications Confirmation Overlay -->
+<div id="clear-all-confirm-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(31, 30, 35, 0.96); backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
+  <div style="background-color: #FFFAF0; border: 3px solid #1F1E23; box-shadow: 8px 8px 0px #1F1E23; max-width: 450px; width: 100%; padding: 40px 30px; text-align: center; border-radius: 0px !important;">
+    <span style="font-size: 3rem; display: block; margin-bottom: 15px;">🔔</span>
+    <h3 style="font-family: var(--font-heading) !important; font-weight: 900; font-size: 1.25rem; color: #1F1E23; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 15px;">Clear Notifications</h3>
+    <p style="font-family: var(--font-body); color: #4A494F; font-size: 0.92rem; line-height: 1.6; margin-bottom: 25px;">
+      Are you sure you want to clear all notifications? They will be permanently removed.
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <button type="button" id="confirm-clear-all-btn" class="btn" style="background-color: #E53935 !important; border: 2px solid #1F1E23 !important; border-radius: 0px !important; color: #FFFFFF !important; font-family: var(--font-heading) !important; font-weight: 800 !important; font-size: 0.78rem !important; text-transform: uppercase !important; padding: 12px !important; width: 100%; box-shadow: 3px 3px 0px #1F1E23 !important; cursor: pointer !important;">
+        Yes, Clear All
+      </button>
+      <button type="button" id="cancel-clear-all-btn" class="btn" style="background-color: #ECEFF1 !important; border: 2px solid #1F1E23 !important; border-radius: 0px !important; color: #1F1E23 !important; font-family: var(--font-heading) !important; font-weight: 800 !important; font-size: 0.78rem !important; text-transform: uppercase !important; padding: 12px !important; width: 100%; box-shadow: 3px 3px 0px #1F1E23 !important; cursor: pointer !important;">
+        No, Keep Them
+      </button>
+    </div>
+  </div>
+</div>
+
+  <!-- Footer -->
+    <%- include('../partials/footer') %>
+
+
 
     </body>
 
@@ -404,22 +895,751 @@
   ></script>
 
     <script>
-      // Replace image source if it contains '/public'
-      const imgElement = document.querySelector(".img-responsive");
-      if (imgElement) {
-        let currentSrc = imgElement.src;
-        let newSrc = currentSrc.replace("/public", "");
-        imgElement.src = newSrc;
+
+
+      // AJAX Resend Email Verification
+      async function resendEmailVerification(event) {
+        event.preventDefault();
+        const form = event.target;
+        const submitBtn = form.querySelector('button');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending...";
+
+        try {
+          const response = await fetch("/resend-verification", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams(new FormData(form)).toString()
+          });
+
+          const data = await response.json();
+          if (data.error) {
+            showToast(data.error, "error");
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+          } else if (data.success) {
+            showToast(data.success, "success");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1200);
+          }
+        } catch (err) {
+          console.error("Resend Verification Error:", err);
+          showToast("Failed to send verification. Please try again.", "error");
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
       }
 
-      // Get the modal element
-      const modal = document.getElementById("confirmDeleteModal");
+      // Password visibility toggle
+      function togglePasswordVisibility() {
+        const pwdInput = document.getElementById('password-input');
+        const eyeIcon = document.querySelector('.input-icon-pwd');
+        if (pwdInput && eyeIcon) {
+          if (pwdInput.type === 'password') {
+            pwdInput.type = 'text';
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+          } else {
+            pwdInput.type = 'password';
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+          }
+        }
+      }
 
-      // Function to submit the delete profile form
+      // Overlay Delete Confirmation
+      function showDeleteConfirmationOverlay() {
+        const overlay = document.getElementById('delete-confirm-overlay');
+        const input = document.getElementById('delete-confirm-input');
+        const btn = document.getElementById('confirm-delete-btn');
+        if (overlay) {
+          overlay.style.display = 'flex';
+          if (input) {
+            input.value = '';
+            input.focus();
+          }
+          if (btn) {
+            btn.disabled = true;
+            btn.style.cursor = 'not-allowed';
+            btn.style.opacity = '0.5';
+          }
+        }
+      }
+
+      function hideDeleteConfirmationOverlay() {
+        const overlay = document.getElementById('delete-confirm-overlay');
+        if (overlay) {
+          overlay.style.display = 'none';
+        }
+      }
+
+      function validateDeleteConfirmation() {
+        const input = document.getElementById('delete-confirm-input');
+        const btn = document.getElementById('confirm-delete-btn');
+        if (input && btn) {
+          if (input.value.trim().toUpperCase() === 'DELETE') {
+            btn.disabled = false;
+            btn.style.cursor = 'pointer';
+            btn.style.opacity = '1';
+          } else {
+            btn.disabled = true;
+            btn.style.cursor = 'not-allowed';
+            btn.style.opacity = '0.5';
+          }
+        }
+      }
+
+      // Review Form toggle handlers
+      function openReviewForm(id) {
+        const form = document.getElementById('review-form-' + id);
+        if (form) form.classList.remove('d-none');
+      }
+
+      // Star Selection
+      function selectStarRating(id, rating) {
+        const starsContainer = document.getElementById('stars-select-' + id);
+        const ratingInput = document.getElementById('rating-val-' + id);
+        
+        if (starsContainer && ratingInput) {
+          ratingInput.value = rating;
+          const stars = starsContainer.querySelectorAll('.star-option');
+          stars.forEach((star, index) => {
+            if (index < rating) {
+              star.classList.remove('fa-regular');
+              star.classList.add('fa-solid');
+            } else {
+              star.classList.remove('fa-solid');
+              star.classList.add('fa-regular');
+            }
+          });
+        }
+      }
+
+      function closeReviewForm(id) {
+        const form = document.getElementById('review-form-' + id);
+        if (form) form.classList.add('d-none');
+      }
+
+      // AJAX Submit product reviews
+      async function submitReviewAJAX(event, id) {
+        event.preventDefault();
+        const form = event.target;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const ratingVal = document.getElementById('rating-val-' + id).value;
+        
+        if (!ratingVal) {
+          showToast("Please select a star rating!", "error");
+          return;
+        }
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Submitting...";
+        }
+
+        const formData = new URLSearchParams(new FormData(form));
+        formData.append('_csrf', "<%= csrfToken %>");
+
+        try {
+          const response = await fetch("/review", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: formData.toString()
+          });
+
+          if (response.ok) {
+            showToast("Review submitted successfully!");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          } else {
+            const msg = await response.text();
+            showToast(msg, "error");
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Submit Review"; }
+          }
+        } catch (err) {
+          console.error("Submit Review Error:", err);
+          showToast("Connection error. Please try again.", "error");
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Submit Review"; }
+        }
+      }
+
+      // AJAX Delete written reviews
+      async function deleteReviewAJAX(orderId, purchasedItemId) {
+        if (!confirm("Are you sure you want to delete this review?")) return;
+
+        try {
+          const response = await fetch("/review?_method=DELETE", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              orderId,
+              purchasedItemId,
+              _csrf: "<%= csrfToken %>"
+            })
+          });
+
+          if (response.ok) {
+            showToast("Review removed successfully!");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          } else {
+            const data = await response.json();
+            showToast(data.error || "Failed to delete review.", "error");
+          }
+        } catch (err) {
+          console.error("Delete Review Error:", err);
+          showToast("Connection error. Please try again.", "error");
+        }
+      }
+
+      // AJAX cancel order overlay controllers
+      function showCancelOrderOverlay(purchaseId) {
+        const overlay = document.getElementById('cancel-order-confirm-overlay');
+        const input = document.getElementById('cancel-order-purchase-id');
+        if (overlay && input) {
+          input.value = purchaseId;
+          overlay.style.display = 'flex';
+        }
+      }
+
+      function hideCancelOrderOverlay() {
+        const overlay = document.getElementById('cancel-order-confirm-overlay');
+        if (overlay) {
+          overlay.style.display = 'none';
+        }
+      }
+
+      async function confirmCancelOrderAJAX() {
+        const input = document.getElementById('cancel-order-purchase-id');
+        if (!input) return;
+        const purchaseId = input.value;
+        hideCancelOrderOverlay();
+
+        const confirmBtn = document.getElementById('confirm-cancel-order-btn');
+        if (confirmBtn) {
+          confirmBtn.disabled = true;
+          confirmBtn.textContent = 'Cancelling...';
+        }
+         
+        try {
+          const response = await fetch("/cancel-order", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-csrf-token": "<%= csrfToken %>"
+            },
+            body: JSON.stringify({
+              PurchaseID: purchaseId
+            })
+          });
+           
+          const data = await response.json();
+          if (data.success) {
+            showToast("Order cancelled successfully!");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          } else {
+            showToast(data.message || "Failed to cancel order.", "error");
+            if (confirmBtn) { confirmBtn.disabled = false; confirmBtn.textContent = 'Yes, Cancel Order'; }
+          }
+        } catch (err) {
+          console.error("Cancel Order Error:", err);
+          showToast("Connection error. Please try again.", "error");
+          if (confirmBtn) { confirmBtn.disabled = false; confirmBtn.textContent = 'Yes, Cancel Order'; }
+        }
+      }
+
+      // AJAX delete single notification
+      async function deleteNotificationAJAX(id, triggerBtn) {
+        if (triggerBtn) {
+          triggerBtn.disabled = true;
+          triggerBtn.style.opacity = '0.5';
+        }
+        try {
+          const response = await fetch("/delete-notification", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              id,
+              _csrf: "<%= csrfToken %>"
+            })
+          });
+
+          const data = await response.json();
+          if (data.success) {
+            showToast("Notification dismissed successfully!");
+            const card = document.getElementById('notif-card-' + id);
+            if (card) {
+              card.style.opacity = '0';
+              card.style.transform = 'translateY(10px)';
+              card.style.transition = 'all 0.3s ease';
+              setTimeout(() => {
+                card.remove();
+                const remaining = document.querySelectorAll('.notification-card');
+                if (remaining.length === 0) {
+                  window.location.reload();
+                }
+              }, 300);
+            } else {
+              window.location.reload();
+            }
+          } else {
+            showToast(data.message || "Failed to delete notification.", "error");
+            if (triggerBtn) { triggerBtn.disabled = false; triggerBtn.style.opacity = ''; }
+          }
+        } catch (err) {
+          console.error("Delete Notification Error:", err);
+          if (triggerBtn) { triggerBtn.disabled = false; triggerBtn.style.opacity = ''; }
+        }
+      }
+
+      // Soft notifications confirmation overlay triggers
+      function showClearAllOverlay() {
+        const overlay = document.getElementById('clear-all-confirm-overlay');
+        if (overlay) overlay.style.display = 'flex';
+      }
+
+      function hideClearAllOverlay() {
+        const overlay = document.getElementById('clear-all-confirm-overlay');
+        if (overlay) overlay.style.display = 'none';
+      }
+
+      // AJAX delete all notifications
+      async function deleteAllNotificationsAJAX() {
+        hideClearAllOverlay();
+
+        const confirmBtn = document.getElementById('confirm-clear-all-btn');
+        if (confirmBtn) {
+          confirmBtn.disabled = true;
+          confirmBtn.textContent = 'Clearing...';
+        }
+
+        try {
+          const response = await fetch("/delete-all", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              _csrf: "<%= csrfToken %>"
+            })
+          });
+
+          const data = await response.json();
+          if (data.success) {
+            showToast("All notifications dismissed.");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          } else {
+            showToast(data.message || "Failed to clear notifications.", "error");
+            if (confirmBtn) { confirmBtn.disabled = false; confirmBtn.textContent = 'Yes, Clear All'; }
+          }
+        } catch (err) {
+          console.error("Delete All Notifications Error:", err);
+          showToast("Connection error. Please try again.", "error");
+          if (confirmBtn) { confirmBtn.disabled = false; confirmBtn.textContent = 'Yes, Clear All'; }
+        }
+      }
+
+      // Submit delete profile form
       function submitDeleteProfileForm() {
         document.getElementById("delete-profile-form").submit();
       }
+
+      // Initialize triggers and handlers on DOM load
+      document.addEventListener("DOMContentLoaded", function () {
+        // --- CSP Event Listeners and Delegation ---
+        
+        // 1. Resend Verification Form Submission
+        const resendForm = document.getElementById('resend-verification-form');
+        if (resendForm) {
+          resendForm.addEventListener('submit', resendEmailVerification);
+        }
+
+        // 2. Delete Avatar/Account Button Trigger
+        const deleteBtn = document.querySelector('.btn-avatar-delete');
+        if (deleteBtn) {
+          deleteBtn.addEventListener('click', showDeleteConfirmationOverlay);
+        }
+
+        // 3. Password Visibility eye toggle click
+        const eyeIcon = document.querySelector('.input-icon-pwd');
+        if (eyeIcon) {
+          eyeIcon.addEventListener('click', togglePasswordVisibility);
+        }
+
+        // 4. Delete Profile confirmation input verification
+        const deleteConfirmInput = document.getElementById('delete-confirm-input');
+        if (deleteConfirmInput) {
+          deleteConfirmInput.addEventListener('input', validateDeleteConfirmation);
+        }
+
+        // 5. Delete Profile overlay action buttons
+        const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+        if (confirmDeleteBtn) {
+          confirmDeleteBtn.addEventListener('click', submitDeleteProfileForm);
+        }
+        const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+        if (cancelDeleteBtn) {
+          cancelDeleteBtn.addEventListener('click', hideDeleteConfirmationOverlay);
+        }
+
+        // 6. Cancel Order overlay action buttons
+        const confirmCancelOrderBtn = document.getElementById('confirm-cancel-order-btn');
+        if (confirmCancelOrderBtn) {
+          confirmCancelOrderBtn.addEventListener('click', confirmCancelOrderAJAX);
+        }
+        const cancelCancelOrderBtn = document.getElementById('cancel-cancel-order-btn');
+        if (cancelCancelOrderBtn) {
+          cancelCancelOrderBtn.addEventListener('click', hideCancelOrderOverlay);
+        }
+
+        // Clear all notifications overlay action buttons
+        const confirmClearAllBtn = document.getElementById('confirm-clear-all-btn');
+        if (confirmClearAllBtn) {
+          confirmClearAllBtn.addEventListener('click', deleteAllNotificationsAJAX);
+        }
+        const cancelClearAllBtn = document.getElementById('cancel-clear-all-btn');
+        if (cancelClearAllBtn) {
+          cancelClearAllBtn.addEventListener('click', hideClearAllOverlay);
+        }
+
+        // 7. Centralized click event delegator for list items
+        document.addEventListener('click', function (e) {
+          // Cancel order timeline button
+          const cancelTimelineBtn = e.target.closest('.cancel-order-timeline-btn');
+          if (cancelTimelineBtn) {
+            const purchaseId = cancelTimelineBtn.getAttribute('data-purchase-id');
+            if (purchaseId) {
+              showCancelOrderOverlay(purchaseId);
+            }
+            return;
+          }
+
+          // Open review form
+          const writeReviewBtn = e.target.closest('.btn-write-review-pill');
+          if (writeReviewBtn) {
+            const itemId = writeReviewBtn.getAttribute('data-item-id');
+            if (itemId) {
+              openReviewForm(itemId);
+            }
+            return;
+          }
+
+          // Close review form
+          const closeReviewBtn = e.target.closest('.btn-close-review-form');
+          if (closeReviewBtn) {
+            const itemId = closeReviewBtn.getAttribute('data-item-id');
+            if (itemId) {
+              closeReviewForm(itemId);
+            }
+            return;
+          }
+
+          // Star selection
+          const starOpt = e.target.closest('.star-option');
+          if (starOpt) {
+            const itemId = starOpt.getAttribute('data-item-id');
+            const rating = parseInt(starOpt.getAttribute('data-star-val'), 10);
+            if (itemId && rating) {
+              selectStarRating(itemId, rating);
+            }
+            return;
+          }
+
+          // Delete Review button
+          const deleteRevBtn = e.target.closest('.delete-review-btn');
+          if (deleteRevBtn) {
+            const orderId = deleteRevBtn.getAttribute('data-order-id');
+            const purchasedItemId = deleteRevBtn.getAttribute('data-purchased-item-id');
+            if (orderId && purchasedItemId) {
+              deleteReviewAJAX(orderId, purchasedItemId);
+            }
+            return;
+          }
+
+          // Dismiss single notification
+          const dismissBtn = e.target.closest('.dismiss-notif-btn');
+          if (dismissBtn) {
+            const notifId = dismissBtn.getAttribute('data-notif-id');
+            if (notifId) {
+              deleteNotificationAJAX(notifId, dismissBtn);
+            }
+            return;
+          }
+
+          // Clear all notifications (triggers soft confirm overlay)
+          const clearAllBtn = e.target.closest('.clear-all-notifs-btn');
+          if (clearAllBtn) {
+            showClearAllOverlay();
+            return;
+          }
+        });
+
+        // 8. Centralized submit event delegator for inline review forms
+        document.addEventListener('submit', function (e) {
+          const revForm = e.target.closest('.submit-review-form');
+          if (revForm) {
+            const itemId = revForm.getAttribute('data-item-id');
+            if (itemId) {
+              submitReviewAJAX(e, itemId);
+            }
+          }
+        });
+
+        // Capture initial profile settings values safely
+        const initialFormValues = {};
+        const editProfileFormObj = document.getElementById('edit-profile-form');
+        if (editProfileFormObj) {
+          const inputs = editProfileFormObj.querySelectorAll('input, select');
+          inputs.forEach(input => {
+            if (input.name) {
+              initialFormValues[input.name] = input.value;
+            }
+          });
+        }
+
+        const btnPending = document.getElementById('btn-pending-reviews');
+        const btnSubmitted = document.getElementById('btn-submitted-reviews');
+        const pendingContainer = document.getElementById('pending-reviews-container');
+        const submittedContainer = document.getElementById('submitted-reviews-container');
+
+        if (btnPending && btnSubmitted && pendingContainer && submittedContainer) {
+          btnPending.addEventListener('click', function () {
+            pendingContainer.classList.remove('d-none');
+            submittedContainer.classList.add('d-none');
+            btnPending.classList.add('active');
+            btnSubmitted.classList.remove('active');
+          });
+
+          btnSubmitted.addEventListener('click', function () {
+            pendingContainer.classList.add('d-none');
+            submittedContainer.classList.remove('d-none');
+            btnPending.classList.remove('active');
+            btnSubmitted.classList.add('active');
+          });
+        }
+
+        // Integrated Order Tracking Event Listeners
+        const trackButtons = document.querySelectorAll('.btn-track-trigger');
+        const backButtons = document.querySelectorAll('.back-to-orders-btn');
+        const ordersListSubpane = document.getElementById('orders-list-subpane');
+
+        if (trackButtons && ordersListSubpane) {
+          trackButtons.forEach(btn => {
+            btn.addEventListener('click', function (e) {
+              e.preventDefault();
+              const purchaseId = btn.getAttribute('data-purchase-id');
+              if (purchaseId) {
+                // Hide orders list
+                ordersListSubpane.classList.add('d-none');
+                // Hide all track panes
+                document.querySelectorAll('.order-tracking-subpane').forEach(pane => pane.classList.add('d-none'));
+                // Show this specific track pane
+                const targetPane = document.getElementById('track-pane-' + purchaseId);
+                if (targetPane) targetPane.classList.remove('d-none');
+              }
+            });
+          });
+        }
+
+        if (backButtons && ordersListSubpane) {
+          backButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+              // Hide all track panes
+              document.querySelectorAll('.order-tracking-subpane').forEach(pane => pane.classList.add('d-none'));
+              // Show orders list
+              ordersListSubpane.classList.remove('d-none');
+            });
+          });
+        }
+
+        const tabButtons = document.querySelectorAll('.profile-tab-btn');
+        const sidebarLinks = document.querySelectorAll('.sidebar-menu-item');
+        const statsColumns = document.querySelectorAll('.sidebar-stats-capsule .stat-column');
+
+        // Core tab switching functionality
+        function switchTab(tabName) {
+          if (!tabName) return;
+
+          // 1. Hide all tab content panes
+          const tabPanes = document.querySelectorAll('.profile-tab-content');
+          tabPanes.forEach(pane => pane.classList.remove('active'));
+
+          // 2. Deactivate all horizontal tab buttons
+          tabButtons.forEach(b => b.classList.remove('active'));
+
+          // 3. Deactivate all sidebar items
+          sidebarLinks.forEach(l => l.classList.remove('active'));
+
+          // 4. Show targeted tab pane
+          const targetPane = document.getElementById(tabName + '-tab-pane');
+          if (targetPane) {
+            targetPane.classList.add('active');
+          }
+
+          // 5. Activate horizontal tab button if it exists
+          const matchingBtn = document.getElementById('tab-' + tabName + '-btn');
+          if (matchingBtn) {
+            matchingBtn.classList.remove('d-none'); // Ensure it is visible if hidden by default
+            matchingBtn.classList.add('active');
+          }
+
+          // 6. Activate sidebar link if it exists
+          const matchingSidebarLink = document.querySelector(`.sidebar-menu-item[data-sidebar-tab="${tabName}"]`);
+          if (matchingSidebarLink) {
+            matchingSidebarLink.classList.add('active');
+          }
+
+          // 7. Update URL query parameter without full reload
+          const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?tab=' + tabName;
+          window.history.pushState({ path: newUrl }, '', newUrl);
+        }
+
+        // Horizontal tab click events
+        tabButtons.forEach(btn => {
+          btn.addEventListener('click', function () {
+            const tabName = btn.getAttribute('data-tab');
+            switchTab(tabName);
+          });
+        });
+
+        // Sidebar link intercept events
+        sidebarLinks.forEach(link => {
+          link.addEventListener('click', function (e) {
+            const tabName = link.getAttribute('data-sidebar-tab');
+            if (tabName) {
+              e.preventDefault(); // Stop default route reload!
+              switchTab(tabName);
+            }
+          });
+        });
+
+        // Stats capsule click events
+        statsColumns.forEach(col => {
+          col.addEventListener('click', function () {
+            const tabName = col.getAttribute('data-sidebar-tab');
+            if (tabName) {
+              switchTab(tabName);
+            }
+          });
+        });
+
+        // Parse query parameter on page load
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryTab = urlParams.get('tab');
+        const queryTrack = urlParams.get('track') || urlParams.get('purchase_id');
+
+        if (queryTrack) {
+          switchTab('orders');
+          if (ordersListSubpane) {
+            ordersListSubpane.classList.add('d-none');
+            const targetPane = document.getElementById('track-pane-' + queryTrack);
+            if (targetPane) targetPane.classList.remove('d-none');
+          }
+        } else if (queryTab) {
+          switchTab(queryTab);
+        }
+
+        // Avatar upload triggers and instant local preview
+        const uploadTrigger = document.getElementById('avatar-upload-trigger');
+        const fileInput = document.getElementById('avatar-file-input');
+        const avatarPreview = document.getElementById('profile-avatar-preview');
+        const alertContainer = document.getElementById('alertContainer');
+
+        if (uploadTrigger && fileInput) {
+          uploadTrigger.addEventListener('click', function () {
+            fileInput.click();
+          });
+
+          fileInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file && avatarPreview) {
+              const reader = new FileReader();
+              reader.onload = function (event) {
+                avatarPreview.src = event.target.result;
+              };
+              reader.readAsDataURL(file);
+            }
+          });
+        }
+
+        // AJAX Form Submission for Profile Editing
+        const editProfileForm = document.getElementById('edit-profile-form');
+        if (editProfileForm) {
+          editProfileForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(editProfileForm);
+            const submitBtn = editProfileForm.querySelector('.btn-profile-submit-pill');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Saving Changes...";
+
+            const hasTextChanged = 
+              formData.get("firstname") !== initialFormValues.firstname ||
+              formData.get("lastname") !== initialFormValues.lastname ||
+              formData.get("email") !== initialFormValues.email ||
+              formData.get("phone") !== initialFormValues.phone ||
+              formData.get("address") !== initialFormValues.address ||
+              formData.get("city") !== initialFormValues.city ||
+              formData.get("province") !== initialFormValues.province ||
+              formData.get("zip") !== initialFormValues.zip;
+
+            const hasPasswordChanged = formData.get("Pass") && formData.get("Pass").trim() !== "";
+            const hasAvatarChanged = fileInput && fileInput.files && fileInput.files.length > 0;
+
+            if (!hasTextChanged && !hasPasswordChanged && !hasAvatarChanged) {
+              showToast("Profile is already up to date.");
+              submitBtn.disabled = false;
+              submitBtn.textContent = originalText;
+              return;
+            }
+
+            try {
+              const response = await fetch("/edit-profile", {
+                method: "POST",
+                body: formData,
+                headers: { 
+                  "Accept": "application/json",
+                  "x-csrf-token": "<%= csrfToken %>"
+                }
+              });
+
+              const data = await response.json();
+
+              if (data.status === "success" || data.success) {
+                showToast("Profile updated successfully!");
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1200);
+              } else {
+                showToast(data.error || "Failed to update profile. Please verify your inputs.", "error");
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+              }
+            } catch (err) {
+              console.error("AJAX Error:", err);
+              showToast("A connection error occurred. Please try again.", "error");
+              submitBtn.disabled = false;
+              submitBtn.textContent = originalText;
+            }
+          });
+        }
+      });
     </script>
-
-
   </html>

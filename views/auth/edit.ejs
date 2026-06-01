@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acess</title>
-     <link rel="icon" type="image/png" href="/image/Acess%20logo/logo.png?v=1.0" />
-  </head>
+    <%- include('../../partials/head', {title: 'Acess'}) %>
   <body>
 <!-- Stylesheets -->
     <link
@@ -60,7 +54,7 @@
               <div class="col-md-6">
                 <label class="form-label">Password</label>
                 <input name="Pass" type="password" class="form-control" id="inputPassword4" required />
-                <div class="invalid-feedback">Password must be 8–12 chars, include uppercase, lowercase, number and symbol.</div>
+                <div class="invalid-feedback">Password must be 8–128 chars, include uppercase, lowercase, number and symbol.</div>
               </div>
               <div class="mb-3">
                 <label class="form-label">Choose Profile Image</label>
@@ -121,10 +115,12 @@
 
 </body>
 
-<!-- Scripts -->
+
+  <!-- Consolidated Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
   <script>
-    (function () {
+    document.addEventListener("DOMContentLoaded", function () {
       "use strict";
 
       const form1 = document.getElementById("form1");
@@ -134,6 +130,10 @@
       const billingBtn = document.getElementById("billingBtn");
       const loginForm = document.getElementById("loginForm");
       const signupForm = document.getElementById("signupForm");
+      // alertContainer reference removed
+
+      const nameRegex = /^[A-Za-z]+$/;
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,128}$/;
 
       const setError = (input, msg) => {
         input.classList.add("is-invalid");
@@ -148,43 +148,37 @@
       };
 
       const validateForm1 = () => {
-         const nameRegex = /^[A-Za-z]+$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,12}$/;
         let valid = true;
-    const firstname = form1.firstname;
-    const lastname = form1.lastname;
-    const password = form1.Pass;
-    const email = form1.email;
-    const img = form1.img;
+        const firstname = form1.firstname;
+        const lastname = form1.lastname;
+        const password = form1.Pass;
+        const email = form1.email;
 
-    [firstname, lastname, password, email, img].forEach(input => input.classList.remove("is-invalid"));
+        [firstname, lastname, password, email].forEach(input => input.classList.remove("is-invalid"));
 
-    if (!nameRegex.test(firstname.value.trim())) {
-      firstname.classList.add("is-invalid");
-      valid = false;
-    }
+        if (!nameRegex.test(firstname.value.trim())) {
+          firstname.classList.add("is-invalid");
+          valid = false;
+        }
 
-    if (!nameRegex.test(lastname.value.trim())) {
-      lastname.classList.add("is-invalid");
-      valid = false;
-    }
+        if (!nameRegex.test(lastname.value.trim())) {
+          lastname.classList.add("is-invalid");
+          valid = false;
+        }
 
-    if (!passwordRegex.test(password.value.trim())) {
-      password.classList.add("is-invalid");
-      valid = false;
-    }
+        // Allow empty password (meaning keep old password) when editing profile
+        const pwdVal = password.value.trim();
+        if (pwdVal !== "" && !passwordRegex.test(pwdVal)) {
+          password.classList.add("is-invalid");
+          valid = false;
+        }
 
-    if (!email.value.trim() || !email.checkValidity()) {
-      email.classList.add("is-invalid");
-      valid = false;
-    }
+        if (!email.value.trim() || !email.checkValidity()) {
+          email.classList.add("is-invalid");
+          valid = false;
+        }
 
-    if (!img.files || img.files.length === 0) {
-      img.classList.add("is-invalid");
-      valid = false;
-    }
-
-    return valid;
+        return valid;
       };
 
       const validateForm2 = () => {
@@ -208,6 +202,12 @@
         return valid;
       };
 
+      function checkForm1State() {
+        const isValid = validateForm1();
+        nextButton.disabled = !isValid;
+        billingBtn.disabled = !isValid;
+      }
+
       form1.querySelectorAll("input").forEach((input) => {
         input.addEventListener("input", () => {
           validateForm1();
@@ -215,272 +215,114 @@
         });
       });
 
-      nextButton.disabled = true;
-      billingBtn.disabled = true;
-
-      function checkForm1State() {
-        const isValid = validateForm1();
-        nextButton.disabled = !isValid;
-        billingBtn.disabled = !isValid;
-      }
-
-      [form1, form2].forEach((form) => {
-        form.addEventListener("submit", (e) => {
-          const isValid = form.id === "form1" ? validateForm1() : validateForm2();
-          if (!form.checkValidity() || !isValid) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-          form.classList.add("was-validated");
-        });
-      });
-
-      nextButton.addEventListener("click", function (event) {
-        event.preventDefault();
-        if (form1.checkValidity() && validateForm1()) {
-          toggleTab(billingBtn, accountBtn);
-          showBillingForm();
-        }
-      });
-
-      accountBtn.addEventListener("click", () => {
-        toggleTab(accountBtn, billingBtn);
-        showSignupForm();
-      });
-
-      billingBtn.addEventListener("click", function (event) {
-        event.preventDefault();
-        if (form1.checkValidity() && validateForm1()) {
-          toggleTab(billingBtn, accountBtn);
-          showBillingForm();
-        }
-      });
-
-      function toggleTab(activeBtn, inactiveBtn) {
-        activeBtn.classList.add("btn-dark");
-        inactiveBtn.classList.remove("btn-dark");
-      }
-
       function showSignupForm() {
         loginForm.style.display = "block";
         signupForm.style.display = "none";
+        accountBtn.classList.add("btn-dark");
+        accountBtn.classList.remove("btn-light", "text-dark", "border-dark");
+        billingBtn.classList.add("btn-light", "text-dark", "border-dark");
+        billingBtn.classList.remove("btn-dark");
       }
 
       function showBillingForm() {
         loginForm.style.display = "none";
         signupForm.style.display = "block";
+        billingBtn.classList.add("btn-dark");
+        billingBtn.classList.remove("btn-light", "text-dark", "border-dark");
+        accountBtn.classList.add("btn-light", "text-dark", "border-dark");
+        accountBtn.classList.remove("btn-dark");
       }
 
-      showSignupForm();
-      checkForm1State();
-    })();
-  </script>
-
-<script>
-  // AJAX Submission for Form2 (final step)
-  document.getElementById("form2").addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const form2 = e.target;
-    const form1 = document.getElementById("form1");
-    
-    const formData = new FormData();
-    [...form1.elements, ...form2.elements].forEach((el) => {
-      if (el.name && (el.type !== 'file' || el.files.length > 0)) {
-        if (el.type === "file") {
-          formData.append(el.name, el.files[0]);
+      nextButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        if (validateForm1()) {
+          showBillingForm();
         } else {
-          formData.append(el.name, el.value.trim());
+          form1.classList.add("was-validated");
         }
-      }
-    });
-
-    const submitBtn = form2.querySelector('button[type="submit"]');
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Saving...";
-
-    const alertBox = document.createElement("div");
-    alertBox.className = "alert mt-3";
-    form2.appendChild(alertBox);
-
-    try {
-      const response = await fetch("/edit-profile", {
-        method: "POST",
-        body: formData,
       });
 
-      const data = await response.json();
-
-      if (data.status === "success") {
-        alertBox.classList.add("alert-success");
-        alertBox.textContent = "Profile updated successfully!";
-        setTimeout(() => {
-          window.location.href = data.redirect;
-        }, 1500);
-      } else {
-        alertBox.classList.add("alert-danger");
-        alertBox.innerHTML = `
-        <span>${data.error || "Something went wrong. Try again."}</span>
-        <button type="button" class="btn-close float-end" aria-label="Close"></button>
-        `;
-        alertBox.querySelector(".btn-close").addEventListener("click", () => {
-        alertBox.remove();
-        });
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Edit Account";
-      }
-    } catch (err) {
-      alertBox.classList.add("alert-danger");
-      alertBox.innerHTML = `
-        <span>${data.error || "Network error. Please try again later."}</span>
-        <button type="button" class="btn-close float-end" aria-label="Close"></button>
-        `;
-        alertBox.querySelector(".btn-close").addEventListener("click", () => {
-        alertBox.remove();
-        });
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Edit Account";
-    }
-  });
-</script>  
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-    const accountBtn = document.getElementById("accountBtn");
-    const billingBtn = document.getElementById("billingBtn");
-    const loginForm = document.getElementById("loginForm");
-    const signupForm = document.getElementById("signupForm");
-    const nextButton = document.getElementById("nextButton");
-    const form1 = document.getElementById("form1");
-    const form2 = document.getElementById("form2");
-
-    // Initial setup: Show loginForm, hide signupForm
-    showSignupForm();
-
-    // Event listener for Account setup button click
-    accountBtn.addEventListener("click", function () {
-        accountBtn.classList.add("bg-dark", "text-white");
-        accountBtn.classList.remove("bg-light", "text-dark");
-        billingBtn.classList.add("bg-light", "text-dark");
-        billingBtn.classList.remove("bg-dark", "text-white");
-
+      accountBtn.addEventListener("click", () => {
         showSignupForm();
-    });
+      });
 
-    // Event listener for Billing address button click
-    billingBtn.addEventListener("click", function () {
-        if (form1.checkValidity()) {
-            billingBtn.classList.add("bg-dark", "text-white");
-            billingBtn.classList.remove("bg-light", "text-dark");
-            accountBtn.classList.add("bg-light", "text-dark");
-            accountBtn.classList.remove("bg-dark", "text-white");
-            showBillingForm(); // Proceed to the billing form
+      billingBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+        if (validateForm1()) {
+          showBillingForm();
         } else {
-            event.preventDefault(); // Prevent default form submission
-            event.stopPropagation(); // Stop event propagation to avoid automatic validation UI
-            form1.classList.add("was-validated"); // Add Bootstrap's 'was-validated' class for validation UI
+          form1.classList.add("was-validated");
         }
-    });
+      });
 
-    // Event listener for Next button click (inside loginForm)
-    nextButton.addEventListener("click", function () {
-        if (form1.checkValidity()) {
-            billingBtn.classList.add("bg-dark", "text-white");
-            billingBtn.classList.remove("bg-light", "text-dark");
-            accountBtn.classList.add("bg-light", "text-dark");
-            accountBtn.classList.remove("bg-dark", "text-white");
-            showBillingForm(); // Proceed to the billing form
+      // Submit Form1 logic (prevent standard HTTP form submit)
+      form1.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (validateForm1()) {
+          showBillingForm();
         } else {
-            event.preventDefault(); // Prevent default form submission
-            event.stopPropagation(); // Stop event propagation to avoid automatic validation UI
-            form1.classList.add("was-validated"); // Add Bootstrap's 'was-validated' class for validation UI
+          form1.classList.add("was-validated");
         }
-    });
+      });
 
-    // Event listener for loginForm submission
-    form1.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent form submission
+      // AJAX submission for edit profile
+      form2.addEventListener("submit", async function (e) {
+        e.preventDefault();
 
-        // Handle login form submission logic if needed
-    });
-
-    // Event listener for signupForm submission
-    form2.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent form submission
+        if (!validateForm2()) {
+          form2.classList.add("was-validated");
+          return;
+        }
 
         const formData = new FormData();
-        formData.append("firstname", form1.firstname.value);
-        formData.append("lastname", form1.lastname.value);
-        formData.append("email", form1.email.value);
-        formData.append("Pass", form1.Pass.value);
-        formData.append("img", form1.img.files[0]);
-        formData.append("address", form2.address.value);
-        formData.append("phone", form2.phone.value);
-        formData.append("city", form2.city.value);
+        formData.append("_csrf", "<%= csrfToken %>");
+        formData.append("firstname", form1.firstname.value.trim());
+        formData.append("lastname", form1.lastname.value.trim());
+        formData.append("email", form1.email.value.trim());
+        formData.append("Pass", form1.Pass.value.trim());
+        if (form1.img.files[0]) {
+          formData.append("img", form1.img.files[0]);
+        }
+        formData.append("address", form2.address.value.trim());
+        formData.append("phone", form2.phone.value.trim());
+        formData.append("city", form2.city.value.trim());
         formData.append("province", form2.province.value);
-        formData.append("zip", form2.zip.value);
+        formData.append("zip", form2.zip.value.trim());
 
-        
+        const submitBtn = form2.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Saving...";
 
-       fetch("/edit-profile", {
-  method: "POST",
-  body: formData,
-  headers: { "Accept": "application/json" }
-})
-  .then(async (response) => {
-    let data;
-    try {
-      data = await response.json();
-    } catch (err) {
-      const text = await response.text();
-      console.error("❌ JSON Parse Error:", err, text);
-      alertContainer.innerHTML = `<div class="alert alert-danger">Could not parse server response.</div>`;
-      return;
-    }
+        try {
+          const response = await fetch("/edit-profile", {
+            method: "POST",
+            body: formData,
+            headers: { "Accept": "application/json" }
+          });
 
-    alertContainer.innerHTML = "";
+          const data = await response.json();
 
-    if (data.error) {
-      alertContainer.innerHTML = `
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          ${data.error}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>`;
-      alertContainer.scrollIntoView({ behavior: "smooth", block: "center" });
-    } else if (data.success) {
-      alertContainer.innerHTML = `
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-          ${data.success}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>`;
-      setTimeout(() => window.location.href = "/user-profile", 1500);
-    } else if (data.redirect) {
-      window.location.href = data.redirect;
-    } else {
-      alertContainer.innerHTML = `<div class="alert alert-warning">Unexpected response.</div>`;
-    }
-  })
-  .catch((error) => {
-    console.error("🔥 Fetch error:", error);
-    alertContainer.innerHTML = `
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        Something went wrong. Please try again.
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>`;
-  });
-  
+          if (data.status === "success" || data.success) {
+            showToast("Profile updated successfully!", "success");
+            setTimeout(() => {
+              window.location.href = data.redirect || "/user-profile";
+            }, 1500);
+          } else {
+            showToast(data.error || "Validation failed. Check your inputs.", "error");
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Edit Account";
+          }
+        } catch (err) {
+          console.error("AJAX Error:", err);
+          showToast("Network error. Please try again.", "error");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Edit Account";
+        }
+      });
+
+      // Initialize
+      showSignupForm();
+      checkForm1State();
     });
-
-    function showSignupForm() {
-        loginForm.style.display = "block";
-        signupForm.style.display = "none";
-    }
-
-    function showBillingForm() {
-        loginForm.style.display = "none";
-        signupForm.style.display = "block";
-    }
-});
-
   </script>
 </html>

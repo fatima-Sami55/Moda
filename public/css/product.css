@@ -1,241 +1,91 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Playwrite+MX:wght@100..400&display=swap');
+/* ==========================================================================
+   DESIGN FOUNDATIONS & TOKEN VARIABLES
+   ========================================================================== */
+
+
 html {
   height: auto;
   width: auto;
   margin: 0;
+  scroll-behavior: smooth !important;
+  background-color: var(--bg-deep);
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial;
-
+  font-family: var(--font-body);
 }
 
-body{
+body {
+  background-color: var(--bg-deep) !important;
+  color: var(--text-primary) !important;
   height: auto;
   width: auto;
   margin: 0;
-  scroll-behavior: smooth !important;
-  padding-top: 120px;
+  padding-top: 100px;
 }
 
-/* Main Footer */
-footer .main-footer {
-  padding-top: 50px ;
-  background: #f8f9fa;
-}
-footer ul {
-  padding-left: 0;
-  list-style: none;
-}
-
-/* Copy Right Footer */
-.footer-copyright {
-  background: rgb(15, 15, 15);
-  padding: 5px 0;
-}
-.footer-copyright .logo {
-  display: inherit;
-}
-.footer-copyright nav {
-  float: right;
-  margin-top: 5px;
-}
-.footer-copyright nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.footer-copyright nav ul li {
-  border-left: 1px solid #141313;
-  display: inline-block;
-  line-height: 12px;
-  margin: 0;
-  padding: 0 8px;
-}
-.footer-copyright nav ul li a {
-  color: #000000;
-}
-.footer-copyright nav ul li:first-child {
-  border: medium none;
-  padding-left: 0;
-}
-.footer-copyright p {
-  color: #ffffff;
-  margin: 2px 0 0;
-}
-
-/* Footer Top */
-.footer-top {
-  background: #e2e2e2;
-  padding-bottom: 30px;
-  margin-bottom: 30px;
-  border-bottom: 3px solid rgb(234, 230, 230);
-}
-
-/* Footer transparent */
-footer.transparent .footer-top,
-footer.transparent .main-footer {
-  background: transparent;
-}
-footer.transparent .footer-copyright {
-  background: none repeat scroll 0 0 rgb(171, 166, 166);
-}
-
-/* Footer light */
-footer.light .footer-top {
-  background: #100f0f;
-}
-footer.light .main-footer {
-  background: #000000;
-}
-footer.light .footer-copyright {
-  margin: 0;
-  background: none repeat scroll 0 0 rgba(14, 13, 13, 0.903);
-}
-
-/* Footer 4 */
-.footer- .logo {
-  display: inline-block;
-}
-
-/*==================== 
-  Widgets 
-====================== */
-.widget {
-  padding: 20px;
-  margin-bottom: 40px;
-}
-.widget.widget-last {
-  margin-bottom: 0px;
-}
-.widget.no-box {
-  padding: 0;
-  background-color: transparent;
-  margin-bottom: 40px;
-  box-shadow: none;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  -ms-box-shadow: none;
-  -o-box-shadow: none;
-}
-.widget.subscribe p {
-  margin-bottom: 18px;
-}
-.widget li a {
-  color: #000000;
-}
-.widget li a:hover {
-  color: #aeaeae;
-}
-.widget-title {
-  margin-bottom: 20px;
-}
-.widget-title span {
-  background: #ebeff1 none repeat scroll 0 0;
-  display: block;
-  height: 1px;
-  margin-top: 25px;
-  position: relative;
-  width: 20%;
-}
-.widget-title span::after {
-  background: inherit;
-  content: "";
-  height: inherit;
-  position: absolute;
-  top: -4px;
-  width: 50%;
-}
-.widget-title.text-center span,
-.widget-title.text-center span::after {
-  margin-left: auto;
-  margin-right: auto;
-  left: 0;
-  right: 0;
-}
-.widget .badge {
-  float: right;
-  background: #eceaea;
-}
-
-.typo-light h1,
-.typo-light h2,
-.typo-light h3,
-.typo-light h4,
-.typo-light h5,
-.typo-light h6,
-.typo-light p,
-.typo-light div,
-.typo-light span,
-.typo-light small {
-  color: rgb(12, 12, 12);
-}
-
-ul.social-footer2 {
-  margin: 0;
-  padding: 0;
-  width: auto;
-}
-ul.social-footer2 li {
-  background-color: #141313;
-  display: inline-block;
-  padding: 0;
-}
-ul.social-footer2 li a:hover {
-  background-color: #aeaeae;
-}
-ul.social-footer2 li a {
-  display: block;
-  height: 30px;
-  width: 30px;
-  text-align: center;
-}
+/* ==========================================================================
+   WIDGETS & BUTTONS
+   ========================================================================== */
 .btn {
-  background-color: #000000;
-  color: #fff;
+  background: var(--accent-gradient) !important;
+  color: white !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 25px !important;
+  padding: 10px 24px !important;
+  box-shadow: var(--shadow-premium) !important;
+  transition: var(--transition-smooth) !important;
 }
+
 .btn:hover,
 .btn:focus,
 .btn.active {
-  background: #60605ef0;
-  color: #fff;
-  -webkit-box-shadow: 0 15px 30px rgb(251, 247, 247);
-  -moz-box-shadow: 0 15px 30px rgb(251, 247, 247);
-  -ms-box-shadow: 0 15px 30px rgb(251, 247, 247);
-  -o-box-shadow: 0 15px 30px rgb(251, 247, 247);
-  box-shadow: 0 15px 30px rgb(251, 247, 247);
-  -webkit-transition: all 250ms ease-in-out 0s;
-  -moz-transition: all 250ms ease-in-out 0s;
-  -ms-transition: all 250ms ease-in-out 0s;
-  -o-transition: all 250ms ease-in-out 0s;
-  transition: all 250ms ease-in-out 0s;
+  transform: translateY(-3px) !important;
+  box-shadow: var(--shadow-glow) !important;
 }
 
-
-/*Product Page Styles */
-
+/* ==========================================================================
+   PRODUCT CARDS
+   ========================================================================== */
 .product-card {
   width: 100%;
   max-width: 380px;
   position: relative;
-  box-shadow: 0 2px 7px #dfdfdf;
+  box-shadow: 8px 8px 0px var(--text-primary) !important;
   margin: 30px auto;
-  background: #fafafa;
+  background: var(--bg-surface) !important; /* Warm cream background instead of white */
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 0px !important; /* Sharp corners */
+  overflow: hidden;
+  transition: var(--transition-smooth);
+}
+
+.product-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 12px 12px 0px var(--text-primary) !important;
 }
 
 .product-card .badge {
   position: absolute;
-  left: 0;
+  left: 15px;
   top: 20px;
   text-transform: uppercase;
-  font-size: 13px;
-  font-weight: 700;
-  background-color: red;
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 800;
+  background: var(--secondary-accent) !important; /* Urgent Burn Orange */
   color: #fff;
-  padding: 3px 10px;
+  padding: 4px 12px;
+  border: 2px solid var(--text-primary);
+  border-radius: 0px !important;
+  box-shadow: 3px 3px 0px var(--text-primary);
+  z-index: 2;
+  letter-spacing: 0.05em;
 }
 
 .product-tumb {
@@ -244,213 +94,219 @@ ul.social-footer2 li a {
   justify-content: center;
   height: 300px;
   padding: 20px;
-  background: #f0f0f0;
+  background: var(--bg-deep) !important;
+  border-bottom: 2px solid var(--text-primary) !important;
+  overflow: hidden;
 }
 
 .product-tumb img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: cover;
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 30px rgba(0,0,0,0.5));
+  transition: var(--transition-smooth);
+}
+
+.product-card:hover .product-tumb img {
+  transform: scale(1.08) rotate(1deg);
 }
 
 .product-details {
-  padding: 20px;
+  padding: 25px;
 }
 
 .product-catagory {
   display: block;
+  font-family: var(--font-heading);
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  color: #ccc;
-  margin-bottom: 12px;
+  color: var(--primary-accent);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
 }
 
 .product-details h4 a {
-  font-weight: 500;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 20px;
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   text-transform: uppercase;
-  color: #363636;
+  color: var(--text-primary);
   text-decoration: none;
-  transition: 0.3s;
+  transition: var(--transition-smooth);
 }
 
 .product-details h4 a:hover {
-  color: #714c02;
+  color: var(--primary-accent);
 }
 
 .product-details p {
-  font-size: 15px;
-  line-height: 22px;
-  margin-bottom: 12px;
-  color: #999;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  color: var(--text-secondary);
 }
 
 .product-bottom-details {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  border-top: 1px solid #eee;
-  padding-top: 12px;
+  border-top: 1px solid var(--border-light);
+  padding-top: 15px;
 }
 
 .product-price {
-  font-size: 18px;
-  color: #17140e;
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-size: 22px;
+  color: var(--text-primary);
+  font-weight: 800;
 }
 
 .product-price small {
-  font-size: 80%;
+  font-size: 70%;
   font-weight: 400;
+  color: var(--text-secondary);
   text-decoration: line-through;
-  margin-right: 5px;
+  margin-right: 8px;
 }
 
 .product-links {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  color: black;
 }
 
 .product-links a {
-  color: #000;
+  color: var(--text-primary) !important;
   text-decoration: none;
   font-size: 18px;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: all 0.3s ease-in-out;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50% !important;
+  background: rgba(26, 26, 26, 0.05) !important;
+  border: 2px solid var(--text-primary) !important;
+  transition: var(--transition-smooth);
 } 
 
 .product-links a:hover {
-  font-size: 20px;
-  transform: scale(1.1);
+  transform: translate(-2px, -2px) scale(1.05);
+  background-color: var(--primary-accent) !important; /* Solar Yellow CTA */
+  box-shadow: 3px 3px 0px var(--text-primary);
 }
 
 .product-links a.wish:hover {
-  color: rgb(243, 4, 4);
+  color: white !important;
+  background: var(--secondary-accent) !important; /* Burn Orange hover */
+  border-color: var(--text-primary) !important;
 }
 
 .product-links a.cart:hover {
-  color: rgb(34, 120, 225);
+  color: var(--text-primary) !important;
+  background: var(--primary-accent) !important;
+  border-color: var(--text-primary) !important;
 }
 
-/* Review & Rating Styles */
-
+/* ==========================================================================
+   REVIEW & RATING STYLES
+   ========================================================================== */
 .text-black {
-  color: #000000;
+  color: var(--text-primary) !important;
 }
 
-.icon-overlap {
-  bottom: -23px;
-  font-size: 74px;
-  opacity: 0.23;
-  position: absolute;
-  right: -32px;
+.reviews-members {
+  background: var(--bg-surface) !important; /* Warm cream background instead of white */
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 0px !important; /* Sharp corners */
+  padding: 24px !important;
+  margin-bottom: 24px !important;
+  box-shadow: 6px 6px 0px var(--text-primary) !important; /* Flat drop shadow */
+  transition: var(--transition-smooth);
 }
 
-.menu-list img,
-.restaurant-detailed-header-left img,
-.reviews-members .media .mr-3 {
-  object-fit: cover;
-}
-
-.menu-list img {
-  width: 41px;
-  height: 41px;
-}
-
-.restaurant-detailed-header-left img {
-  width: 88px;
-  height: 88px;
-  border-radius: 3px;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+.reviews-members:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 10px 10px 0px var(--text-primary) !important;
 }
 
 .reviews-members .media .mr-3 {
   width: 56px;
   height: 56px;
-}
-
-.rounded-pill {
-  border-radius: 50rem !important;
-}
-
-.restaurant-detailed-ratings-and-reviews hr {
-  margin: 0 -24px;
-}
-
-.skill {
-  width: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--text-primary);
 }
 
 .rating-bar {
-  background: #EBEBEB;
-  padding: 1px;
-  border-radius: 4px;
+  background: rgba(26, 26, 26, 0.08) !important;
+  padding: 0;
+  border-radius: 0px !important;
+  height: 10px;
+  overflow: hidden;
+  border: 2px solid var(--text-primary) !important;
 }
 
-.rating-bar > div {
-  height: 5px;
-  border-radius: 4px;
-  background: #FFA41C;
-}
-
-
+.rating-bar > div,
 .rating-bar span {
-  display: block;
-  height: 5px;
-  border-radius: 4px;
+  height: 100% !important;
+  border-radius: 0px !important;
+  background: var(--primary-accent) !important; /* Solar Yellow progress bar */
+  box-shadow: none !important;
 }
 
 .orange {
-  background: #ffa41c;
+  background: var(--accent-gradient) !important;
 }
 
 .schriftorange {
-  color: #ffa41c;
+  color: #FFC107 !important; /* Gold Yellow Stars */
 }
 
 .rating-view {
   display: flex;
   align-items: center;
   white-space: nowrap;
-  gap: 5px;
-  height: 40px;
+  gap: 12px;
+  height: auto;
+  color: var(--text-secondary);
 }
 
 .zahlreviews {
-  min-width: 40px;
+  min-width: 45px;
   text-align: center;
-  border-radius: 3px;
-  padding: 1px 0;
-  box-shadow: rgba(0, 0, 0, 0.05) 0 0 0 1px;
+  border-radius: 6px;
+  padding: 4px 8px;
+  background: hsla(222, 47%, 20%, 0.5);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-weight: 600;
 }
 
 .sternzahl {
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 .profile-text {
   text-decoration: none;
-  color: rgb(10, 18, 90);
+  color: var(--primary-accent) !important;
+  font-weight: 600;
+  transition: var(--transition-smooth);
 }
 
 .profile-text:hover {
-  color: rgb(69, 70, 75);
+  color: var(--secondary-accent) !important;
   text-decoration: underline;
 }
 
-.reviews-members-avatar {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-}
-
-.review-link{
+.review-link {
   text-decoration: none;
-  color: #000;
+  color: var(--text-primary) !important;
   font-weight: 600;
   text-align: center;
 }
@@ -465,93 +321,647 @@ ul.social-footer2 li a {
   overflow: hidden;
 }
 
+/* ==========================================================================
+   RELATED PRODUCTS & STREETWEAR CARDS
+   ========================================================================== */
+.related-products {
+  background-color: var(--bg-surface) !important; /* Organic light cream background */
+  border-top: 2px solid var(--text-primary) !important;
+  padding: 80px 0 !important;
+}
 
-/* Responsive Tweaks */
+.related-products h2 {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 2.2rem !important;
+  text-transform: uppercase;
+  color: var(--text-primary) !important;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px !important;
+}
 
+.related-products .category-divider {
+  width: 60px;
+  height: 4px;
+  background-color: var(--primary-accent) !important; /* Neon Burn Orange underline */
+  border: none;
+  margin-top: 8px;
+  margin-bottom: 40px;
+}
+
+/* Reusing exact Streetwear Flat Geometric Product Card styles */
+.related-products .product-card {
+  background: #FFFFFF !important; /* Pure White background as requested */
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 0px !important; /* Sharp corners */
+  padding: 14px !important; /* More compact padding for tucked look */
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Tighter layout gap */
+  box-shadow: 6px 6px 0px var(--text-primary) !important; /* Slightly smaller flat shadow for tucked feel */
+  height: 100% !important; /* Perfect height matching */
+}
+
+.related-products .product-card:hover {
+  transform: translate(-3px, -3px) !important;
+  box-shadow: 9px 9px 0px var(--text-primary) !important;
+}
+
+.related-products .badge-best-selling {
+  background: var(--secondary-accent) !important; /* Electric Violet-Blue */
+  color: #FFFFFF !important;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 0px !important;
+  border: 2px solid var(--text-primary) !important;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+  box-shadow: 2px 2px 0px var(--text-primary);
+  text-transform: uppercase;
+}
+
+.related-products .product-image {
+  width: 100%;
+  height: 160px; /* Sized down to 160px for a perfectly tucked, compact height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: var(--bg-surface) !important; /* Warm cream background instead of white */
+  border-radius: 0px !important;
+  border: 2px solid var(--text-primary);
+  overflow: hidden;
+}
+
+.related-products .product-thumb {
+  max-height: 85% !important;
+  max-width: 85% !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+  transition: var(--transition-smooth);
+}
+
+.related-products .product-card:hover .product-thumb {
+  transform: scale(1.06) rotate(1deg);
+}
+
+.related-products .product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-grow: 1;
+}
+
+.related-products .product-brand {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.2rem; /* Sized down slightly for tucked layout */
+  color: var(--text-primary);
+  margin-bottom: 0;
+  letter-spacing: 0.02em;
+  text-transform: uppercase !important; /* Force uppercase styling as in 3rd image */
+}
+
+.related-products .product-short-description {
+  font-size: 16px !important; /* Larger, more prominent description font */
+  color: var(--text-secondary) !important;
+  line-height: 1.5 !important;
+  margin-bottom: 0;
+  flex-grow: 0 !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* Clamp description text to exactly 1 line to prevent size shifts */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.related-products .card-rating-trigger {
+  margin-top: auto !important; /* Cleanly push ratings and price/CTA block to the very bottom */
+}
+
+/* Beautiful custom color override to change generic grey empty stars to slate/semi-transparent */
+.related-products .fa-star-o {
+  color: rgba(31, 30, 37, 0.25) !important;
+}
+
+.related-products .price {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--secondary-accent) !important; /* Sporty Electric Violet-Blue */
+  margin: 0;
+  line-height: 1;
+}
+
+.related-products .card-btn {
+  width: 100%;
+  background: var(--primary-accent) !important; /* Neon Burn Orange CTA */
+  border: 2.5px solid var(--text-primary) !important; /* Solid thick black border */
+  color: var(--text-primary) !important; /* Pitch Black bold text as in 3rd image */
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 8px;
+  border-radius: 50px !important; /* Pill style */
+  transition: var(--transition-smooth);
+  box-shadow: 3px 3px 0px var(--text-primary) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none !important;
+  text-align: center;
+  display: block;
+  margin-top: 6px;
+}
+
+.related-products .card-btn:hover {
+  transform: translate(-2px, -2px) !important;
+  box-shadow: 5px 5px 0px var(--text-primary) !important;
+  background-color: var(--secondary-accent) !important; /* Electric Violet-Blue on hover */
+  color: #FFFFFF !important;
+  text-decoration: none !important;
+}
+
+/* Eliminate awkward different colored background margin patch above footer */
+footer#footer {
+  margin-top: 0 !important;
+}
+
+/* ==========================================================================
+   FOOTER SECTION
+   ========================================================================== */
+footer .main-footer {
+  padding-top: 70px;
+  background: var(--bg-surface) !important;
+  border-top: 1px solid var(--border-light);
+}
+
+footer ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+.footer-copyright {
+  background: var(--bg-deep) !important;
+  padding: 20px 0;
+  border-top: 1px solid var(--border-light);
+}
+
+.footer-copyright p {
+  color: var(--text-secondary) !important;
+  margin: 0;
+}
+
+.footer-top {
+  background: var(--bg-surface) !important;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.widget {
+  padding: 0px;
+  margin-bottom: 40px;
+}
+
+.widget.no-box {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.widget li a {
+  color: var(--text-secondary) !important;
+  transition: var(--transition-smooth);
+}
+
+.widget li a:hover {
+  color: var(--primary-accent) !important;
+  padding-left: 5px;
+}
+
+.widget-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: var(--text-primary) !important;
+}
+
+.widget-title span {
+  background: var(--primary-accent) !important;
+  display: block;
+  height: 2px;
+  margin-top: 10px;
+  position: relative;
+  width: 40px;
+}
+
+.widget-title span::after {
+  background: var(--secondary-accent) !important;
+  content: "";
+  height: inherit;
+  position: absolute;
+  top: 0;
+  left: 40px;
+  width: 20px;
+}
+
+/* ==========================================================================
+   SCROLLBAR & LAYOUT
+   ========================================================================== */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+  border-left: 1px solid var(--border-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsla(222, 47%, 20%, 0.8);
+  border-radius: 8px;
+  border: 2px solid var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-accent);
+}
+
+/* ==========================================================================
+   RESPONSIVE TWEAKS
+   ========================================================================== */
 @media (max-width: 768px) {
   .product-card {
     max-width: 100%;
   }
 
   .product-tumb {
-    height: 220px;
-    padding: 10px;
+    height: 240px;
   }
 
   .product-details {
-    padding: 15px;
+    padding: 20px;
   }
 
   .product-bottom-details {
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
+    align-items: flex-start;
   }
 
   .product-links {
-    justify-content: space-between;
+    width: 100%;
+    justify-content: flex-end;
   }
 
   .rating-view {
     flex-direction: column;
     align-items: flex-start;
-    gap: 6px;
+    gap: 8px;
   }
 
   .zahlreviews {
-    align-self: flex-end;
+    align-self: flex-start;
   }
 }
 
+/* ==========================================================================
+   MODERN PRODUCT VIEW SHOWCASE OVERHAUL
+   ========================================================================== */
 
-.related-products .card {
-  height: 100%;
+/* Modern Details Card for Description, Ratings, and Reviews */
+.modern-details-card {
+  background: #FFFFFF !important; /* Pure White background for outer container */
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 0px !important;
+  box-shadow: 8px 8px 0px var(--text-primary) !important;
+  margin-bottom: 30px;
+  transition: var(--transition-smooth);
+}
+
+.modern-details-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 10px 10px 0px var(--text-primary) !important;
+}
+
+/* Image Showcase Container */
+.modern-product-image-container {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  background: #FFFFFF !important; /* Pure White background for outer container */
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 0px !important;
+  box-shadow: 8px 8px 0px var(--text-primary) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+}
+
+.modern-product-image-container:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 12px 12px 0px var(--text-primary) !important;
+}
+
+.modern-product-image {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  transition: transform 0.15s cubic-bezier(0.25, 0.8, 0.25, 1); /* Ultra-smooth zoom track transition */
+  pointer-events: none; /* Let mouse tracking events bubble to container directly */
+}
+
+.modern-product-image-container:hover .modern-product-image {
+  transform: scale(2.2) !important; /* Magnifying glass zoom scale */
+}
+
+/* Status badge overlapping the image top-left */
+.purchase-status-badge {
+  position: absolute;
+  top: 15px; /* Completely inside boundaries */
+  left: 15px; /* Completely inside boundaries */
+  background-color: var(--secondary-accent) !important; /* Electric Violet-Blue */
+  color: #FFFFFF !important;
+  border: 2px solid var(--text-primary) !important;
+  padding: 8px 18px;
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  border-radius: 0px !important;
+  box-shadow: 3px 3px 0px var(--text-primary);
+  z-index: 5;
+  transform: rotate(-3deg);
+  text-transform: uppercase;
+}
+
+.purchase-status-badge span {
+  color: #FFFFFF !important;
+}
+
+/* Details Panel styling */
+.modern-product-details {
+  padding: 10px 0;
+}
+
+.capsule-badge-row {
+  margin-bottom: 20px;
+}
+
+.capsule-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #E2E1FF !important; /* Light Sporty Violet-Blue */
+  color: var(--text-primary) !important;
+  font-family: var(--font-body) !important;
+  font-weight: 800;
+  font-size: 0.9rem !important;
+  letter-spacing: 0.04em;
+  padding: 6px 20px;
+  border-radius: 999px !important;
+  border: 2px solid var(--text-primary) !important;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.modern-product-title {
+  font-family: var(--font-heading) !important;
+  font-weight: 900;
+  font-size: 3rem !important;
+  line-height: 1.05;
+  color: var(--text-primary) !important;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  letter-spacing: -0.02em;
+}
+
+.modern-price-block {
+  margin-top: 15px;
+}
+
+.modern-price-tag {
+  font-family: var(--font-heading) !important;
+  font-weight: 900;
+  font-size: 2.5rem !important;
+  color: var(--primary-accent) !important; /* Neon Burn Orange core pricing */
+  line-height: 1;
+}
+
+.divider-line {
+  border: none;
+  height: 2px;
+  background-color: var(--text-primary) !important;
+  opacity: 0.15;
+}
+
+.modern-sub-title {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 1.25rem !important;
+  text-transform: uppercase;
+  color: var(--text-primary) !important;
+  margin-bottom: 10px;
+}
+
+.modern-product-desc {
+  font-family: var(--font-body) !important;
+  font-size: 1.05rem !important;
+  line-height: 1.65 !important;
+  color: var(--text-secondary) !important;
+}
+
+/* CTA Action Buttons styling */
+.modern-actions-row {
+  margin-top: 30px;
+}
+
+.modern-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 30px !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 999px !important;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  text-decoration: none !important;
+}
+
+.modern-cta-btn:hover {
+  text-decoration: none !important;
+}
+
+.add-to-cart-cta {
+  background-color: var(--primary-accent) !important; /* Core Urgency Orange / Burn Orange */
+  color: var(--text-primary) !important;
+  box-shadow: 4px 4px 0px var(--text-primary);
+}
+
+.add-to-cart-cta:hover {
+  background-color: var(--secondary-accent) !important; /* Electric Violet-Blue on hover */
+  color: #FFFFFF !important;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--text-primary);
+}
+
+.wishlist-cta {
+  background-color: transparent !important;
+  color: var(--text-primary) !important;
+  box-shadow: 4px 4px 0px var(--text-primary);
+}
+
+.wishlist-cta:hover {
+  background-color: var(--text-primary) !important;
+  color: #FFFFFF !important;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--text-primary);
+}
+
+/* Vertically Center Content for Perfect Viewport Balance */
+.main-card {
+  min-height: calc(100vh - 100px); /* Fills available height below fixed navbar */
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  padding-top: 40px !important;
+  padding-bottom: 40px !important;
 }
 
-.related-products .card-img-top {
-  height: 200px;
-  object-fit: cover;
-  display: block;
+/* Modern Description and Ratings Breakdown Styling */
+.modern-sub-title-large {
+  font-family: var(--font-heading) !important;
+  font-weight: 800;
+  font-size: 1.8rem !important;
+  text-transform: uppercase;
+  color: var(--text-primary) !important;
+  margin-bottom: 15px;
+  letter-spacing: -0.01em;
 }
 
-.related-products .card-body {
+.modern-product-desc-large {
+  font-family: var(--font-body) !important;
+  font-size: 1.15rem !important;
+  line-height: 1.75 !important;
+  color: var(--text-secondary) !important;
+}
+
+.modern-rating-summary-box {
+  background: var(--bg-surface) !important;
+  border: 2px solid var(--text-primary) !important;
+  padding: 24px 20px !important;
+  text-align: center;
+  box-shadow: 6px 6px 0px var(--text-primary) !important;
+  border-radius: 0px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 180px; /* Match the vertical height of progress bars perfectly */
+  transition: var(--transition-smooth);
+}
+
+.modern-rating-summary-box:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px var(--text-primary) !important;
+}
+
+.modern-rating-score {
+  font-family: var(--font-heading) !important;
+  font-weight: 900;
+  font-size: 4rem !important;
+  line-height: 1;
+  color: var(--text-primary) !important;
+  margin: 0;
+  letter-spacing: -0.03em;
+}
+
+/* Breathing Spacing between viewport sections */
+.product-page-section {
+  margin-top: 55px !important;
+  margin-bottom: 55px !important;
+}
+
+/* Sleek Brutalist Toast Notification */
+.lookbook-toast {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  background: #FFFFFF !important;
+  border: 3px solid var(--text-primary) !important;
+  box-shadow: 6px 6px 0px var(--text-primary) !important;
+  padding: 16px 24px !important;
+  z-index: 999999 !important;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 340px;
+  max-width: 420px;
+  transform: translateY(150px) scale(0.9);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-family: var(--font-body);
+}
+
+.lookbook-toast.show {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lookbook-toast-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary-accent); /* Orange */
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  border: 2px solid var(--text-primary);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  box-shadow: 2px 2px 0px var(--text-primary);
+}
+
+.lookbook-toast-icon.error {
+  background: var(--secondary-accent); /* Violet-Blue */
+}
+
+.lookbook-toast-content {
   flex-grow: 1;
 }
 
-.related-products .card-footer {
-  background: transparent;
-  border: none;
+.lookbook-toast-title {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  letter-spacing: -0.01em;
 }
 
-.related-products .card .badge{
-  color: white;
-  background-color: red;
-}
-
-::-webkit-scrollbar{
-  width: 10px;
-}
-
-::-webkit-scrollbar-track{
-  border: 1px solid rgb(255, 255, 255);
-  border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb{
-  background: rgba(108, 108, 108, 0.558);
-  border-radius: 8px;
-}
-::-webkit-scrollbar-thumb:hover{
-  background-color: rgba(108, 108, 108, 0.896);
-}
-
-.profile-text {
-  text-decoration: none;
-  color: rgb(10, 18, 90); 
-}
-
-.profile-text:hover {
-  color: rgb(69, 70, 75); 
-  text-decoration: underline;
+.lookbook-toast-message {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
 }

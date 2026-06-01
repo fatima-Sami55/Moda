@@ -1,756 +1,828 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Playwrite+MX:wght@100..400&display=swap');
+/* ==========================================================================
+   DESIGN FOUNDATIONS & TOKEN VARIABLES
+   ========================================================================== */
+
 
 html {
-  height: auto;
-  width: auto;
-  margin: 0;
+  scroll-behavior: smooth !important;
+  background-color: var(--bg-deep);
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial;
-
+  font-family: var(--font-body);
 }
 
-body{
-  height: auto;
-  width: auto;
-  margin: 0;
-  scroll-behavior: smooth !important;
+body {
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  overflow-x: hidden;
 }
 
-.fixed-wrapper {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1090;
-  height: 60px;
+/* Explicit Section Heading Colors */
+.product-category,
+.timeline-section h1,
+.gradient-custom h1,
+.sponsors-section h2,
+.newsletter-container h1 {
+  color: #1A1A1A !important;
 }
 
-/* Main Footer */
-footer .main-footer {
-  padding: 60px 0;
-  background: #f8f9fa;
-}
-
-footer ul {
-  padding-left: 0;
-  list-style: none;
-}
-
-/* Copy Right Footer */
-.footer-copyright {
-  background: rgb(15, 15, 15);
-  padding: 5px 0;
-}
-
-.footer-copyright .logo {
-  display: inherit;
-}
-
-.footer-copyright nav {
-  float: right;
-  margin-top: 5px;
-}
-
-.footer-copyright nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.footer-copyright nav ul li {
-  border-left: 1px solid #141313;
-  display: inline-block;
-  line-height: 12px;
-  margin: 0;
-  padding: 0 8px;
-}
-
-.footer-copyright nav ul li a {
-  color: #000000;
-}
-
-.footer-copyright nav ul li:first-child {
-  border: medium none;
-  padding-left: 0;
-}
-
-.footer-copyright p {
-  color: #ffffff;
-  margin: 2px 0 0;
-}
-
-/* Footer Top */
-.footer-top {
-  background: #e2e2e2;
-  padding-bottom: 30px;
-  margin-bottom: 30px;
-  border-bottom: 3px solid rgb(234, 230, 230);
-}
-
-/* Footer transparent */
-footer.transparent .footer-top,
-footer.transparent .main-footer {
-  background: transparent;
-}
-
-footer.transparent .footer-copyright {
-  background: none repeat scroll 0 0 rgb(171, 166, 166);
-}
-
-/* Footer light */
-footer.light .footer-top {
-  background: #100f0f;
-}
-
-footer.light .main-footer {
-  background: #000000;
-}
-
-footer.light .footer-copyright {
-  margin: 0;
-  background: none repeat scroll 0 0 rgba(14, 13, 13, 0.903);
-}
-
-/* Footer 4 */
-.footer- .logo {
-  display: inline-block;
-}
-
-/*==================== 
-  Widgets 
-====================== */
-.widget {
-  padding: 20px;
-  margin-bottom: 40px;
-}
-
-.widget.widget-last {
-  margin-bottom: 0px;
-}
-
-.widget.no-box {
-  padding: 0;
-  background-color: transparent;
-  margin-bottom: 40px;
-  box-shadow: none;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  -ms-box-shadow: none;
-  -o-box-shadow: none;
-}
-
-.widget.subscribe p {
-  margin-bottom: 18px;
-}
-
-.widget li a {
-  color: #000000;
-}
-
-.widget li a:hover {
-  color: #aeaeae;
-}
-
-.widget-title {
-  margin-bottom: 20px;
-}
-
-.widget-title span {
-  background: #ebeff1 none repeat scroll 0 0;
-  display: block;
-  height: 1px;
-  margin-top: 25px;
+/* ==========================================================================
+   EDITORIAL HERO (LIGHT THEME LUXURY FASHION)
+   ========================================================================== */
+.editorial-hero {
+  height: calc(100vh - 90px) !important;
+  margin-top: 90px !important; /* Offsets the 90px fixed navbar */
+  background-color: var(--bg-deep) !important;
   position: relative;
-  width: 20%;
+  overflow: hidden !important; /* Fits precisely inside the viewport fold */
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+body.unverified .editorial-hero {
+  height: calc(100vh - 138px) !important; /* Offsets 90px navbar + 48px strip */
+  margin-top: 0px !important; /* Prevent double push since body padding-top is already 138px */
+}
+.editorial-left {
+  padding: 30px 8% !important;
+  padding-left: max(8%, 60px) !important;
 }
 
-.widget-title span::after {
-  background: inherit;
-  content: "";
-  height: inherit;
-  position: absolute;
-  top: -4px;
-  width: 50%;
+.editorial-text-wrapper {
+  max-width: 750px;
 }
 
-.widget-title.text-center span,
-.widget-title.text-center span::after {
-  margin-left: auto;
-  margin-right: auto;
-  left: 0;
-  right: 0;
+/* Giant Fashion Bold Title */
+.editorial-main-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 5.5rem !important; /* Increased from 4.5rem to 5.5rem as requested */
+  line-height: 0.95 !important;
+  letter-spacing: 0.01em !important;
+  color: var(--text-primary) !important;
+  margin-bottom: 20px;
+  text-transform: uppercase;
 }
 
-.widget .badge {
-  float: right;
-  background: #eceaea;
+.editorial-main-title .capsule-pill {
+  font-size: 1.15rem !important; /* Scaled up to balance with larger 5.5rem heading */
+  padding: 8px 24px !important;
+  border: 2.5px solid var(--text-primary) !important;
 }
 
-.typo-light h1,
-.typo-light h2,
-.typo-light h3,
-.typo-light h4,
-.typo-light h5,
-.typo-light h6,
-.typo-light p,
-.typo-light div,
-.typo-light span,
-.typo-light small {
-  color: rgb(12, 12, 12);
+/* Outlined Word Styling */
+.outlined-word {
+  color: transparent !important;
+  -webkit-text-stroke: 2px var(--text-primary);
+  font-weight: 700;
 }
 
-ul.social-footer2 {
-  margin: 0;
-  padding: 0;
-  width: auto;
+/* Capsule Pill Badge Row */
+.capsule-badge-row {
+  margin-bottom: 25px;
 }
 
-ul.social-footer2 li {
-  background-color: #141313;
-  display: inline-block;
-  padding: 0;
+.capsule-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #BCEFE9 !important; /* Light Sporty Teal */
+  color: var(--text-primary) !important;
+  font-family: var(--font-body) !important;
+  font-weight: 800;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.04em;
+  padding: 6px 20px;
+  border-radius: 999px !important;
+  border: 2px solid var(--text-primary) !important;
+  text-transform: uppercase;
+  line-height: 1;
+  vertical-align: middle;
 }
 
-ul.social-footer2 li a:hover {
-  background-color: #aeaeae;
+/* Narrative Copy */
+.editorial-desc {
+  font-size: 1.05rem !important;
+  color: var(--text-secondary) !important;
+  line-height: 1.6 !important;
+  margin-bottom: 30px;
+  max-width: 680px; /* Increased to fill space and align with wider heading wrapper */
 }
 
-ul.social-footer2 li a {
+/* Sticker Arrow Button */
+.editorial-action-row {
+  display: flex;
+  align-items: center;
+}
+
+.sticker-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: var(--secondary-accent) !important; /* Burn Orange */
+  color: #FFFFFF !important; /* White arrow */
+  border-radius: 50%;
+  text-decoration: none !important;
+  border: 2px solid var(--text-primary) !important;
+  box-shadow: 2px 2px 0px var(--text-primary);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  vertical-align: middle;
+}
+
+.sticker-btn:hover {
+  transform: scale(1.1) rotate(15deg);
+  background-color: var(--primary-accent) !important; /* Solar Yellow hover */
+  color: var(--text-primary) !important;
+  box-shadow: 3px 3px 0px var(--text-primary);
+}
+
+.sticker-btn .arrow-icon {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Right Column Photographic Showcase */
+.editorial-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 5% !important;
+}
+
+.editorial-image-frame {
+  position: relative;
+  max-width: 360px;
+  max-height: 460px;
+  width: 100%;
+  border-radius: 0px; /* Streetwear lookbooks love sharp angles */
+  border: 3px solid var(--text-primary) !important;
+  box-shadow: 8px 8px 0px #1A1A1A !important; /* Flat offset shadow */
+  overflow: visible; /* To let overlapping badges overflow */
+  background: var(--primary-accent); /* Bright Solar Yellow block fallback behind image */
+}
+
+.editorial-main-image {
+  width: 100%;
+  max-height: 454px;
   display: block;
-  height: 30px;
-  width: 30px;
-  text-align: center;
+  object-fit: cover;
+  transition: transform 0.5s var(--transition-smooth);
 }
 
-#footer .btn {
-  background-color: #000000;
-  color: #fff;
+.editorial-image-frame:hover .editorial-main-image {
+  transform: scale(1.02);
 }
 
-#footer .btn:hover,
-#footer .btn:focus,
-#footer .btn.active {
-  background: #81888e;
-  color: #fff;
-  -webkit-box-shadow: 0 15px 30px rgb(251, 247, 247);
-  -moz-box-shadow: 0 15px 30px rgb(251, 247, 247);
-  -ms-box-shadow: 0 15px 30px rgb(251, 247, 247);
-  -o-box-shadow: 0 15px 30px rgb(251, 247, 247);
-  box-shadow: 0 15px 30px rgb(251, 247, 247);
-  -webkit-transition: all 250ms ease-in-out 0s;
-  -moz-transition: all 250ms ease-in-out 0s;
-  -ms-transition: all 250ms ease-in-out 0s;
-  -o-transition: all 250ms ease-in-out 0s;
-  transition: all 250ms ease-in-out 0s;
-}
-
-.banner {
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
-  margin-top: 40px;
-}
-
-.content {
+/* Summer Sale Circle Sticker Overlay */
+.summer-sale-sticker {
+  position: absolute;
+  top: 25%;
+  left: -45px; /* Overlap the left edge as in reference design */
+  width: 110px;
+  height: 110px;
+  background-color: #1F1E23 !important; /* Dark streetwear black circle */
+  color: #FFFFFF !important;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  padding: 0 20px;
+  border: 2px solid var(--primary-accent) !important; /* Bold Burn Orange border */
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  transform: rotate(-10deg);
+  transition: transform 0.4s var(--transition-smooth);
 }
 
-.banner-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 1200px;
-  flex-wrap: wrap; 
-  padding: 0 20px;
+.editorial-image-frame:hover .summer-sale-sticker {
+  transform: scale(1.1) rotate(10deg);
 }
 
-.banner-text {
-  flex: 1;
-  margin-top: 5%;
-  padding: 20px;
-  text-align: left;
-}
-
-.banner-text h2 {
-  font-size: 2.5rem;
-}
-
-.banner-desc {
-  font-size: 20px;
-  font-weight: bolder;
-  line-height: 1.8;
-}
-
-.banner-image {
-  object-fit: contain;
-  flex: 1;
-  max-width: 600px;
-  width: 100%;
-  height: auto;
-  margin-top: 5%;
-  padding: 20px;
-}
-
-/* Buttons */
-.signup-btn {
-  width: 200px;
-  padding: 15px 0;
+.sticker-inner {
   text-align: center;
-  margin: 20px 0px;
-  font-weight: bold;
-  border: 2px solid #000000;
-  background: transparent;
-  color: rgb(8, 8, 8);
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
 }
 
-.cover {
-  background: #000000;
-  height: 100%;
-  width: 0%;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  z-index: -1;
-  transition: 0.5s;
+.sticker-tag {
+  font-family: var(--font-body) !important; /* Roboto standard-width for small tags */
+  font-size: 0.58rem !important; /* Slightly smaller for perfect fit */
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  color: #FFFFFF !important; /* Standardized to crisp white */
+  text-transform: uppercase;
 }
 
-.signup-btn:hover span {
-  width: 100%;
+.sticker-discount {
+  font-family: var(--font-heading) !important; /* Bold Unbounded */
+  font-weight: 900;
+  font-size: 1.5rem !important;
+  line-height: 1;
+  color: var(--primary-accent) !important; /* Vivid Burn Orange #FE672E */
 }
 
-.signup-btn:hover {
-  color: white;
-  border: none;
-}
-
-@media (max-width: 1024px) {
-  .banner-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 20px;
+/* Responsive Editorial Rules */
+@media screen and (max-width: 991px) {
+  .editorial-hero {
+    height: auto !important;
+    padding-top: 40px !important;
+    padding-bottom: 60px !important;
+    min-height: calc(100vh - 90px) !important;
   }
-
-  .banner-text {
-    margin: 0 auto;
-    padding: 20px;
+  body.unverified .editorial-hero {
+    min-height: calc(100vh - 138px) !important;
   }
-
-  .banner-image {
-    width: 100%;
-    max-width: 400px;
-    height: auto;
-    margin: 0 auto;
+  .editorial-main-title {
+    font-size: 4.2rem !important; /* Scaled up tablet view to match desktop enlargement */
   }
-
-  .banner {
-    height: auto;
-    padding: 40px 10px;
+  .editorial-main-title .capsule-pill {
+    font-size: 0.95rem !important; /* Scale back down pill on tablet screens */
+    padding: 6px 18px !important;
+    border: 2px solid var(--text-primary) !important;
   }
-}
-
-
-/* 💡 Responsive behavior */
-@media (max-width: 1178px) {
-  .banner-content {
-    flex-direction: column;
-    text-align: center;
+  .editorial-left {
+    padding: 60px 4% !important;
   }
-
-  .banner-text {
-    margin-top: 30px;
-    padding: 10px;
-    text-align: center;
+  .editorial-image-frame {
+    margin-top: 40px;
+    box-shadow: 8px 8px 0px #1A1A1A !important;
   }
-
-  .banner-image {
-    max-width: 90%;
-    margin: 20px auto 0 auto;
+  .summer-sale-sticker {
+    top: -20px;
+    right: -20px;
+    width: 95px;
+    height: 95px;
   }
-
-  .banner-text h2 {
-    font-size: 2rem;
-  }
-
-  .banner-desc {
+  .sticker-discount {
     font-size: 1rem;
   }
 }
 
-
-/* Adjust h1 and p styles as needed *
-/* PRODUCTS */
-.product {
-  background-color: #272829;
-}
-
-.product-container {
-  background-color: #272829;
-  padding: 20px;
-}
-
-.product-card {
-  background-color: #ffffff;
-  color: #000000;
-  padding: 15px;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  text-align: center;
-}
-
-.product-thumb {
-  width: 100%;
-  max-width: 180px;
-  height: 180px; 
-  object-fit: contain;
-  margin: 0 auto 10px auto;
-  display: block;
-  border-radius: 8px;
-}
-
-
-.card-btn {
-  background-color: #000000;
-  border: none;
-  color: #ffffff;
-  padding: 10px;
-  margin-top: 10px;
+/* Premium Neobrutalist Hero Action Buttons */
+.hero-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 30px !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 800 !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  border: 3px solid var(--text-primary) !important;
+  border-radius: 0px !important; /* Sharp corners */
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
   cursor: pointer;
-  border-radius: 5px;
-  transition: all 0.3s ease;
 }
 
-.card-btn:hover {
-  background-color: #fffae7;
-  color: #000000;
+.cta-signup {
+  background-color: var(--primary-accent) !important; /* Bright Solar Yellow/Teal */
+  color: var(--text-primary) !important;
+  box-shadow: 4px 4px 0px var(--text-primary) !important;
 }
 
-.product-info {
-  margin-top: 10px;
+.cta-signup:hover {
+  transform: translate(-3px, -3px) !important;
+  box-shadow: 7px 7px 0px var(--text-primary) !important;
+  background-color: var(--secondary-accent) !important; /* Purple */
+  color: #FFFFFF !important;
 }
 
-.product-brand {
-  font-weight: bold;
+.cta-login {
+  background-color: #FFFFFF !important;
+  color: var(--text-primary) !important;
+  box-shadow: 4px 4px 0px var(--text-primary) !important;
 }
 
-.product-short-description {
-  font-size: 1rem;
-  margin: 10px 0;
-}
-
-.price,
-.actual-price {
-  display: block;
-  margin-top: 5px;
-  font-size: 20px;
-}
-
-@media (max-width: 1366px) {
-  .product .col-md-4 {
-    flex: 0 0 50%;
-    max-width: 50%;
-  }
-}
-
-@media (max-width: 1017px) {
-  .product .col-md-4 {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
+.cta-login:hover {
+  transform: translate(-3px, -3px) !important;
+  box-shadow: 7px 7px 0px var(--text-primary) !important;
+  background-color: var(--text-primary) !important;
+  color: #FFFFFF !important;
 }
 
 
-@media (max-width: 992px) {
-  .product-thumb {
-    max-width: 180px;
-  }
-
-  .product-short-description {
-    font-size: 0.9rem;
-  }
-
-  .price {
-    font-size: 18px;
-  }
-}
-
-@media (max-width: 768px) {
-  .product-card {
-    padding: 10px;
-  }
-
-  .product-thumb {
-    max-width: 160px;
-  }
-
-  .product-short-description {
-    font-size: 0.85rem;
-  }
-
-  .price {
-    font-size: 16px;
-  }
-
-  .card-btn {
-    padding: 8px;
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 576px) {
-  .product-thumb {
-    max-width: 150px;
-  }
-
-  .product-short-description {
-    font-size: 0.8rem;
-  }
-
-  .product-card h1.badge {
-    font-size: 0.8rem;
-  }
-
-  .card-btn {
-    padding: 6px;
-    font-size: 13px;
-  }
-}
-
-/* Timeline Styles */
-
-.main-timeline {
+/* ==========================================================================
+   PRODUCTS SECTION
+   ========================================================================== */
+.product {
+  background-color: var(--bg-deep) !important;
   position: relative;
 }
 
-/* The actual timeline (the vertical ruler) */
-.main-timeline::after {
+.product::before {
   content: "";
   position: absolute;
-  width: 6px;
-  background-color: #939597;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  margin-left: -3px;
-}
-
-/* Container around content */
-.timeline {
-  position: relative;
-  background-color: inherit;
-  width: 50%;
-}
-
-/* The circles on the timeline */
-.timeline::after {
-  content: "";
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  right: -13px;
-  background-color: #939597;
-  border: 5px solid #f5df4d;
-  top: 15px;
-  border-radius: 50%;
-  z-index: 1;
-}
-
-/* Place the container to the left */
-.left {
-  padding: 0px 40px 20px 0px;
+  width: 300px;
+  height: 300px;
+  background: var(--primary-accent);
+  filter: blur(150px);
+  opacity: 0.1;
+  top: 10%;
   left: 0;
 }
 
-/* Place the container to the right */
-.right {
-  padding: 0px 0px 20px 40px;
+.product-category {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 2.5rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+
+.product-container {
+  background-color: transparent !important;
+}
+
+.product-container .row {
+  row-gap: 40px !important; /* Perfect spacious editorial card row gap */
+}
+
+/* Streetwear Flat Geometric Product Card */
+.product-card {
+  background: #FFFFFF !important;
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 0px !important; /* Sharp corners */
+  padding: 20px !important;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 8px 8px 0px var(--text-primary) !important; /* Flat streetwear drop shadow */
+}
+
+.product-card::before {
+  display: none; /* Remove legacy gradient blurs */
+}
+
+.product-card:hover {
+  transform: translate(-4px, -4px) !important;
+  box-shadow: 12px 12px 0px var(--text-primary) !important;
+}
+
+.badge-best-selling {
+  background: var(--secondary-accent) !important; /* Urgency Burn Orange */
+  color: #FFFFFF !important;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 4px 12px;
+  border-radius: 0px !important;
+  border: 2px solid var(--text-primary) !important;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  box-shadow: 3px 3px 0px var(--text-primary);
+  text-transform: uppercase;
+}
+
+.product-image {
+  width: 100%;
+  height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: var(--bg-deep) !important;
+  border-radius: 0px !important;
+  border: 2px solid var(--text-primary);
+  overflow: hidden;
+}
+
+.product-thumb {
+  max-height: 85% !important;
+  max-width: 85% !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+  transition: var(--transition-smooth);
+}
+
+.product-card:hover .product-thumb {
+  transform: scale(1.06) rotate(1deg);
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+}
+
+.product-brand {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 0;
+  letter-spacing: 0.02em;
+}
+
+.product-short-description {
+  font-size: 15px !important;
+  color: var(--text-secondary);
+  line-height: 1.65 !important;
+  margin-bottom: 0;
+  flex-grow: 1;
+}
+
+.card-rating-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: var(--transition-smooth);
+  width: max-content;
+}
+
+.card-rating-trigger:hover {
+  transform: scale(1.05);
+}
+
+.price {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.8rem;
+  color: #1A1A1A !important; /* Pitch Black */
+  margin: 0;
+  line-height: 1;
+}
+
+.card-btn {
+  width: 100%;
+  background: var(--primary-accent) !important; /* Solar Yellow CTA */
+  border: 2px solid var(--text-primary) !important;
+  color: #1A1A1A !important; /* Pitch Black */
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 12px;
+  border-radius: 50px !important; /* Pill style */
+  transition: var(--transition-smooth);
+  box-shadow: 4px 4px 0px var(--text-primary) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none !important;
+  display: block;
+  text-align: center;
+}
+
+.card-btn:hover {
+  transform: translate(-2px, -2px) !important;
+  box-shadow: 6px 6px 0px var(--text-primary) !important;
+  background-color: var(--secondary-accent) !important; /* Urgency Orange on hover */
+  color: white !important;
+  text-decoration: none !important;
+}
+
+/* ==========================================================================
+   TIMELINE SECTION ("Why Choose Us")
+   ========================================================================== */
+.timeline-section {
+  background-color: var(--bg-surface) !important;
+  position: relative;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  padding: 80px 0;
+}
+
+.main-timeline {
+  position: relative;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px 0;
+}
+
+.main-timeline::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  background-color: var(--border-light) !important;
+  top: 0;
+  bottom: 0;
   left: 50%;
+  margin-left: -1px;
 }
 
-/* Add arrows to the left container (pointing right) */
-.left::before {
-  content: " ";
+.timeline {
+  position: relative;
+  width: 50%;
+  padding: 10px 40px;
+  box-sizing: border-box;
+  margin-bottom: 0;
+}
+
+.timeline.left {
+  left: 0;
+  text-align: right;
+}
+
+.timeline.right {
+  left: 50%;
+  text-align: left;
+}
+
+.timeline::after {
+  content: '';
   position: absolute;
-  top: 18px;
-  z-index: 1;
-  right: 30px;
-  border: medium solid white;
-  border-width: 10px 0 10px 10px;
-  border-color: transparent transparent transparent white;
+  width: 16px;
+  height: 16px;
+  right: -8px;
+  background-color: var(--bg-deep) !important;
+  border: 3px solid var(--primary-accent) !important;
+  border-radius: 50%;
+  top: 30px;
+  z-index: 10;
+  transition: var(--transition-smooth);
 }
 
-/* Add arrows to the right container (pointing left) */
-.right::before {
-  content: " ";
-  position: absolute;
-  top: 18px;
-  z-index: 1;
-  left: 30px;
-  border: medium solid white;
-  border-width: 10px 10px 10px 0;
-  border-color: transparent white transparent transparent;
+.timeline.right::after {
+  left: -8px;
+  right: auto;
 }
 
-/* Fix the circle for containers on the right side */
-.right::after {
-  left: -12px;
+.timeline:hover::after {
+  background-color: var(--secondary-accent) !important;
+  border-color: var(--secondary-accent) !important;
+  box-shadow: 0 0 10px var(--secondary-accent);
+  transform: scale(1.3);
 }
 
-/* Media queries - Responsive timeline on screens less than 600px wide */
-@media screen and (max-width: 790px) {
+.timeline .card {
+  background: var(--secondary-accent) !important; /* Burn Orange contrast background */
+  border: 2px solid #1A1A1A !important; /* Solid 2px #1A1A1A border */
+  border-radius: 0px !important; /* Sharp corners */
+  transition: var(--transition-smooth);
+  box-shadow: 4px 4px 0px #1A1A1A !important; /* Flat offset box-shadow */
+  display: inline-block;
+  width: 100%;
+  text-align: left !important; /* Standardize text-align to left */
+}
 
-  /* Place the timelime to the left */
+.timeline .card-body {
+  background-color: transparent !important; /* Bypasses global card-body background override */
+}
+
+.timeline:hover .card {
+  border-color: #1A1A1A !important;
+  box-shadow: 8px 8px 0px #1A1A1A !important;
+  transform: translateY(-4px);
+}
+
+.timeline .card-body h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #FFFFFF !important; /* Bold high-contrast white over orange */
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+
+.timeline .card-body p {
+  font-size: 15px !important;
+  color: #FFFFFF !important; /* Clear readable white over orange */
+  line-height: 1.65 !important;
+}
+
+@media screen and (max-width: 768px) {
   .main-timeline::after {
     left: 31px;
   }
-
-  /* Full-width containers */
   .timeline {
     width: 100%;
     padding-left: 70px;
     padding-right: 25px;
+    text-align: left !important;
   }
-
-  /* Make sure that all arrows are pointing leftwards */
-  .timeline::before {
-    left: 60px;
-    border: medium solid white;
-    border-width: 10px 10px 10px 0;
-    border-color: transparent white transparent transparent;
+  .timeline.right {
+    left: 0;
   }
-
-  /* Make sure all circles are at the same spot */
-  .left::after,
-  .right::after {
-    left: 18px;
-  }
-
-  .left::before {
+  .timeline::after {
+    left: 23px;
     right: auto;
   }
-
-  /* Make all right containers behave like the left ones */
-  .right {
-    left: 0%;
+  .timeline.right::after {
+    left: 23px;
   }
 }
 
-/* newsletter section*/
-.newsletter-container {
-  background-color: #272829;
-  color: white;
-  padding: 40px 20px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  min-height: 400px;
-  flex-wrap: wrap;
+/* ==========================================================================
+   TESTIMONIALS SECTION
+   ========================================================================== */
+.gradient-custom {
+  background: var(--bg-deep) !important; /* Flat background, remove radial blurs */
 }
 
-/* Ensure input fits */
+.gradient-custom .card {
+  background: #FFFFFF !important;
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 0px !important;
+  padding: 40px 20px;
+  box-shadow: 8px 8px 0px var(--text-primary) !important;
+}
+
+.gradient-custom img.rounded-circle {
+  border: 3px solid var(--text-primary) !important;
+  padding: 0px;
+  box-shadow: 4px 4px 0px var(--text-primary);
+}
+
+.gradient-custom h4 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.65rem;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+}
+
+.gradient-custom p {
+  color: var(--text-secondary) !important;
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+}
+
+.carousel-indicators button {
+  background-color: var(--text-secondary) !important;
+  opacity: 0.3 !important;
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50%;
+  margin: 0 6px !important;
+  transition: var(--transition-smooth) !important;
+}
+
+.carousel-indicators button.active {
+  background-color: var(--text-primary) !important;
+  opacity: 1 !important;
+  transform: scale(1.3);
+}
+
+/* ==========================================================================
+   SPONSORS SECTION
+   ========================================================================== */
+.sponsors-section {
+  background-color: var(--bg-deep) !important;
+  border-top: 1px solid var(--border-light);
+}
+
+.sponsors-grid-container {
+  background: #FFFFFF !important;
+  border: 2px solid var(--text-primary) !important;
+  border-radius: 0px !important; /* Sharp streetwear corners */
+  box-shadow: 6px 6px 0px var(--text-primary) !important; /* Bold flat offset shadow */
+  padding: 50px 30px !important;
+  margin-top: 30px;
+  transition: var(--transition-smooth);
+}
+
+.sponsors-grid-container:hover {
+  transform: translate(-2px, -2px) !important;
+  box-shadow: 8px 8px 0px var(--text-primary) !important;
+}
+
+.sponsors-section svg {
+  color: var(--text-primary) !important;
+  opacity: 0.45;
+  transition: var(--transition-smooth);
+}
+
+.sponsors-section svg:hover {
+  opacity: 0.95;
+  transform: scale(1.08);
+}
+
+/* ==========================================================================
+   NEWSLETTER SECTION
+   ========================================================================== */
+.newsletter-container {
+  background: var(--bg-surface) !important; /* Elegant Lookbook surface block */
+  border-top: 2px solid var(--text-primary) !important;
+  border-bottom: 2px solid var(--text-primary) !important;
+  padding: 80px 40px !important;
+}
+
+.newsletter-container h1 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 3rem;
+  letter-spacing: -0.02em;
+  color: var(--text-primary) !important;
+  text-transform: uppercase;
+}
+
 .newsletter-container .form-control {
-  min-width: 250px;
-  max-width: 350px;
+  background-color: #FFFFFF !important;
+  border: 2px solid var(--text-primary) !important;
+  color: var(--text-primary) !important;
+  border-radius: 0px !important; /* Sharp angles */
+  padding: 16px 20px;
+  font-size: 1rem;
+}
+
+.newsletter-container .form-control:focus {
+  border-color: var(--primary-accent) !important;
+  box-shadow: var(--shadow-glow) !important;
+}
+
+.newsletter-container .btn-dark {
+  background: var(--primary-accent) !important; /* Solar Yellow CTA */
+  border: 2px solid var(--text-primary) !important;
+  border-left: none !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  border-radius: 0px !important;
+  padding: 0 35px;
+  font-size: 1.2rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: var(--transition-smooth);
+}
+
+.newsletter-container .btn-dark:hover {
+  background: var(--secondary-accent) !important;
+  color: white !important;
+  transform: none;
 }
 
 .newsletter-image {
-  max-width: 400px;
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  margin-bottom: 20px;
+  filter: drop-shadow(4px 4px 0px var(--text-primary));
+  animation: floatSlow 5s ease-in-out infinite;
 }
 
-@media (max-width: 768px) {
-  .newsletter-image {
-    max-width: 300px;
-    margin-top: 20px;
-  }
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
-
-/* Stack on small screens */
-@media (max-width: 879px) {
-  .newsletter-container {
-    flex-direction: column;
-    padding: 20px 10px;
-    align-items: stretch; /* 🧠 this fixes the height issue */
-  }
-
-  .newsletter-container .row {
-    flex-direction: column;
-  }
-
-  .newsletter-container .col-md-6 {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-
-  .newsletter-container h1 {
-    font-size: 1.8rem;
-  }
-
-  .newsletter-container .form-control {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .newsletter-container .input-group {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .newsletter-container .btn {
-    width: 100%;
-  }
-}
-
-
-
+/* ==========================================================================
+   SCROLLBAR & FOOTER STYLING
+   ========================================================================== */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  border: 1px solid rgb(255, 255, 255);
-  border-radius: 8px;
+  background: var(--bg-deep);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(108, 108, 108, 0.558);
-  border-radius: 8px;
+  background: hsla(215, 20%, 40%, 0.4);
+  border-radius: 10px;
+  border: 2px solid var(--bg-deep);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(108, 108, 108, 0.896);
+  background: hsla(215, 20%, 50%, 0.6);
 }
 
-.profile-text {
-  text-decoration: none;
-  color: rgb(10, 18, 90);
+/* Footer layout tokens */
+footer .main-footer {
+  background-color: var(--bg-surface) !important;
+  border-top: 1px solid var(--border-light);
+  padding: 80px 0 60px 0 !important;
 }
 
-.profile-text:hover {
-  color: rgb(69, 70, 75);
-  text-decoration: underline;
+footer .widget-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--text-primary) !important;
+  margin-bottom: 25px;
 }
 
-.gradient-custom {
-  background-color: #272829;
+footer p, footer li a {
+  color: var(--text-secondary) !important;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+footer li a {
+  transition: var(--transition-smooth);
+}
+
+footer li a:hover {
+  color: var(--primary-accent) !important;
+  padding-left: 5px;
+}
+
+.footer-copyright {
+  background: var(--bg-deep) !important;
+  border-top: 1px solid var(--border-light);
+  padding: 24px 0 !important;
+}
+
+.footer-copyright p {
+  color: var(--text-secondary) !important;
+  font-size: 0.85rem;
 }

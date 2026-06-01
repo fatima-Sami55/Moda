@@ -26,7 +26,7 @@ async function checkEmailVerified(req, res, next) {
     if (!isVerified) {
       console.log("⚠️ User email not verified. Blocking access.");
       req.flash("error", "⚠️ User email not verified. Blocking access.");
-       if (req.xhr || req.headers.accept.indexOf("json") > -1) {
+       if (req.xhr || req.headers.accept?.indexOf("json") > -1) {
        return res.status(401).json({ redirect: "/Product", error: "Email not verified" });}
        const backURL = req.get("Referer") || "/home"; 
        return res.redirect(backURL);

@@ -1,23 +1,172 @@
-@import url("https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap");
+/* ==========================================================================
+   MODA — NEOBRUTALIST PROTECTED ACCESS STYLESHEET
+   ========================================================================== */
 
-html {
-    height: auto;
-    width: auto;
-    margin: 0;
+:root {
+  --bg-primary: #FAF9F6;
+  --text-primary: #1A1A1A;
+  --primary-accent: #FE672E;
+  --secondary-accent: #6A69FF;
+  --border-color: #1A1A1A;
+  --font-heading: 'Unbounded', 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial;
-
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    height: auto;
-    width: auto;
-    margin: 0;
-    scroll-behavior: smooth !important;
-    overflow-x: hidden;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-x: hidden;
+}
+
+/* ── Container Card ── */
+.protected-container {
+  background: #FFFFFF;
+  border: 3px solid var(--border-color);
+  box-shadow: 8px 8px 0px var(--border-color);
+  padding: 24px 24px;
+  text-align: center;
+  max-width: 440px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.protected-container:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 10px 10px 0px var(--border-color);
+}
+
+/* ── Illustration Wrapper ── */
+.illustration-wrapper {
+  width: 100%;
+  max-width: 180px;
+  height: 135px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.protected-container:hover .illustration-wrapper {
+  transform: rotate(1deg) scale(1.02);
+}
+
+.illustration-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: hue-rotate(15deg) saturate(1.4) contrast(1.05); /* Increases color vibrancy and maps padlock to Electric Violet-Blue (#6A69FF) and accents/background to warm Orange (#FE672E) */
+}
+
+/* ── Typography ── */
+.gate-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary-accent);
+  border: 2px solid var(--border-color);
+  color: #FFFFFF;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  box-shadow: 2px 2px 0px var(--border-color);
+  margin-bottom: 0px;
+}
+
+.protected-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.protected-text {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: #666666;
+  max-width: 380px;
+}
+
+/* ── CTA Action Panel ── */
+.auth-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+/* ── Neobrutalist Auth Buttons ── */
+.btn-auth {
+  display: inline-block;
+  min-width: 120px;
+  border: 2.5px solid var(--border-color);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 10px 20px;
+  text-decoration: none;
+  box-shadow: 4px 4px 0px var(--border-color);
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* Sign Up Button (Primary Orange Accent) */
+.btn-auth.btn-signup {
+  background: var(--primary-accent);
+  color: #FFFFFF;
+}
+
+.btn-auth.btn-signup:hover {
+  background: #E0541B;
+  color: #FFFFFF;
+  text-decoration: none;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--border-color);
+}
+
+/* Login Button (Secondary Blue Accent) */
+.btn-auth.btn-login {
+  background: var(--secondary-accent);
+  color: #FFFFFF;
+}
+
+.btn-auth.btn-login:hover {
+  background: #5352E0;
+  color: #FFFFFF;
+  text-decoration: none;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--border-color);
+}
+
+.btn-auth:active {
+  transform: translate(0px, 0px);
+  box-shadow: none;
 }

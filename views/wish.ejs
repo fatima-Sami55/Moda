@@ -1,201 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acess</title>
-    <link rel="icon" type="image/png" href="/image/Acess%20logo/logo.png?v=1.0" />
-  </head>
+  <%- include('../partials/head', {title: 'Acess - Wishlist'}) %>
   <body>
-<!-- stylesheets -->
-  <link rel="stylesheet" href="../css/wish.css" />
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
-  />
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-    crossorigin="anonymous"
-  />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/icon?family=Material+Icons"
-  />
-  <link
-    href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"
-    rel="stylesheet"
-  />
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="../css/wish.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      rel="stylesheet"
+    />
 
-<!-- Navbar -->
-<%- include('../partials/navbar_carts', { page: page }) %>
-<!-- Flash Message (Full Width) -->
- <div style="padding-top: 100px;">
-<div id="flash-message" class="alert alert-dismissible fade show" style="display:none; top:0; left:0; width:100%; z-index:9999; border-radius: 0;" role="alert">
-  <div class="container d-flex justify-content-between align-items-center">
-    <span id="flash-text" class="m-2"></span>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-</div>
-</div>
-<% if (data.length === 0) { %>
-<!-- Empty Wishlist -->
-<div class="container text-center wish-container-empty my-5">
-  <img src="../image/vectors/find2.jpg" alt="Empty Wishlist" class="img-fluid" style="max-width: 400px;" />
-  <h3 class="mt-3">No items found in the wishlist!</h3>
-</div>
-<% } else { %>
-<!-- Wishlist Heart -->
-<h1 class="text-center my-3  wish-container " style="color: red;">&#10084;</h1>
-<!-- Wishlist Items -->
-<% data.forEach(item => { %>
-  <div class="container">
-    <div class="row gx-3 gy-2 p-3 shadow-lg align-items-center mb-4 rounded bg-white">
+    <!-- Navbar -->
+    <%- include('../partials/navbar_carts', { page: page }) %>
 
-      <!-- Product Image -->
-      <div class="col-12 col-sm-3 col-md-2 text-center mb-2 mb-sm-0 c-img">
-        <img src="<%= item.item_image %>" alt="Product Image"
-          class="img-fluid rounded"
-          style="max-height: 100px; object-fit: cover;" />
-      </div>
-
-      <!-- Product Info -->
-      <div class="col-12 col-sm-6 col-md-8">
-        <div class="d-flex flex-column gap-1">
-          <div class="d-flex justify-content-between flex-wrap c-title">
-            <strong class="text-capitalize"><%= item.item_Name %></strong>
-            <small class="text-muted">Added on: <%= new Date(item.item_date).toString().split(' GMT')[0] %></small>
-          </div>
-          <p class="mb-1 c-price"><strong>Price:</strong> $<%= item.item_price %></p>
-
-          <!-- Description -->
-          <div>
-            <strong>Description:</strong>
-            <span class="d-none d-md-inline c-text" title="<%= item.item_description %>">
-              <%= item.item_description %>
-            </span>
-            <span class="d-inline d-md-none c-text" style="display: block; max-height: 3.2em; overflow: hidden; text-overflow: ellipsis;">
-              <%= item.item_description %>
-            </span>
-          </div>
+    <!-- Neobrutalist Deletion Confirmation Overlay -->
+    <div id="wishlist-confirm-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(31, 30, 35, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center;">
+      <div style="background: #FFFFFF; border: 3px solid #1F1E23; box-shadow: 8px 8px 0px #1F1E23; max-width: 480px; width: 100%; padding: 40px; text-align: center; border-radius: 0px;">
+        <div style="width: 70px; height: 70px; background: #FFECEC; border: 3px solid #1F1E23; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 3px 3px 0px #1F1E23;">
+          <i class="fa-solid fa-heart-circle-xmark" style="font-size: 1.8rem; color: #6A69FF;"></i>
+        </div>
+        <h4 style="font-family: var(--font-heading), sans-serif; font-weight: 800; text-transform: uppercase; color: #1F1E23; font-size: 1.25rem; letter-spacing: 0.02em; margin-bottom: 12px;">Remove Style?</h4>
+        <p style="font-family: var(--font-body), sans-serif; font-weight: 500; color: #555; font-size: 0.95rem; line-height: 1.6; margin-bottom: 30px;">Are you sure you want to remove this style from your wishlist? You will have to search for it again in our collection.</p>
+        <div class="d-flex align-items-center justify-content-center gap-3">
+          <button id="overlay-confirm-btn" class="btn px-4 py-2" style="background: #FE672E; color: #FFFFFF; border: 3px solid #1F1E23; font-family: var(--font-heading), sans-serif; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; box-shadow: 3px 3px 0px #1F1E23; border-radius: 0px; transition: all 0.15s ease;">Yes, Remove</button>
+          <button id="overlay-cancel-btn" class="btn px-4 py-2" style="background: #FFFFFF; color: #1F1E23; border: 3px solid #1F1E23; font-family: var(--font-heading), sans-serif; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; box-shadow: 3px 3px 0px #1F1E23; border-radius: 0px; transition: all 0.15s ease;">No, Keep It</button>
         </div>
       </div>
-
-      <!-- Action Buttons -->
-      <div class="col-12 col-sm-3 col-md-2 text-center mt-2 mt-sm-0 d-flex flex-sm-column justify-content-center gap-2">
-        <form action="/delete/wishItem/<%= item.id %>" method="POST" class="d-inline">
-          <button class="btn btn-danger btn-sm w-100" title="Delete">
-            <i class="fa fa-trash-o"></i> <span class="d-none d-sm-inline">Remove</span>
-          </button>
-        </form>
-        <button class="btn btn-success btn-sm w-100 btn-cart" title="Add to Cart">
-        <i class="fa fa-shopping-cart"></i> <span class="d-none d-sm-inline">Add</span>
-       </button>
-      </div>
-
     </div>
-  </div>
-<% })} %>
 
+    <% if (data.length === 0) { %>
+      <!-- Empty Wishlist Showcase -->
+      <div class="container text-center wish-container-empty my-5">
+        <div class="empty-wishlist-showcase">
+          <img
+            src="/image/vectors/empty_wishlist.svg"
+            alt="Wishlist is empty"
+            class="img-fluid empty-wishlist-img"
+          />
+          <h2 class="mt-4 empty-wishlist-heading">Your Wishlist is Empty</h2>
+          <p class="empty-wishlist-sub">Looks like you haven't saved any true styles to your wishlist yet.</p>
+          <a href="/acessiories" class="btn btn-warning mt-3">
+            <i class="fa fa-chevron-left me-2"></i> Browse Collection
+          </a>
+        </div>
+      </div>
+    <% } else { %>
+      <!-- Active Wishlist Curated Showcase -->
+      <div class="container wish-container my-5">
+        
+        <!-- Curated Minimal Header -->
+        <div class="d-flex justify-content-between align-items-baseline mb-4 border-bottom border-1 border-dark pb-2">
+          <h1 class="wish-main-title mb-0">My Wishlist</h1>
+          <span class="wishlist-count-text"><%= data.length %> styles saved</span>
+        </div>
+        
+        <div class="wishlist-list-wrapper">
+          <% data.forEach(item => { %>
+            <div class="wishlist-item-row wishlist-item-container py-4 border-bottom border-light">
+              <div class="row align-items-center">
+                
+                <!-- Product Image (Unbordered, organic) -->
+                <div class="col-4 col-sm-2 c-img text-center text-sm-start position-relative">
+                  <img src="<%= item.item_image %>" alt="<%= item.item_Name %>" class="wishlist-item-img img-fluid" />
+                  <div class="wishlist-heart-badge">
+                    <i class="fa-solid fa-heart"></i>
+                  </div>
+                </div>
+                
+                <!-- Product Content Details -->
+                <div class="col-8 col-sm-6 col-md-7">
+                  <div class="d-flex flex-column gap-1">
+                    <h3 class="wishlist-item-name c-title text-capitalize mb-1">
+                      <strong><%= item.item_Name %></strong>
+                    </h3>
+                    <div class="wishlist-stars mb-1">
+                      <% 
+                        const normalizedName = item.item_Name.toLowerCase().trim();
+                        const ratingInfo = typeof ratingsMap !== 'undefined' && ratingsMap[normalizedName];
+                        const avgRating = ratingInfo ? Math.round(parseFloat(ratingInfo.avgRating)) : 0; 
+                      %>
+                      <% for(let i = 1; i <= 5; i++) { %>
+                        <i class="fa-<%= i <= avgRating ? 'solid' : 'regular' %> fa-star"></i>
+                      <% } %>
+                    </div>
+                    <p class="wishlist-item-desc mb-2">
+                      <span class="c-text"><%= item.item_description %></span>
+                    </p>
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                      <div class="wishlist-item-price c-price">$<%= item.item_price %></div>
+                      <span class="wishlist-curated-tag"><i class="fa-solid fa-heart me-1"></i> CURATED STYLE</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Minimal Action operations triggers -->
+                <div class="col-12 col-sm-4 col-md-3 d-flex flex-row flex-sm-column gap-3 justify-content-start justify-content-sm-end align-items-center align-items-sm-end mt-3 mt-sm-0">
+                  <!-- Add to Cart AJAX action -->
+                  <button class="btn wishlist-action-btn btn-cart px-4 py-2" title="Add to Cart">
+                    Add to Cart <i class="fa fa-arrow-right ms-2"></i>
+                  </button>
+                  
+                  <!-- Remove wishlist item -->
+                  <form action="/delete/wishItem/<%= item.id %>" method="POST" class="m-0 wishlist-remove-form">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                    <button type="button" class="wishlist-remove-btn" title="Remove Style">
+                      <i class="fa-regular fa-trash-can me-1"></i> REMOVE
+                    </button>
+                  </form>
+                </div>
+                
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    <% } %>
 
-  </body>
+    <%- include('../partials/footer') %>
 
- <!-- scripts -->
-
-<script>
-function showFlashMessage(message, type = "success", duration = 3000) {
-  const flashDiv = document.getElementById("flash-message");
-  const flashText = document.getElementById("flash-text");
-
-  // Remove any existing alert color classes
-  flashDiv.classList.remove("alert-success", "alert-danger", "alert-warning", "alert-info");
-
-  // Add the right alert type class
-  flashDiv.classList.add(`alert-${type}`);
-
-  // Make sure necessary alert classes are there
-  flashDiv.classList.add("alert", "alert-dismissible", "fade", "show");
-
-  // Set message text
-  flashText.textContent = message;
-
-  // Make it visible
-  flashDiv.style.display = "block";
-
-  // Auto-dismiss
-  setTimeout(() => {
-    const alertInstance = bootstrap.Alert.getOrCreateInstance(flashDiv);
-    alertInstance.close();
-  }, duration);
-}
-
-  document.querySelectorAll(".btn-cart").forEach((button) => {
-    button.addEventListener("click", async (event) => {
-      try {
-        // Get the parent container of the clicked button
-        const cardContainer = button.closest(".container");
-
-        // Select the elements relative to this container
-        const itemNameElement = cardContainer.querySelector(".c-title strong");
-        const itemImageElement = cardContainer.querySelector(".c-img img");
-        const itemDescriptionElement = cardContainer.querySelector(".c-text");
-        const itemPriceElement = cardContainer.querySelector(".c-price");
-
-        if (
-          itemNameElement &&
-          itemImageElement &&
-          itemDescriptionElement &&
-          itemPriceElement
-        ) {
-          const itemName = itemNameElement.innerText.trim();
-          const itemImage = itemImageElement.src;
-          const itemDescription = itemDescriptionElement.innerText.trim();
-          const itemPrice = parseFloat(itemPriceElement.innerText.replace(/[^0-9.]/g, "").trim());
-
-          const response = await fetch("/add-to-cart", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-Requested-With": "XMLHttpRequest"
-            },
-            body: JSON.stringify({
-              itemName,
-              itemImage,
-              itemDescription,
-              itemPrice,
-            }),
-          });
-
-          const data = await response.json();
-          if (response.ok) {
-            showFlashMessage(data.message || "Item added successfully!", "success", 1500);
-            setTimeout(() => {
-              window.location.href = "/add-to-cart";
-            }, 1500);
-          } else {
-            showFlashMessage(`${data.error || data.message}`, "danger", 2000);
-          }
-        }
-      } catch (error) {
-        showFlashMessage("Error: " + error, "danger");
-        console.log(error);
-      }
-    });
-  });
-</script>
-
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"
-  ></script>
-
+    <!-- Scripts -->
     <script
-    src="https://kit.fontawesome.com/542d90fccf.js"
-    crossorigin="anonymous"
-  ></script>
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
 
+    <!-- AJAX Add to Cart Handler and Overlay script -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Add to Cart
+        document.querySelectorAll(".btn-cart").forEach((button) => {
+          button.addEventListener("click", async (event) => {
+            if (button.disabled) return;
+            const originalHTML = button.innerHTML;
+            button.disabled = true;
+            button.style.opacity = '0.7';
+            button.innerHTML = '<i class="fa fa-spinner fa-spin me-2"></i> Adding...';
+            try {
+              const cardContainer = button.closest(".wishlist-item-container");
+              const itemNameElement = cardContainer.querySelector(".c-title strong");
+              const itemImageElement = cardContainer.querySelector(".c-img img");
+              const itemDescriptionElement = cardContainer.querySelector(".c-text");
+              const itemPriceElement = cardContainer.querySelector(".c-price");
 
+              if (itemNameElement && itemImageElement && itemDescriptionElement && itemPriceElement) {
+                const itemName = itemNameElement.innerText.trim();
+                const itemImage = itemImageElement.src;
+                const itemDescription = itemDescriptionElement.innerText.trim();
+                const itemPrice = parseFloat(itemPriceElement.innerText.replace(/[^0-9.]/g, "").trim());
+
+                const response = await fetch("/add-to-cart", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest"
+                  },
+                  body: JSON.stringify({
+                    itemName,
+                    itemImage,
+                    itemDescription,
+                    itemPrice,
+                    _csrf: "<%= csrfToken %>"
+                  }),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                  showToast(data.message || "Item added to cart successfully!", "success");
+                  setTimeout(() => {
+                    window.location.href = "/add-to-cart";
+                  }, 1500);
+                } else {
+                  showToast(`${data.error || data.message}`, "error");
+                  button.disabled = false;
+                  button.style.opacity = '';
+                  button.innerHTML = originalHTML;
+                }
+              }
+            } catch (error) {
+              showToast("Error: " + error, "error");
+              console.error(error);
+              button.disabled = false;
+              button.style.opacity = '';
+              button.innerHTML = originalHTML;
+            }
+          });
+        });
+
+        // Soft confirmation overlay for removal
+        let activeRemoveForm = null;
+        const overlay = document.getElementById("wishlist-confirm-overlay");
+
+        document.addEventListener("click", (event) => {
+          const removeBtn = event.target.closest(".wishlist-remove-btn");
+          if (removeBtn) {
+            event.preventDefault();
+            activeRemoveForm = removeBtn.closest("form");
+            overlay.style.display = "flex";
+          }
+        });
+
+        document.getElementById("overlay-cancel-btn").addEventListener("click", () => {
+          overlay.style.display = "none";
+          activeRemoveForm = null;
+        });
+
+        document.getElementById("overlay-confirm-btn").addEventListener("click", () => {
+          if (activeRemoveForm) {
+            const confirmBtn = document.getElementById("overlay-confirm-btn");
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = "Removing...";
+            activeRemoveForm.submit();
+          }
+        });
+      });
+    </script>
+  </body>
 </html>

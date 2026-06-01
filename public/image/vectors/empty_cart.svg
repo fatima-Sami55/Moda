@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 0 230 160" width="100%" height="100%">
+  <!-- Background Sparkles & Decorations -->
+  <!-- Top-Left Plus -->
+  <path d="M 50 30 L 58 30 M 54 26 L 54 34" stroke="#D1D0D5" stroke-width="2" stroke-linecap="round" />
+  
+  <!-- Right Plus -->
+  <path d="M 162 90 L 170 90 M 166 86 L 166 94" stroke="#D1D0D5" stroke-width="2" stroke-linecap="round" />
+  
+  <!-- Top decorative circles -->
+  <circle cx="76" cy="22" r="3" fill="none" stroke="#D1D0D5" stroke-width="1.5" />
+  <circle cx="120" cy="26" r="2" fill="none" stroke="#D1D0D5" stroke-width="1.5" />
+
+  <!-- Main Handles (Drawn behind the basket rim) -->
+  <!-- Left Handle (Yellow/Gold) -->
+  <!-- Outline -->
+  <line x1="91" y1="70" x2="80" y2="38" stroke="#1F1E23" stroke-width="10" stroke-linecap="round" />
+  <!-- Fill -->
+  <line x1="91" y1="70" x2="80" y2="38" stroke="#FFC107" stroke-width="6" stroke-linecap="round" />
+
+  <!-- Right Handle (Orange/Red) -->
+  <!-- Outline -->
+  <line x1="100" y1="56" x2="128" y2="67" stroke="#1F1E23" stroke-width="10" stroke-linecap="round" />
+  <!-- Fill -->
+  <line x1="100" y1="56" x2="128" y2="67" stroke="#FE672E" stroke-width="6" stroke-linecap="round" />
+
+  <!-- The Basket Body -->
+  <!-- Outline & Body Fill -->
+  <polygon points="70,68 145,68 135,124 80,124" fill="#FFFFFF" stroke="#1F1E23" stroke-width="3" stroke-linejoin="round" />
+  
+  <!-- Sad Face on Basket -->
+  <circle cx="98" cy="92" r="2.5" fill="#1F1E23" />
+  <circle cx="118" cy="92" r="2.5" fill="#1F1E23" />
+  <!-- Sad Mouth Arc -->
+  <path d="M 104 104 Q 108 99 112 104" fill="none" stroke="#1F1E23" stroke-width="2.5" stroke-linecap="round" />
+
+  <!-- "0 items" Dashed Badge on the Left -->
+  <!-- Dashed Circle Background Sparkles -->
+  <path d="M 22 94 L 28 96" stroke="#1F1E23" stroke-width="2" stroke-linecap="round" />
+  <path d="M 18 102 L 25 102" stroke="#1F1E23" stroke-width="2" stroke-linecap="round" />
+  <path d="M 22 110 L 28 108" stroke="#1F1E23" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Main Dashed Circle -->
+  <circle cx="56" cy="100" r="22" fill="#FFFFFF" stroke="#1F1E23" stroke-width="2.5" stroke-dasharray="5,4" />
+  <!-- "0" Number -->
+  <text x="56" y="99" fill="#FE672E" font-family="'Unbounded', sans-serif" font-weight="900" font-size="16" text-anchor="middle">0</text>
+  <!-- "items" label -->
+  <text x="56" y="111" fill="#1F1E23" font-family="'Roboto', sans-serif" font-weight="700" font-size="8" text-anchor="middle" letter-spacing="0.02em">items</text>
+</svg>

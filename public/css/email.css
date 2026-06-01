@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap");
-
 html {
     height: auto;
     width: auto;
@@ -205,28 +203,7 @@ footer.light .footer-copyright {
     color: rgb(12, 12, 12);
 }
 
-footer ul.social-footer2 {
-    margin: 0;
-    padding: 0;
-    width: auto;
-}
 
-footer ul.social-footer2 li {
-    background-color: #141313;
-    display: inline-block;
-    padding: 0;
-}
-
-footer ul.social-footer2 li a:hover {
-    background-color: #aeaeae;
-}
-
-footer ul.social-footer2 li a {
-    display: block;
-    height: 30px;
-    width: 30px;
-    text-align: center;
-}
 
 footer .btn {
     background-color: #000000;
