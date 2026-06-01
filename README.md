@@ -1,4 +1,4 @@
-🛍️ Acess — E-commerce Web Application
+🛍️ Moda — E-commerce Web Application
 ======================================
 
 A modern, full-featured, and responsive e-commerce web application built with Node.js, Express, EJS, and Microsoft SQL Server (hosted on Azure).
@@ -6,7 +6,7 @@ A modern, full-featured, and responsive e-commerce web application built with No
 🎯 Project Overview
 -------------------
 
-**Acess** is an end-to-end e-commerce platform designed for modern retail experiences. It includes user authentication, cart & wishlist features, real-time notifications, email verification, order management, admin dashboards, and mobile-first responsive UI — all backed by a robust MSSQL database deployed on Microsoft Azure.
+**Moda** is an end-to-end e-commerce platform designed for modern retail experiences. It includes user authentication, cart & wishlist features, real-time notifications, email verification, order management, admin dashboards, and mobile-first responsive UI — all backed by a robust MSSQL database deployed on Microsoft Azure.
 
 ⚙️ Core Functionality
 ---------------------
@@ -85,4 +85,4 @@ This project is licensed under the **MIT License**. You are free to use, modify,
 
 * * *
 
-© 2025 Acess WebApp — All Rights Reserved
+© 2025 Moda WebApp — All Rights Reserved
