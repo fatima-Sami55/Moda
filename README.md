@@ -1,12 +1,12 @@
 # Moda E-commerce Web Application
 
-Moda is a full-stack e-commerce web application built with Node.js, Express, EJS, Socket.IO, and Microsoft SQL Server. The project provides a server-rendered shopping experience with authentication, product browsing, cart and wishlist management, checkout, order tracking, reviews, notifications, and transactional email support.
+**Moda** is a full-stack e-commerce web application built with **Node.js**, **Express**, **EJS**, **Socket.IO**, and **Microsoft SQL Server**. The project provides a server-rendered shopping experience with authentication, product browsing, cart and wishlist management, checkout, order tracking, reviews, notifications, and transactional email support.
 
 ## Project Overview
 
 Moda is designed as a complete retail storefront for fashion and accessories. It combines server-side rendering with interactive client-side behavior to support a responsive shopping workflow across desktop and mobile devices.
 
-The application includes customer account management, email verification, profile management, product discovery, category filtering, real-time notifications, and order lifecycle tracking. Static product seed data is used alongside database-backed user, cart, wishlist, review, order, notification, and email records.
+The application includes **customer account management**, **email verification**, **profile management**, **product discovery**, **category filtering**, **real-time notifications**, and **order lifecycle tracking**. Static product seed data is used alongside database-backed user, cart, wishlist, review, order, notification, and email records.
 
 ## Key Features
 
@@ -19,38 +19,39 @@ The application includes customer account management, email verification, profil
 - Order history and order tracking views
 - Review submission and review deletion
 - User profile editing with image upload support
-- Real-time user notifications with Socket.IO
-- Contact form and transactional email delivery with Nodemailer
+- Real-time user notifications with **Socket.IO**
+- Contact form and transactional email delivery with **Nodemailer**
 - SQL Server backed sessions using `connect-mssql-v2`
-- Production-focused security middleware with Helmet, rate limiting, secure cookies, and CSRF validation
+- Production-focused security middleware with **Helmet**, rate limiting, secure cookies, and CSRF validation
 - Responsive EJS views with custom CSS, Bootstrap, and Tailwind configuration
 
 ## Technology Stack
 
 ### Backend
 
-- Node.js
-- Express
-- EJS
-- Microsoft SQL Server
-- `mssql`
-- `connect-mssql-v2`
-- Express Session
-- Socket.IO
-- Nodemailer
-- Multer and Cloudinary storage
-- Node Cron
-- Helmet
-- Express Rate Limit
-- Validator
+| Package | Purpose |
+|---|---|
+| Node.js + Express | Server and routing |
+| EJS | Server-side templating |
+| Microsoft SQL Server + `mssql` | Primary database |
+| `connect-mssql-v2` | SQL-backed session store |
+| Express Session | Session management |
+| Socket.IO | Real-time notifications |
+| Nodemailer | Transactional email |
+| Multer + Cloudinary | File upload and image storage |
+| Node Cron | Scheduled background tasks |
+| Helmet + Express Rate Limit | Security middleware |
+| Validator | Input validation |
 
 ### Frontend
 
-- EJS templates
-- Bootstrap
-- Tailwind CSS configuration
-- Custom CSS modules by page
-- Client-side JavaScript for AJAX workflows, filtering, sorting, cart actions, wishlist actions, reviews, and notifications
+| Technology | Purpose |
+|---|---|
+| EJS Templates | Server-rendered views |
+| Bootstrap | UI component base |
+| Tailwind CSS | Utility class configuration |
+| Custom CSS Modules | Per-page styling |
+| Client-side JavaScript | AJAX workflows, filtering, sorting, cart, wishlist, reviews, and notifications |
 
 ### Data and Assets
 
