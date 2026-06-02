@@ -5,14 +5,14 @@ const data1 = require("../seeds/product.json");
 const data2 = require("../seeds/acessiories.json");
 const data3 = require("../seeds/men.json");
 const data4 = require("../seeds/women.json");
-const getUserMiddleware = require("../Middleware/getUser");
-const getCartMiddleware = require("../Middleware/getCart");
-const getWishMiddleware = require("../Middleware/getWishlist");
-const getPurchaseMiddleware = require("../Middleware/getPurchase");
+const getUserMiddleware = require("../middleware/get-user");
+const getCartMiddleware = require("../middleware/get-cart");
+const getWishMiddleware = require("../middleware/get-wishlist");
+const getPurchaseMiddleware = require("../middleware/get-purchase");
 const { pool } = require("../database/data");
 const sql = require("mssql");
 // getNoticeCount import removed
-const {getProductRating, findProductByName, getAllProductRatings} = require("../helper_functions/getRating");
+const {getProductRating, findProductByName, getAllProductRatings} = require("../helper-functions/get-rating");
 
 
 router.get("/",getUserMiddleware,getCartMiddleware,getWishMiddleware,getPurchaseMiddleware, async (req, res) => {

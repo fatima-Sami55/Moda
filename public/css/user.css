@@ -999,3 +999,251 @@ body.unverified .sidebar-card-wrapper {
 input, select, textarea, button, .btn {
   border-radius: 0px !important;
 }
+
+/* ==========================================================================
+   USER PROFILE PAGE — COMPREHENSIVE RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* Tablet — max 991px */
+@media (max-width: 991px) {
+  body {
+    padding-top: 90px;
+  }
+
+  .sidebar-card-wrapper {
+    position: relative !important;
+    top: auto !important;
+    margin-bottom: 30px !important;
+    padding: 20px !important;
+  }
+
+  body.unverified .sidebar-card-wrapper {
+    top: auto !important;
+  }
+
+  .main-profile-title {
+    font-size: 1.7rem !important;
+  }
+
+  .profile-tabs-nav {
+    gap: 16px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex-wrap: nowrap !important;
+    padding-bottom: 2px !important;
+  }
+
+  .profile-tab-btn {
+    white-space: nowrap !important;
+    font-size: 0.88rem !important;
+  }
+
+  .order-card-premium {
+    padding: 12px !important;
+  }
+}
+
+/* Mobile — max 768px */
+@media (max-width: 768px) {
+  body {
+    padding-top: 80px;
+  }
+
+  .sidebar-card-wrapper {
+    padding: 16px !important;
+    box-shadow: 4px 4px 0px rgba(31, 30, 35, 0.1) !important;
+  }
+
+  .sidebar-stats-capsule {
+    padding: 8px 12px !important;
+  }
+
+  .sidebar-menu-item,
+  .sidebar-logout-item {
+    padding: 10px 12px !important;
+    font-size: 0.72rem !important;
+  }
+
+  .main-profile-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 5px !important;
+  }
+
+  .main-profile-desc {
+    font-size: 0.88rem !important;
+    margin-bottom: 20px !important;
+  }
+
+  .settings-section-heading {
+    font-size: 0.95rem !important;
+    margin-bottom: 18px !important;
+  }
+
+  .input-pill,
+  .input-pill-select {
+    padding: 10px 16px 10px 16px !important;
+    font-size: 0.9rem !important;
+  }
+
+  .btn-profile-submit-pill {
+    padding: 10px 28px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .order-card-id {
+    font-size: 0.78rem !important;
+  }
+
+  .order-status-badge {
+    font-size: 0.58rem !important;
+    padding: 4px 8px !important;
+  }
+
+  .wishlist-item-img {
+    height: 80px !important;
+  }
+
+  .tab-summary-info-card {
+    padding: 12px !important;
+  }
+}
+
+/* Mobile — max 576px */
+@media (max-width: 576px) {
+  body {
+    padding-top: 75px;
+  }
+
+  .user-dashboard {
+    padding-top: 20px !important;
+  }
+
+  .sidebar-card-wrapper {
+    padding: 14px !important;
+  }
+
+  .sidebar-profile-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+
+  .sidebar-user-name {
+    font-size: 0.78rem !important;
+  }
+
+  .sidebar-avatar {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .stat-count {
+    font-size: 1rem !important;
+  }
+
+  .stat-lbl {
+    font-size: 0.62rem !important;
+  }
+
+  .profile-tabs-nav {
+    gap: 10px !important;
+  }
+
+  .profile-tab-btn {
+    font-size: 0.8rem !important;
+    padding: 10px 2px !important;
+  }
+
+  .main-profile-title {
+    font-size: 1.3rem !important;
+  }
+
+  .btn-profile-submit-pill {
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .wishlist-item-row {
+    padding: 14px !important;
+  }
+
+  .wishlist-item-img {
+    height: 70px !important;
+  }
+
+  .wishlist-item-name {
+    font-size: 0.9rem !important;
+  }
+
+  .wishlist-action-btn {
+    padding: 8px 16px !important;
+    font-size: 0.72rem !important;
+    white-space: nowrap !important;
+  }
+
+  .notification-card {
+    padding: 10px 12px !important;
+  }
+
+  .pending-review-card,
+  .submitted-review-card {
+    padding: 12px !important;
+  }
+
+  .email-log-card {
+    padding: 12px !important;
+  }
+
+  .email-log-subject {
+    font-size: 0.75rem !important;
+  }
+
+  .modal-body {
+    padding: 18px !important;
+  }
+
+  .modal-footer {
+    padding: 14px 18px !important;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .modal-footer .btn-secondary,
+  .modal-footer .btn-danger {
+    width: 100% !important;
+  }
+}
+
+/* Small Mobile — max 400px */
+@media (max-width: 400px) {
+  .sidebar-stats-capsule {
+    padding: 6px 8px !important;
+  }
+
+  .stat-count {
+    font-size: 0.88rem !important;
+  }
+
+  .profile-tab-btn {
+    font-size: 0.72rem !important;
+  }
+
+  .main-profile-title {
+    font-size: 1.15rem !important;
+  }
+
+  .wishlist-item-row {
+    padding: 10px !important;
+  }
+}
+
+/* Large Desktop — min 1400px */
+@media (min-width: 1400px) {
+  .sidebar-card-wrapper {
+    padding: 36px !important;
+  }
+
+  .main-profile-title {
+    font-size: 2.6rem !important;
+  }
+}

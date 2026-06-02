@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { pool } = require("../database/data");
 const sql = require("mssql");
-const isAuthenticated = require("../Middleware/is_logged_in");
-const { verifyCsrf } = require("../Middleware/csrf");
+const isAuthenticated = require("../middleware/is-logged-in");
+const { verifyCsrf } = require("../middleware/csrf");
 
 
 router.delete("/email-log/:id", isAuthenticated, verifyCsrf, async (req, res) => {

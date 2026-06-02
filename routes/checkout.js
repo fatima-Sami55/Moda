@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 const { pool } = require("../database/data");
 const sql = require("mssql");
-const getUserMiddleware = require("../Middleware/getUser");
-const getCartMiddleware = require("../Middleware/getCart");
-const isAuthenticated = require("../Middleware/is_logged_in");
-const checkEmailVerified = require("../Middleware/getEmailVerification");
-const { html1 } = require("../helper_functions/emailMessages");
-const logEmail = require("../helper_functions/emailLogger");
-const sendEmail = require("../helper_functions/emailWriter");
-const { verifyCsrf } = require("../Middleware/csrf");
+const getUserMiddleware = require("../middleware/get-user");
+const getCartMiddleware = require("../middleware/get-cart");
+const isAuthenticated = require("../middleware/is-logged-in");
+const checkEmailVerified = require("../middleware/get-email-verification");
+const { html1 } = require("../helper-functions/email-messages");
+const logEmail = require("../helper-functions/email-logger");
+const sendEmail = require("../helper-functions/email-writer");
+const { verifyCsrf } = require("../middleware/csrf");
 
 
 router.get("/checkout", isAuthenticated, getUserMiddleware, getCartMiddleware,checkEmailVerified, (req, res) => {
@@ -37,7 +37,7 @@ router.post("/checkout", isAuthenticated, checkEmailVerified, verifyCsrf, async 
       return res.status(400).json({ success: false, message: "Your cart is empty." });
     }
 
-    const { findProductByName } = require("../helper_functions/getRating");
+    const { findProductByName } = require("../helper-functions/get-rating");
     let computedSubtotal = 0;
     let computedQuantity = 0;
 
@@ -118,7 +118,7 @@ router.post("/safe-checkout", isAuthenticated, getCartMiddleware, checkEmailVeri
   const parsedQuantities = JSON.parse(quantities || "[]");
 
   try {
-    const { findProductByName } = require("../helper_functions/getRating");
+    const { findProductByName } = require("../helper-functions/get-rating");
     let computedSubtotal = 0;
     let computedQuantity = 0;
 

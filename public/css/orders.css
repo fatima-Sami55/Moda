@@ -153,3 +153,45 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--primary-accent);
 }
+
+/* ==========================================================================
+   ORDERS PAGE — COMPREHENSIVE RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+body {
+  padding-top: 110px;
+}
+
+@media (max-width: 991px) {
+  body { padding-top: 100px; }
+  .counter-section { padding: 22px !important; }
+  .counter-section .counter { font-size: 2.8rem !important; }
+  .order-card h6 { font-size: 1.2rem !important; }
+}
+
+@media (max-width: 768px) {
+  body { padding-top: 90px; }
+  .counter-section { padding: 16px !important; margin-bottom: 24px; }
+  .counter-section .counter { font-size: 2.2rem !important; }
+  .counter-title { font-size: 1rem !important; }
+  .medium-icon { font-size: 36px !important; }
+  .order-card { padding: 14px !important; box-shadow: 4px 4px 0px var(--text-primary) !important; }
+  .order-card h6 { font-size: 1.1rem !important; }
+  .info-item span.text-success { font-size: 1.1rem !important; }
+}
+
+@media (max-width: 576px) {
+  body { padding-top: 80px; }
+  .counter-section { padding: 14px !important; }
+  .counter-section .counter { font-size: 1.8rem !important; }
+  .counter-title { font-size: 0.88rem !important; }
+  .medium-icon { font-size: 28px !important; }
+  .order-card { padding: 12px !important; }
+  .order-card h6 { font-size: 1rem !important; }
+  .order-card .btn-outline-dark { font-size: 0.72rem !important; padding: 5px 14px !important; }
+  .info-item span.text-muted { font-size: 0.78rem !important; }
+}
+
+@media (max-width: 400px) {
+  .counter-section .counter { font-size: 1.5rem !important; }
+  .order-card { padding: 10px !important; }
+}

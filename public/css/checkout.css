@@ -573,15 +573,246 @@ body {
   background: #FAF8F4;
 }
 
+@media (max-width: 576px) {
+  .wizard-pane {
+    padding: 16px;
+  }
+}
+
+/* ==========================================================================
+   CHECKOUT PAGE — COMPREHENSIVE RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* Tablet — max 991px */
 @media (max-width: 991px) {
+  body {
+    padding-top: 90px;
+  }
+
   .sticky-top-summary {
     position: static;
     margin-top: 25px;
   }
+
+  .progressbar-container {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  #progressbar li {
+    font-size: 0.82rem !important;
+  }
+
+  .step-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+
+  .pane-title {
+    font-size: 1.15rem !important;
+  }
+
+  .summary-heading {
+    font-size: 1.2rem !important;
+  }
+
+  .grand-total-value {
+    font-size: 1.4rem !important;
+  }
 }
 
-@media (max-width: 576px) {
+/* Mobile — max 768px */
+@media (max-width: 768px) {
+  body {
+    padding-top: 80px;
+  }
+
   .wizard-pane {
-    padding: 16px;
+    padding: 18px;
+  }
+
+  .progressbar-container {
+    margin: 10px auto;
+  }
+
+  #progressbar li {
+    font-size: 0.72rem !important;
+  }
+
+  .step-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .step-label {
+    font-size: 0.65rem;
+  }
+
+  .shipping-option-card {
+    padding: 10px !important;
+  }
+
+  .option-name {
+    font-size: 0.88rem !important;
+  }
+
+  .option-price {
+    font-size: 0.92rem !important;
+  }
+
+  .summary-card {
+    padding: 14px !important;
+  }
+
+  .grand-total-value {
+    font-size: 1.3rem !important;
+  }
+
+  .customer-name {
+    font-size: 1rem !important;
+  }
+
+  .pane-title {
+    font-size: 1.05rem !important;
+  }
+}
+
+/* Mobile — max 576px */
+@media (max-width: 576px) {
+  body {
+    padding-top: 75px;
+  }
+
+  .wizard-pane {
+    padding: 14px;
+  }
+
+  .wizard-container {
+    box-shadow: 2px 2px 0px #1E1C21 !important;
+  }
+
+  .progressbar-container {
+    margin: 8px auto;
+  }
+
+  #progressbar {
+    justify-content: center;
+    gap: 10px;
+  }
+
+  #progressbar li {
+    font-size: 0.65rem !important;
+    flex: 0 0 auto;
+  }
+
+  .step-icon {
+    width: 26px;
+    height: 26px;
+    font-size: 0.72rem;
+  }
+
+  .step-label {
+    font-size: 0.58rem;
+  }
+
+  .btn-primary-brutal {
+    font-size: 0.9rem !important;
+    padding: 10px 0 !important;
+  }
+
+  .card-visual-container {
+    padding: 8px;
+  }
+
+  .summary-card {
+    padding: 12px !important;
+  }
+
+  .summary-heading {
+    font-size: 1.1rem !important;
+    padding-bottom: 6px;
+  }
+
+  .grand-total-value {
+    font-size: 1.2rem !important;
+  }
+
+  .grand-total-label {
+    font-size: 1rem;
+  }
+
+  .breakdown-label {
+    font-size: 0.82rem;
+  }
+
+  .breakdown-value {
+    font-size: 0.95rem;
+  }
+
+  .promo-input {
+    padding: 7px 10px !important;
+    font-size: 0.85rem !important;
+  }
+
+  .card-type-btn {
+    padding: 5px 8px;
+  }
+
+  .card-type-btn img {
+    height: 18px;
+  }
+
+  .form-label-brutal {
+    font-size: 0.82rem !important;
+  }
+
+  .input-addon {
+    padding: 0 8px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Small Mobile — max 400px */
+@media (max-width: 400px) {
+  .wizard-pane {
+    padding: 10px;
+  }
+
+  #progressbar li {
+    font-size: 0.58rem !important;
+  }
+
+  .step-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 0.65rem;
+  }
+
+  .pane-title {
+    font-size: 0.92rem !important;
+  }
+
+  .grand-total-value {
+    font-size: 1.1rem !important;
+  }
+
+  .option-name {
+    font-size: 0.8rem !important;
+  }
+}
+
+/* Large Desktop — min 1400px */
+@media (min-width: 1400px) {
+  .progressbar-container {
+    max-width: 800px;
+  }
+
+  .wizard-pane {
+    padding: 32px;
+  }
+
+  .pane-title {
+    font-size: 1.55rem !important;
   }
 }

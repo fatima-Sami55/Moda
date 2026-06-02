@@ -166,6 +166,7 @@ footer#footer {
   border: 2px solid var(--text-primary) !important; /* Bold streetwear outline border */
   box-shadow: 6px 6px 0px rgba(31, 30, 35, 0.15) !important; /* Bold solid offset shadow */
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  overflow: hidden;
 }
 
 .wishlist-item-row:hover {
@@ -303,6 +304,7 @@ footer#footer {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
   white-space: nowrap;
   cursor: pointer;
+  max-width: 100%;
 }
 
 .wishlist-action-btn:hover {
@@ -347,4 +349,197 @@ footer#footer {
 }
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--primary-accent);
+}
+
+/* ==========================================================================
+   WISHLIST PAGE — COMPREHENSIVE RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* Tablet — max 991px */
+@media (max-width: 991px) {
+  body {
+    padding-top: 90px;
+  }
+
+  .wish-container,
+  .wish-container-empty {
+    padding: 0 15px;
+  }
+
+  .wish-main-title {
+    font-size: 1.5rem !important;
+  }
+
+  .wishlist-item-row {
+    padding: 18px !important;
+  }
+
+  .wishlist-item-img {
+    height: 95px !important;
+  }
+
+  .wishlist-action-btn {
+    padding: 9px 20px !important;
+    font-size: 0.75rem !important;
+  }
+}
+
+/* Mobile — max 768px */
+@media (max-width: 768px) {
+  body {
+    padding-top: 80px;
+  }
+
+  .wish-main-title {
+    font-size: 1.3rem !important;
+  }
+
+  .wishlist-count-text {
+    font-size: 0.85rem;
+  }
+
+  .wishlist-item-row {
+    padding: 14px !important;
+  }
+
+  .wishlist-item-row .row {
+    row-gap: 14px;
+  }
+
+  .wishlist-item-img {
+    height: 80px !important;
+  }
+
+  .wishlist-item-name {
+    font-size: 0.95rem !important;
+  }
+
+  .wishlist-item-price {
+    font-size: 1rem !important;
+  }
+
+  .wishlist-item-desc {
+    font-size: 0.82rem !important;
+  }
+
+  .wishlist-action-btn {
+    padding: 8px 16px !important;
+    font-size: 0.72rem !important;
+    white-space: normal;
+  }
+}
+
+/* Mobile — max 576px */
+@media (max-width: 576px) {
+  body {
+    padding-top: 75px;
+  }
+
+  .wish-container,
+  .wish-container-empty {
+    padding: 0 10px;
+  }
+
+  .wish-main-title {
+    font-size: 1.15rem !important;
+  }
+
+  .wishlist-item-row {
+    padding: 12px !important;
+  }
+
+  .wishlist-item-row .col-8 {
+    min-width: 0;
+  }
+
+  .wishlist-item-img {
+    height: 68px !important;
+  }
+
+  .wishlist-item-name {
+    font-size: 0.88rem !important;
+  }
+
+  .wishlist-item-price {
+    font-size: 0.92rem !important;
+  }
+
+  .wishlist-item-desc {
+    display: none !important; /* Save space on tiny mobile */
+  }
+
+  .wishlist-action-btn {
+    padding: 7px 12px !important;
+    font-size: 0.68rem !important;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .wishlist-remove-btn {
+    font-size: 0.72rem !important;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .empty-wishlist-showcase {
+    padding: 28px 12px !important;
+  }
+
+  .empty-wishlist-img {
+    max-height: 130px !important;
+  }
+
+  .empty-wishlist-heading {
+    font-size: 1.2rem !important;
+  }
+
+  .empty-wishlist-sub {
+    font-size: 0.88rem !important;
+  }
+}
+
+/* Small Mobile — max 400px */
+@media (max-width: 400px) {
+  .wishlist-item-row {
+    padding: 10px !important;
+  }
+
+  .wishlist-item-row .col-4,
+  .wishlist-item-row .col-8 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .wishlist-item-img {
+    height: 120px !important;
+  }
+
+  .wishlist-item-name {
+    font-size: 0.82rem !important;
+  }
+
+  .wishlist-action-btn {
+    padding: 6px 10px !important;
+    font-size: 0.62rem !important;
+  }
+
+  .empty-wishlist-heading {
+    font-size: 1.05rem !important;
+  }
+}
+
+/* Large Desktop — min 1400px */
+@media (min-width: 1400px) {
+  .wish-container,
+  .wish-container-empty {
+    max-width: 1100px;
+  }
+
+  .wishlist-item-img {
+    height: 130px !important;
+  }
+
+  .wishlist-item-name {
+    font-size: 1.2rem !important;
+  }
 }

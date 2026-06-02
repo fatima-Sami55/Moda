@@ -11,6 +11,16 @@ footer#footer .main-footer {
   border-top: 2px solid var(--text-primary); /* Bold border */
 }
 
+footer#footer .main-footer .row {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+
+footer#footer .main-footer .row > [class*="col-"] {
+  min-width: 0;
+}
+
 footer#footer ul {
   padding-left: 0;
   list-style: none;
@@ -36,6 +46,8 @@ footer#footer .widget-title {
   position: relative;
   text-transform: uppercase;
   letter-spacing: 0.02em;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 footer#footer .widget-title span {
@@ -61,6 +73,8 @@ footer#footer .widget li a {
   text-decoration: none !important;
   transition: var(--transition-smooth);
   display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 footer#footer .widget li a:hover {
@@ -79,9 +93,11 @@ footer#footer .btn-buy {
   font-size: 1.1rem;
   padding: 10px 24px !important;
   display: inline-block;
+  max-width: 100%;
   text-decoration: none !important;
   box-shadow: 3px 3px 0px var(--text-primary) !important;
   transition: var(--transition-smooth) !important;
+  white-space: normal;
 }
 
 footer#footer .btn-buy:hover {
@@ -108,6 +124,7 @@ footer#footer a.email-link:hover {
 /* Social media list */
 footer#footer ul.social-footer2 {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   margin-top: 15px;
 }
@@ -155,6 +172,49 @@ footer#footer .footer-copyright p {
   color: var(--text-primary) !important;
   font-weight: 500;
   text-align: center;
+}
+
+@media (max-width: 991.98px) {
+  footer#footer .main-footer {
+    padding: 60px 0 36px 0;
+  }
+
+  footer#footer .widget-title {
+    font-size: clamp(1.25rem, 3vw, 1.6rem);
+  }
+}
+
+@media (max-width: 575.98px) {
+  footer#footer {
+    margin-top: 56px;
+  }
+
+  footer#footer .main-footer {
+    padding: 44px 0 22px 0;
+  }
+
+  footer#footer .main-footer .row > [class*="col-"] {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  footer#footer .widget {
+    margin-bottom: 30px;
+  }
+
+  footer#footer .widget-title {
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+  }
+
+  footer#footer p,
+  footer#footer .widget li a {
+    font-size: 14px;
+  }
+
+  footer#footer .footer-copyright {
+    padding: 18px 0;
+  }
 }
 </style>
 

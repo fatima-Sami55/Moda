@@ -269,10 +269,23 @@ body {
 .rating-view {
   display: flex;
   align-items: center;
-  white-space: nowrap;
+  white-space: normal;
   gap: 12px;
   height: auto;
   color: var(--text-secondary);
+}
+
+.graph-star-rating .row {
+  min-width: 0;
+}
+
+.modern-rating-bars-container,
+.rating-view .skill {
+  min-width: 0;
+}
+
+.modern-rating-bars-container .rating-view {
+  width: 100%;
 }
 
 .zahlreviews {
@@ -622,7 +635,7 @@ footer ul {
 
   .rating-view {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-start !important;
     gap: 8px;
   }
 
@@ -964,4 +977,257 @@ footer ul {
   color: var(--text-secondary);
   margin: 0;
   line-height: 1.4;
+}
+
+/* ==========================================================================
+   PRODUCT PAGE — COMPREHENSIVE RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* Tablet — max 991px */
+@media (max-width: 991px) {
+  body {
+    padding-top: 90px;
+  }
+
+  .modern-product-image-container {
+    height: 420px !important;
+  }
+
+  .modern-product-title {
+    font-size: 2.2rem !important;
+  }
+
+  .modern-price-tag {
+    font-size: 2rem !important;
+  }
+
+  .modern-cta-btn {
+    padding: 14px 22px !important;
+    font-size: 0.95rem !important;
+  }
+
+  .related-products {
+    padding: 60px 0 !important;
+  }
+
+  .related-products h2 {
+    font-size: 1.8rem !important;
+  }
+
+  .rating-view {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+/* Mobile — max 768px */
+@media (max-width: 768px) {
+  body {
+    padding-top: 80px;
+  }
+
+  .modern-product-image-container {
+    height: 350px !important;
+    padding: 20px !important;
+  }
+
+  .modern-product-image-container:hover .modern-product-image {
+    transform: scale(1.6) !important; /* Reduce zoom on touch screens */
+  }
+
+  .modern-product-title {
+    font-size: 1.8rem !important;
+    margin-bottom: 10px !important;
+  }
+
+  .modern-price-tag {
+    font-size: 1.7rem !important;
+  }
+
+  .modern-product-details {
+    padding: 15px 0 !important;
+  }
+
+  .modern-actions-row {
+    margin-top: 20px !important;
+  }
+
+  .modern-cta-btn {
+    padding: 12px 18px !important;
+    font-size: 0.88rem !important;
+    flex: 1 !important;
+  }
+
+  .related-products .product-image {
+    height: 140px !important;
+  }
+
+  .related-products .product-brand {
+    font-size: 1rem !important;
+  }
+
+  .reviews-members {
+    padding: 16px !important;
+  }
+
+  .graph-star-rating {
+    padding: 24px 18px !important;
+  }
+
+  .graph-star-rating .modern-sub-title-large {
+    font-size: 1.35rem !important;
+    margin-bottom: 18px !important;
+  }
+
+  .modern-rating-summary-box {
+    min-height: auto;
+    padding: 20px 16px !important;
+  }
+
+  .modern-rating-score {
+    font-size: 3rem !important;
+  }
+
+  .modern-rating-bars-container {
+    gap: 12px !important;
+  }
+
+  .modern-rating-bars-container .rating-view {
+    display: grid !important;
+    grid-template-columns: minmax(64px, auto) minmax(0, 1fr) auto;
+    align-items: center !important;
+    column-gap: 8px !important;
+    row-gap: 6px !important;
+  }
+
+  .modern-rating-bars-container .sternzahl {
+    min-width: 0 !important;
+    font-size: 0.88rem;
+  }
+
+  .modern-rating-bars-container .zahlreviews {
+    min-width: 38px !important;
+    padding: 3px 6px !important;
+    font-size: 0.78rem !important;
+  }
+}
+
+/* Mobile — max 576px */
+@media (max-width: 576px) {
+  body {
+    padding-top: 75px;
+  }
+
+  .modern-product-image-container {
+    height: 280px !important;
+    padding: 15px !important;
+  }
+
+  .modern-product-image-container:hover .modern-product-image {
+    transform: scale(1.3) !important;
+  }
+
+  .purchase-status-badge {
+    font-size: 0.75rem !important;
+    padding: 5px 12px !important;
+  }
+
+  .modern-product-title {
+    font-size: 1.5rem !important;
+  }
+
+  .modern-price-tag {
+    font-size: 1.5rem !important;
+  }
+
+  .modern-cta-btn {
+    padding: 11px 14px !important;
+    font-size: 0.82rem !important;
+    width: 100% !important;
+    display: block !important;
+    text-align: center !important;
+  }
+
+  .modern-actions-row {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .capsule-pill {
+    font-size: 0.78rem !important;
+    padding: 4px 14px !important;
+  }
+
+  .related-products {
+    padding: 40px 0 !important;
+  }
+
+  .related-products h2 {
+    font-size: 1.4rem !important;
+  }
+
+  .related-products .product-image {
+    height: 120px !important;
+  }
+
+  .product-card {
+    max-width: 100% !important;
+    margin: 15px auto !important;
+  }
+
+  .product-tumb {
+    height: 200px;
+  }
+}
+
+/* Small Mobile — max 400px */
+@media (max-width: 400px) {
+  .modern-product-image-container {
+    height: 240px !important;
+  }
+
+  .modern-product-title {
+    font-size: 1.3rem !important;
+  }
+
+  .modern-price-tag {
+    font-size: 1.3rem !important;
+  }
+
+  .modern-sub-title {
+    font-size: 1rem !important;
+  }
+
+  .modern-product-desc {
+    font-size: 0.9rem !important;
+  }
+
+  .graph-star-rating {
+    padding: 20px 14px !important;
+  }
+
+  .modern-rating-bars-container .rating-view {
+    grid-template-columns: 1fr auto;
+  }
+
+  .modern-rating-bars-container .rating-view .skill {
+    grid-column: 1 / -1;
+    width: 100%;
+    order: 3;
+  }
+}
+
+/* Large Desktop — min 1400px */
+@media (min-width: 1400px) {
+  .modern-product-image-container {
+    height: 600px !important;
+  }
+
+  .modern-product-title {
+    font-size: 3.5rem !important;
+  }
+
+  .modern-price-tag {
+    font-size: 3rem !important;
+  }
 }

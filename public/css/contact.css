@@ -25,6 +25,7 @@ body {
   margin: 0;
   padding-top: 130px; /* Offsets navbar */
   padding-bottom: 0px !important;
+  overflow-x: hidden;
 }
 
 /* ==========================================================================
@@ -34,7 +35,18 @@ body {
   width: 100%;
   max-width: 1300px;
   margin: 0 auto;
-  padding: 0 4% !important;
+  padding: 0 max(4%, 24px) !important;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.contact-section-wrapper > .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.contact-section-wrapper > .row > [class*="col-"] {
+  min-width: 0;
 }
 
 /* Page Header Row */
@@ -52,6 +64,10 @@ body {
   line-height: 0.95;
   color: var(--text-primary) !important;
   letter-spacing: -0.02em;
+}
+
+.contact-main-title > span {
+  white-space: normal !important;
 }
 
 .contact-main-title .outlined-word {
@@ -99,6 +115,7 @@ body {
   margin-bottom: 24px;
   box-shadow: 6px 6px 0px rgba(0,0,0,0.1) !important;
   transition: var(--transition-smooth);
+  max-width: 100%;
 }
 
 .channel-card:hover {
@@ -155,6 +172,9 @@ body {
   box-shadow: 14px 14px 0px var(--text-primary) !important;
   padding: 40px !important;
   transition: var(--transition-smooth);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .contact-form-card:hover {
@@ -277,7 +297,7 @@ body {
    ========================================================================== */
 @media screen and (max-width: 991px) {
   body {
-    padding-top: 110px;
+    padding-top: 100px;
   }
   
   .contact-main-title {
@@ -298,16 +318,109 @@ body {
   }
 }
 
-@media screen and (max-width: 576px) {
+@media screen and (max-width: 768px) {
+  body {
+    padding-top: 90px;
+  }
+
   .contact-main-title {
-    font-size: 2.4rem !important;
+    font-size: 2.6rem !important;
+  }
+
+  .contact-form-card {
+    padding: 24px !important;
+    box-shadow: 8px 8px 0px var(--text-primary) !important;
+  }
+
+  .contact-header-row {
+    margin-bottom: 35px;
+    padding-bottom: 18px;
+  }
+
+  .channel-card {
+    padding: 18px 20px !important;
+  }
+
+  .contact-lead-text {
+    font-size: 1.1rem !important;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  body {
+    padding-top: 80px;
+  }
+
+  .contact-section-wrapper {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  .contact-main-title {
+    font-size: 2rem !important;
+    line-height: 1.0 !important;
+    overflow-wrap: anywhere;
   }
   
   .contact-subtitle-tag {
-    font-size: 0.85rem !important;
+    font-size: 0.82rem !important;
+    padding: 5px 14px !important;
   }
-  
+
+  .contact-form-card {
+    padding: 18px !important;
+    box-shadow: 4px 4px 0px var(--text-primary) !important;
+  }
+
+  .form-intro-title {
+    font-size: 1.3rem !important;
+  }
+
   .matrix-badge {
     width: 100% !important;
+  }
+
+  .channel-card {
+    padding: 14px 16px !important;
+    margin-bottom: 16px;
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.1) !important;
+  }
+
+  .channel-title {
+    font-size: 1rem !important;
+  }
+
+  .contact-header-row {
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .contact-section-wrapper {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .contact-main-title {
+    font-size: 1.7rem !important;
+  }
+
+  .contact-form-card {
+    padding: 14px !important;
+  }
+
+  .form-intro-title {
+    font-size: 1.15rem !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  .contact-main-title {
+    font-size: 5.5rem !important;
+  }
+
+  .contact-section-wrapper {
+    max-width: 1500px;
   }
 }

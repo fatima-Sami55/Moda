@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const getUserMiddleware = require("../Middleware/getUser");
-const getCartMiddleware = require("../Middleware/getCart");
-const getWishMiddleware = require("../Middleware/getWishlist");
-const getPurchaseMiddleware = require("../Middleware/getPurchase");
-const isAuthenticated = require("../Middleware/is_logged_in");
-const checkEmailVerified = require("../Middleware/getEmailVerification");
-const transporter = require("../helper_functions/email");
+const getUserMiddleware = require("../middleware/get-user");
+const getCartMiddleware = require("../middleware/get-cart");
+const getWishMiddleware = require("../middleware/get-wishlist");
+const getPurchaseMiddleware = require("../middleware/get-purchase");
+const isAuthenticated = require("../middleware/is-logged-in");
+const checkEmailVerified = require("../middleware/get-email-verification");
+const transporter = require("../helper-functions/email");
 // getNoticeCount import removed
 
 

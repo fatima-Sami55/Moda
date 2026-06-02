@@ -243,14 +243,105 @@ a:hover {
   background: var(--primary-accent);
 }
 
-@media (max-width: 576px) {
+@media (max-width: 991px) {
+  body {
+    padding-top: 120px;
+  }
+
+  .form-card h4,
+  .card h4,
+  .card-body h3,
+  .card-body h4 {
+    font-size: 1.8rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 100px;
+    padding-bottom: 50px !important;
+  }
+
   .form-card,
   .card {
-    padding: 25px !important;
-    margin-top: 15% !important;
+    padding: 30px !important;
+    box-shadow: 6px 6px 0px var(--text-primary) !important;
+  }
+
+  .form-card h4,
+  .card h4,
+  .card-body h3,
+  .card-body h4 {
+    font-size: 1.6rem !important;
+  }
+
+  .btn-dark {
+    font-size: 1rem;
+    padding: 11px 24px !important;
+  }
+
+  #accountBtn,
+  #billingBtn {
+    padding: 8px 18px !important;
+    font-size: 0.85rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  body {
+    padding-top: 90px;
+  }
+
+  .form-card,
+  .card {
+    padding: 22px !important;
+    margin-top: 10% !important;
+  }
+
+  .form-card h4,
+  .card h4,
+  .card-body h3,
+  .card-body h4 {
+    font-size: 1.4rem !important;
   }
 
   .btn-dark {
     width: 100% !important;
+    font-size: 0.95rem;
+  }
+
+  #accountBtn,
+  #billingBtn {
+    padding: 7px 14px !important;
+    font-size: 0.8rem !important;
+  }
+
+  .btn-group {
+    gap: 10px !important;
   }
 }
+
+@media (max-width: 400px) {
+  body {
+    padding-top: 80px;
+  }
+
+  .form-card,
+  .card {
+    padding: 16px !important;
+  }
+
+  .form-card h4,
+  .card h4,
+  .card-body h3,
+  .card-body h4 {
+    font-size: 1.2rem !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  .form-card,
+  .card {
+    padding: 50px !important;
+  }
+}

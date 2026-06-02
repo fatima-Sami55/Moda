@@ -1,7 +1,7 @@
 const cron = require("node-cron");
 const sql = require("mssql");
 const { pool, poolConnect } = require("../database/data");
-const { getRandomNotifications } = require("../helper_functions/notifications_helper");
+const { getRandomNotifications } = require("../helper-functions/notifications-helper");
 
 // ⏰ Schedule every 30 minutes
 cron.schedule("*/30 * * * *", async () => {

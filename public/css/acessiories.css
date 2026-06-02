@@ -733,3 +733,215 @@ footer.light .footer-copyright {
   color: rgb(69, 70, 75); 
   text-decoration: underline;
 }
+
+/* ==========================================================================
+   ACCESSORIES PAGE — COMPREHENSIVE RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* Tablet — max 991px */
+@media (max-width: 991px) {
+  .banner {
+    height: auto !important;
+    min-height: calc(100vh - 90px) !important;
+    padding: 40px 10px !important;
+  }
+
+  .banner-content {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 30px !important;
+  }
+
+  .banner-text {
+    text-align: center !important;
+    padding: 10px 5% !important;
+  }
+
+  .banner-text h2 {
+    font-size: 2.5rem !important;
+  }
+
+  .banner-image-container {
+    max-width: 400px !important;
+    width: 100% !important;
+  }
+
+  .banner-image {
+    height: 380px !important;
+  }
+
+  .summer-sale-sticker {
+    width: 90px !important;
+    height: 90px !important;
+    left: -20px !important;
+  }
+
+  .browse-btn {
+    margin: 15px auto !important;
+  }
+
+  .product-category {
+    font-size: 1.8rem !important;
+  }
+
+  .product-card {
+    min-height: 420px !important;
+  }
+}
+
+/* Mobile — max 768px */
+@media (max-width: 768px) {
+  .banner {
+    padding: 30px 10px !important;
+  }
+
+  .banner-text h2 {
+    font-size: 2rem !important;
+  }
+
+  .banner-desc {
+    font-size: 0.95rem !important;
+  }
+
+  .banner-image {
+    height: 300px !important;
+  }
+
+  .summer-sale-sticker {
+    width: 80px !important;
+    height: 80px !important;
+    left: -15px !important;
+  }
+
+  .sticker-discount {
+    font-size: 1.2rem !important;
+  }
+
+  .browse-btn {
+    width: 180px !important;
+    font-size: 0.95rem !important;
+  }
+
+  .product-image {
+    height: 200px !important;
+  }
+
+  .product-brand {
+    font-size: 1.2rem !important;
+  }
+
+  .price {
+    font-size: 1.3rem !important;
+  }
+
+  .card-btn {
+    font-size: 0.85rem !important;
+  }
+}
+
+/* Mobile — max 576px */
+@media (max-width: 576px) {
+  .banner {
+    margin-top: 80px !important;
+    padding: 25px 8px !important;
+  }
+
+  .banner-text h2 {
+    font-size: 1.6rem !important;
+    margin-bottom: 12px !important;
+  }
+
+  .banner-desc {
+    font-size: 0.88rem !important;
+    margin-bottom: 18px !important;
+  }
+
+  .banner-image-container {
+    max-width: 280px !important;
+  }
+
+  .banner-image {
+    height: 250px !important;
+  }
+
+  .summer-sale-sticker {
+    width: 68px !important;
+    height: 68px !important;
+    left: -10px !important;
+    top: 10% !important;
+  }
+
+  .sticker-discount {
+    font-size: 1rem !important;
+  }
+
+  .browse-btn {
+    width: 160px !important;
+    font-size: 0.88rem !important;
+    padding: 11px 0 !important;
+  }
+
+  .product {
+    padding: 40px 0 !important;
+  }
+
+  .product-category {
+    font-size: 1.4rem !important;
+  }
+
+  .product-image {
+    height: 180px !important;
+  }
+
+  .product-brand {
+    font-size: 1.1rem !important;
+  }
+
+  .card-btn {
+    font-size: 0.8rem !important;
+    padding: 10px 0 !important;
+  }
+}
+
+/* Small Mobile — max 400px */
+@media (max-width: 400px) {
+  .banner-text h2 {
+    font-size: 1.4rem !important;
+  }
+
+  .banner-image-container {
+    max-width: 230px !important;
+  }
+
+  .banner-image {
+    height: 210px !important;
+  }
+
+  .product-category {
+    font-size: 1.2rem !important;
+  }
+
+  .product-image {
+    height: 160px !important;
+  }
+}
+
+/* Large Desktop — min 1400px */
+@media (min-width: 1400px) {
+  .banner-text h2 {
+    font-size: 4.2rem !important;
+  }
+
+  .banner-image-container {
+    max-width: 560px !important;
+  }
+
+  .banner-image {
+    height: 560px !important;
+  }
+
+  .product-image {
+    height: 300px !important;
+  }
+}

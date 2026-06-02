@@ -170,3 +170,42 @@ body {
   transform: translate(0px, 0px);
   box-shadow: none;
 }
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 576px) {
+  body { padding: 16px; }
+  .protected-container {
+    padding: 20px 16px;
+    box-shadow: 5px 5px 0px var(--border-color);
+    gap: 12px;
+  }
+  .illustration-wrapper {
+    max-width: 140px;
+    height: 105px;
+  }
+  .auth-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .btn-auth {
+    width: 100%;
+    min-width: unset;
+    text-align: center;
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  body { padding: 12px; }
+  .protected-container {
+    padding: 16px 12px;
+    box-shadow: 3px 3px 0px var(--border-color);
+    gap: 8px;
+  }
+  .illustration-wrapper {
+    max-width: 110px;
+    height: 85px;
+  }
+}

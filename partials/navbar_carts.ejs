@@ -90,6 +90,8 @@ header ul {
   flex: 2;
   justify-content: space-evenly;
   align-items: center;
+  margin: 0;
+  padding: 0;
 }
 
 header ul li {
@@ -152,27 +154,46 @@ header a:focus {
     top: 90px;
     right: -100%;
     width: 60%;
-    height: calc(100vh - 90px);
+    height: calc(100dvh - 90px);
+    max-height: calc(100dvh - 90px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     background-color: var(--bg-surface) !important;
     border-left: 1px solid var(--border-light);
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     padding-top: 40px;
+    padding-bottom: 40px;
     gap: 40px;
     transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     box-shadow: var(--shadow-premium);
-    z-index: 1000;
+    z-index: 1099;
   }
 
   body.unverified header ul {
     top: 130px;
-    height: calc(100vh - 130px);
+    height: calc(100dvh - 130px);
+    max-height: calc(100dvh - 130px);
   }
 
   #chk1:checked ~ ul {
     right: 0;
   }
+}
+
+header.checkout-nav {
+  justify-content: center;
+}
+
+header.checkout-nav .logo {
+  flex: 0 0 auto;
+}
+
+header.checkout-nav .menu,
+header.checkout-nav .nav-links,
+header.checkout-nav #chk1 {
+  display: none !important;
 }
 </style>
 
@@ -186,7 +207,7 @@ header a:focus {
 %>
 
 <!-- Header -->
-<header id="navbar" class="shadow p-3 mb-5 bg-body-tertiary rounded <%= headerClass %>">
+<header id="navbar" class="shadow p-3 mb-5 bg-body-tertiary rounded <%= headerClass %> <%= page === 'checkout' ? 'checkout-nav' : '' %>">
     <!-- Navbar logo -->
    <div class="logo">
     <h3>

@@ -1480,3 +1480,42 @@ h4, h6 {
 .modal-footer {
   border-top: 1px solid var(--border-light) !important;
 }
+
+/* ==========================================================================
+   TRACK ORDER PAGE — RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+body {
+  padding-top: 110px;
+  background-color: var(--bg-deep) !important;
+  color: var(--text-primary) !important;
+}
+
+@media (max-width: 991px) {
+  body { padding-top: 100px; }
+  .modal-content { box-shadow: 6px 6px 0px var(--text-primary) !important; }
+  .modal-header .modal-title { font-size: 1.3rem !important; }
+}
+
+@media (max-width: 768px) {
+  body { padding-top: 90px; }
+  .modal-content { box-shadow: 4px 4px 0px var(--text-primary) !important; }
+  .modal-header .modal-title { font-size: 1.15rem !important; }
+  .p-6 { padding: 1rem; }
+  .px-5 { padding-left: 0.75rem; padding-right: 0.75rem; }
+}
+
+@media (max-width: 576px) {
+  body { padding-top: 80px; }
+  .modal-content { box-shadow: 3px 3px 0px var(--text-primary) !important; }
+  .modal-header .modal-title { font-size: 1rem !important; }
+  .modal-body { padding: 14px; }
+  .modal-footer { padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
+  .p-6 { padding: 0.75rem; }
+  .gap-6 { gap: 0.75rem; }
+  .gap-4 { gap: 0.5rem; }
+}
+
+@media (max-width: 400px) {
+  body { padding-top: 75px; }
+  .modal-header .modal-title { font-size: 0.9rem !important; }
+}

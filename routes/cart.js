@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const { pool } = require("../database/data");
-const isAuthenticated = require("../Middleware/is_logged_in");
-const checkEmailVerified = require("../Middleware/getEmailVerification");
-const { verifyCsrf } = require("../Middleware/csrf");
+const isAuthenticated = require("../middleware/is-logged-in");
+const checkEmailVerified = require("../middleware/get-email-verification");
+const { verifyCsrf } = require("../middleware/csrf");
 
 // GET /add-to-cart
 router.get("/add-to-cart", isAuthenticated,checkEmailVerified, async (req, res, next) => {
@@ -36,7 +36,7 @@ router.post("/add-to-cart", isAuthenticated,checkEmailVerified, verifyCsrf, asyn
   }
 
   // Backend price lookup to prevent client-side manipulation
-  const { findProductByName } = require("../helper_functions/getRating");
+  const { findProductByName } = require("../helper-functions/get-rating");
   const product = findProductByName(itemName);
   if (!product) {
     if (req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest') {

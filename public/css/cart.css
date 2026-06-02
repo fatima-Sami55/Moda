@@ -186,6 +186,8 @@ footer#footer {
   font-size: 1.15rem !important;
   font-weight: 800;
   color: #1E1C21 !important;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .item-subtotal {
@@ -253,6 +255,7 @@ footer#footer {
   border-radius: 0px !important;
   box-shadow: 3px 3px 0px #1E1C21 !important;
   margin-bottom: 15px;
+  overflow: hidden;
 }
 
 .cart-mobile-card .card-body {
@@ -410,4 +413,218 @@ footer#footer {
 }
 ::-webkit-scrollbar-thumb:hover {
   background-color: #FE672E;
+}
+
+/* ==========================================================================
+   CART PAGE — COMPREHENSIVE RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+  .cart-container > .row {
+    --bs-gutter-x: 0;
+  }
+
+  .cart-container > .row > .col-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .order-summary-card {
+    position: static !important;
+    margin-top: 26px;
+  }
+}
+
+/* Tablet — max 991px */
+@media (max-width: 991px) {
+  body {
+    padding-top: 90px;
+  }
+
+  .cart-container,
+  .cart-container-empty {
+    padding: 0 15px;
+  }
+
+  .order-summary-card {
+    position: static !important;
+    margin-top: 24px;
+  }
+
+  .cart-main-title {
+    font-size: 1.7rem !important;
+  }
+
+  .summary-title {
+    font-size: 1.2rem !important;
+  }
+
+  .summary-val-total {
+    font-size: 1.4rem !important;
+  }
+}
+
+/* Mobile — max 768px */
+@media (max-width: 768px) {
+  body {
+    padding-top: 80px;
+  }
+
+  .cart-container {
+    padding: 0 12px;
+  }
+
+  .table {
+    display: none !important; /* Hide desktop table on mobile — use mobile cards instead */
+  }
+
+  .cart-mobile-card {
+    display: block !important;
+  }
+
+  .cart-main-title {
+    font-size: 1.5rem !important;
+    padding-bottom: 8px;
+  }
+
+  .empty-cart-showcase {
+    max-width: 360px;
+    padding: 22px;
+  }
+
+  .empty-cart-heading {
+    font-size: 1.3rem !important;
+  }
+
+  .quantity-group {
+    width: 96px !important;
+  }
+
+  .quantity-group .quantity-input {
+    min-width: 28px !important;
+  }
+
+  .btn-success,
+  .btn-warning {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+}
+
+/* Mobile — max 576px */
+@media (max-width: 576px) {
+  body {
+    padding-top: 75px;
+  }
+
+  .cart-container,
+  .cart-container-empty {
+    padding: 0 10px;
+  }
+
+  .cart-main-title {
+    font-size: 1.3rem !important;
+  }
+
+  .cart-mobile-card .card-body {
+    padding: 12px !important;
+  }
+
+  .cart-mobile-card .card-body > .d-flex.justify-content-between {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .cart-mobile-card .card-body > .d-flex:first-child {
+    align-items: flex-start !important;
+  }
+
+  .cart-item-thumb {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .cart-item-name {
+    font-size: 0.88rem !important;
+  }
+
+  .cart-item-desc {
+    font-size: 0.75rem !important;
+    max-width: 100%;
+  }
+
+  .item-price,
+  .item-subtotal {
+    font-size: 1rem !important;
+    display: inline-block;
+    max-width: 100%;
+    overflow: visible;
+  }
+
+  .summary-val-total {
+    font-size: 1.3rem !important;
+  }
+
+  .summary-label-total {
+    font-size: 1rem !important;
+  }
+
+  .order-summary-card {
+    padding: 14px !important;
+  }
+
+  .empty-cart-showcase {
+    max-width: 300px;
+    padding: 18px;
+  }
+
+  .empty-cart-img {
+    max-height: 120px;
+  }
+}
+
+/* Small Mobile — max 400px */
+@media (max-width: 400px) {
+  .cart-main-title {
+    font-size: 1.15rem !important;
+  }
+
+  .cart-item-thumb {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .quantity-group {
+    width: 88px !important;
+  }
+
+  .cart-mobile-card .card-body > .d-flex:first-child {
+    flex-wrap: wrap;
+  }
+
+  .cart-mobile-card .card-body > .d-flex:first-child .flex-grow-1 {
+    flex-basis: calc(100% - 56px);
+    min-width: 0;
+  }
+
+  .summary-label {
+    font-size: 0.82rem;
+  }
+
+  .summary-val {
+    font-size: 0.95rem;
+  }
+}
+
+/* Large Desktop — min 1400px */
+@media (min-width: 1400px) {
+  .cart-container,
+  .cart-container-empty {
+    max-width: 1300px;
+  }
+
+  .order-summary-card {
+    top: 140px;
+  }
 }

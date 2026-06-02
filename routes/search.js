@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const getUserMiddleware = require("../Middleware/getUser");
-const getCartMiddleware = require("../Middleware/getCart");
-const getWishMiddleware = require("../Middleware/getWishlist");
-const getPurchaseMiddleware = require("../Middleware/getPurchase");
-const {searchProducts} = require("../helper_functions/search");
-const { getAllProductRatings } = require("../helper_functions/getRating");
+const getUserMiddleware = require("../middleware/get-user");
+const getCartMiddleware = require("../middleware/get-cart");
+const getWishMiddleware = require("../middleware/get-wishlist");
+const getPurchaseMiddleware = require("../middleware/get-purchase");
+const {searchProducts} = require("../helper-functions/search");
+const { getAllProductRatings } = require("../helper-functions/get-rating");
 // getNoticeCount import removed
 
 

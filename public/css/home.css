@@ -826,3 +826,259 @@ footer li a:hover {
   color: var(--text-secondary) !important;
   font-size: 0.85rem;
 }
+
+/* ==========================================================================
+   HOME PAGE — COMPREHENSIVE RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* Tablet — max 991px */
+@media (max-width: 991px) {
+  .editorial-hero {
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: calc(100vh - 90px) !important;
+    padding: 40px 0 60px 0 !important;
+    margin-top: 90px !important;
+  }
+
+  .editorial-left {
+    padding: 30px 5% !important;
+    text-align: center !important;
+  }
+
+  .editorial-text-wrapper {
+    max-width: 100% !important;
+  }
+
+  .editorial-main-title {
+    font-size: 3.5rem !important;
+  }
+
+  .editorial-action-row {
+    justify-content: center !important;
+  }
+
+  .editorial-right {
+    padding: 20px 5% !important;
+  }
+
+  .editorial-image-frame {
+    max-width: 320px !important;
+    margin: 0 auto;
+  }
+
+  .summer-sale-sticker {
+    width: 90px !important;
+    height: 90px !important;
+    left: -20px !important;
+  }
+
+  .newsletter-container {
+    padding: 60px 20px !important;
+    text-align: center !important;
+  }
+
+  .newsletter-container h1 {
+    font-size: 2.2rem !important;
+  }
+
+  .sponsors-grid-container {
+    padding: 35px 20px !important;
+  }
+
+  .product-category {
+    font-size: 2rem !important;
+  }
+
+  footer .main-footer {
+    padding: 60px 0 40px 0 !important;
+  }
+}
+
+/* Tablet — max 768px */
+@media (max-width: 768px) {
+  .editorial-main-title {
+    font-size: 2.8rem !important;
+  }
+
+  .editorial-desc {
+    font-size: 0.95rem !important;
+  }
+
+  .hero-cta-btn {
+    padding: 12px 22px !important;
+    font-size: 0.85rem !important;
+  }
+
+  .product-card {
+    box-shadow: 5px 5px 0px var(--text-primary) !important;
+  }
+
+  .product-card:hover {
+    transform: translate(-2px, -2px) !important;
+    box-shadow: 7px 7px 0px var(--text-primary) !important;
+  }
+
+  .timeline-section {
+    padding: 60px 0;
+  }
+
+  .timeline .card-body h3 {
+    font-size: 1.2rem;
+  }
+
+  .gradient-custom .card {
+    padding: 25px 15px;
+  }
+
+  .newsletter-container h1 {
+    font-size: 1.8rem !important;
+  }
+
+  .newsletter-image {
+    width: 60px;
+    height: auto;
+  }
+
+  footer .main-footer {
+    padding: 50px 0 30px 0 !important;
+  }
+
+  footer .widget-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* Mobile — max 576px */
+@media (max-width: 576px) {
+  .editorial-hero {
+    margin-top: 80px !important;
+    min-height: auto !important;
+    padding: 30px 0 50px 0 !important;
+  }
+
+  .editorial-left {
+    padding: 20px 4% !important;
+  }
+
+  .editorial-main-title {
+    font-size: 2.2rem !important;
+    line-height: 1.05 !important;
+  }
+
+  .editorial-main-title .capsule-pill {
+    font-size: 0.78rem !important;
+    padding: 5px 14px !important;
+  }
+
+  .editorial-desc {
+    font-size: 0.9rem !important;
+  }
+
+  .hero-cta-btn {
+    padding: 10px 18px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .sticker-btn {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .editorial-image-frame {
+    max-width: 260px !important;
+  }
+
+  .summer-sale-sticker {
+    width: 75px !important;
+    height: 75px !important;
+    left: -15px !important;
+  }
+
+  .sticker-discount {
+    font-size: 1.1rem !important;
+  }
+
+  .product-category {
+    font-size: 1.6rem !important;
+  }
+
+  .product-image {
+    height: 180px !important;
+  }
+
+  .product-brand {
+    font-size: 1.2rem !important;
+  }
+
+  .price {
+    font-size: 1.4rem !important;
+  }
+
+  .card-btn {
+    font-size: 0.9rem !important;
+    padding: 10px !important;
+  }
+
+  .main-timeline::after {
+    left: 20px;
+  }
+
+  .newsletter-container {
+    padding: 40px 15px !important;
+  }
+
+  .newsletter-container h1 {
+    font-size: 1.5rem !important;
+  }
+
+  .newsletter-container .btn-dark {
+    padding: 0 20px !important;
+    font-size: 0.9rem;
+  }
+
+  .sponsors-grid-container {
+    padding: 25px 15px !important;
+  }
+
+  footer .main-footer {
+    padding: 40px 0 20px 0 !important;
+  }
+}
+
+/* Small Mobile — max 400px */
+@media (max-width: 400px) {
+  .editorial-main-title {
+    font-size: 1.8rem !important;
+  }
+
+  .editorial-image-frame {
+    max-width: 220px !important;
+  }
+
+  .hero-cta-btn {
+    padding: 9px 14px !important;
+    font-size: 0.72rem !important;
+  }
+
+  .product-image {
+    height: 160px !important;
+  }
+}
+
+/* Large Desktop — min 1400px */
+@media (min-width: 1400px) {
+  .editorial-left {
+    padding: 30px 10% !important;
+    padding-left: max(10%, 80px) !important;
+  }
+
+  .editorial-image-frame {
+    max-width: 420px !important;
+    max-height: 540px !important;
+  }
+
+  .editorial-main-image {
+    max-height: 534px !important;
+  }
+}

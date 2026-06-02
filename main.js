@@ -13,7 +13,7 @@ const path = require("path");
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
 global.io = io;
-const authentication = require("./routes/Authentication");
+const authentication = require("./routes/authentication");
 const cart = require("./routes/cart");
 const shop = require("./routes/shop");
 const wish = require("./routes/wish");
@@ -27,7 +27,7 @@ const error = require("./routes/error");
 const { poolConnect } = require("./database/data");
 const {
   getCurrentNotifications,
-} = require("./helper_functions/timeBasedUpdate");
+} = require("./helper-functions/time-based-update");
 
 // wrap everything inside async IIFE
 (async () => {
@@ -126,14 +126,14 @@ const {
 
     // 🛡️ GENERAL RATE LIMITER (DoS Protection) - TEMPORARILY DISABLED FOR TESTING
   
-    const generalLimiter = rateLimit({
-      windowMs: 15 * 60 * 1000,
-      max: 200,
-      standardHeaders: true,
-      legacyHeaders: false,
-      message: "Too many requests from this IP. Please try again in 15 minutes."
-    });
-    app.use(generalLimiter);
+    // const generalLimiter = rateLimit({
+    //   windowMs: 15 * 60 * 1000,
+    //   max: 200,
+    //   standardHeaders: true,
+    //   legacyHeaders: false,
+    //   message: "Too many requests from this IP. Please try again in 15 minutes."
+    // });
+    // app.use(generalLimiter);
   
 
     // 🛡️ AUTH RATE LIMITER (Brute-Force Protection) - TEMPORARILY DISABLED FOR TESTING
@@ -174,7 +174,7 @@ const {
       next();
     });
 
-    const { csrfTokenMiddleware } = require("./Middleware/csrf");
+    const { csrfTokenMiddleware } = require("./middleware/csrf");
     app.use(csrfTokenMiddleware);
     app.use((req, res, next) => {
       res.locals.success = req.flash("success");
@@ -215,7 +215,7 @@ const {
     // 🛡️ GLOBAL ERROR HANDLER
     app.use((err, req, res, next) => {
       console.error("🔥 Unhandled Server Error:", err);
-      res.status(500).render("500 page.ejs");
+      res.status(500).render("500-page");
     });
 
    

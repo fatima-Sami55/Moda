@@ -140,7 +140,10 @@ body {
 }
 
 @media (max-width: 900px) {
-  .search-layout { grid-template-columns: 1fr; }
+  .search-layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
 }
 
 /* ==========================================================================
@@ -148,11 +151,13 @@ body {
    ========================================================================== */
 .filter-sidebar {
   position: sticky;
-  top: 130px;
+  top: 110px;
+  z-index: 25;
   background: #FFFFFF;
   border: 2.5px solid #1A1A1A;
   box-shadow: 6px 6px 0px #1A1A1A;
   padding: 24px 20px;
+  margin-top: 12px;
 }
 
 .filter-sidebar-title {
@@ -318,6 +323,19 @@ body {
 .clear-filters-btn:hover {
   background: #1A1A1A;
   color: #FFFFFF;
+}
+
+@media (max-width: 900px) {
+  .filter-sidebar {
+    position: sticky;
+    top: 100px;
+    z-index: 50;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    max-height: calc(100dvh - 180px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
 }
 
 /* ==========================================================================
@@ -528,4 +546,45 @@ body {
   font-size: 0.88rem;
   color: #666;
   margin: 0;
+}
+
+/* ==========================================================================
+   SEARCH PAGE — COMPREHENSIVE RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+@media (max-width: 991px) {
+  .search-page { padding-top: 110px; }
+  .search-header { margin-bottom: 28px; }
+  .search-result-title { font-size: clamp(1rem, 3vw, 1.6rem); }
+}
+
+@media (max-width: 768px) {
+  .search-page { padding-top: 90px; }
+  .search-header { gap: 12px; padding-bottom: 16px; }
+  .search-result-title { font-size: clamp(0.9rem, 4vw, 1.3rem); }
+  .filter-sidebar { top: 75px; max-height: calc(100dvh - 80px); }
+  .no-results { padding: 40px 15px; }
+  .no-results-illustration { width: 110px; height: 110px; }
+  .no-results-title { font-size: 1.2rem; }
+}
+
+@media (max-width: 576px) {
+  .search-page { padding-top: 80px; padding-bottom: 50px; }
+  .search-header { flex-direction: column; align-items: flex-start; }
+  .search-result-title { font-size: clamp(0.82rem, 5vw, 1.1rem); }
+  .filter-sidebar { top: 75px; max-height: calc(100dvh - 75px); }
+  .no-results { padding: 30px 12px; }
+  .no-results-illustration { width: 90px; height: 90px; }
+  .no-results-title { font-size: 1rem; }
+  .no-results-sub { font-size: 0.82rem; }
+}
+
+@media (max-width: 400px) {
+  .search-result-title { font-size: 0.78rem; }
+  .no-results { padding: 24px 10px; }
+  .no-results-illustration { width: 75px; height: 75px; }
+}
+
+@media (min-width: 1400px) {
+  .search-page { padding-top: 150px; }
 }

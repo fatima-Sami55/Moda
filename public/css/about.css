@@ -25,6 +25,7 @@ body {
   margin: 0;
   padding-top: 130px; /* Offsets fixed navbar */
   padding-bottom: 0px !important;
+  overflow-x: hidden;
 }
 
 /* ==========================================================================
@@ -34,7 +35,18 @@ body {
   width: 100%;
   max-width: 1300px;
   margin: 0 auto;
-  padding: 0 4% !important;
+  padding: 0 max(4%, 24px) !important;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.about-hero-section > .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.about-hero-section > .row > [class*="col-"] {
+  min-width: 0;
 }
 
 /* Asymmetric Page Title */
@@ -52,6 +64,10 @@ body {
   line-height: 0.95;
   color: var(--text-primary) !important;
   letter-spacing: -0.02em;
+}
+
+.about-main-title > span {
+  white-space: normal !important;
 }
 
 .about-main-title .outlined-word {
@@ -163,6 +179,7 @@ body {
   line-height: 1.5 !important;
   color: var(--text-primary) !important;
   margin-bottom: 20px;
+  overflow-wrap: anywhere;
 }
 
 .about-desc-sub {
@@ -170,6 +187,7 @@ body {
   line-height: 1.65 !important;
   color: var(--text-secondary) !important;
   margin-bottom: 35px;
+  overflow-wrap: anywhere;
 }
 
 /* Pillars Grid (Pillar Cards) */
@@ -269,7 +287,7 @@ body {
    ========================================================================== */
 @media screen and (max-width: 991px) {
   body {
-    padding-top: 110px;
+    padding-top: 100px;
   }
   
   .about-main-title {
@@ -278,7 +296,7 @@ body {
   
   .about-image-column {
     padding-right: 0px !important;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
   }
   
   .about-text-column {
@@ -287,23 +305,159 @@ body {
   
   .about-image-frame {
     max-width: 100%;
+    box-shadow: 10px 10px 0px var(--text-primary) !important;
   }
   
   .about-main-image {
-    height: 480px;
+    height: 460px;
+  }
+
+  .about-desc-lead {
+    font-size: 1.15rem !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    padding-top: 90px;
+  }
+
+  .about-main-title {
+    font-size: 2.6rem !important;
+  }
+
+  .about-main-image {
+    height: 380px;
+  }
+
+  .about-sticker {
+    width: 90px !important;
+    height: 90px !important;
+    bottom: -18px !important;
+    right: -18px !important;
+  }
+
+  .about-sticker-bold {
+    font-size: 1.1rem !important;
+  }
+
+  .about-desc-lead {
+    font-size: 1.05rem !important;
+  }
+
+  .about-desc-sub {
+    font-size: 0.95rem !important;
+  }
+
+  .pillar-card {
+    padding: 16px 18px !important;
+  }
+
+  .pillar-title {
+    font-size: 1rem !important;
+  }
+
+  .about-action-row {
+    margin-top: 28px;
+    gap: 10px;
+  }
+
+  .about-btn {
+    padding: 10px 22px !important;
+    font-size: 0.88rem !important;
   }
 }
 
 @media screen and (max-width: 576px) {
+  body {
+    padding-top: 80px;
+  }
+
+  .about-hero-section {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
   .about-main-title {
-    font-size: 2.4rem !important;
+    font-size: 2rem !important;
+    line-height: 1.0 !important;
+    overflow-wrap: anywhere;
   }
   
   .about-subtitle-tag {
-    font-size: 0.85rem !important;
+    font-size: 0.82rem !important;
+    padding: 5px 14px !important;
+  }
+
+  .about-main-image {
+    height: 300px;
+  }
+
+  .about-sticker {
+    width: 76px !important;
+    height: 76px !important;
+    bottom: -15px !important;
+    right: -12px !important;
+  }
+
+  .about-sticker-bold {
+    font-size: 0.9rem !important;
+  }
+
+  .about-sticker-tag {
+    font-size: 0.48rem !important;
   }
   
   .about-btn {
     width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .about-action-row {
+    flex-direction: column !important;
+  }
+
+  .about-header-row {
+    margin-bottom: 30px;
+    padding-bottom: 18px;
+  }
+
+  .pillar-card {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .about-hero-section {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .about-main-title {
+    font-size: 1.7rem !important;
+  }
+
+  .about-main-image {
+    height: 250px;
+  }
+
+  .pillar-card {
+    padding: 12px 14px !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  .about-main-title {
+    font-size: 5.5rem !important;
+  }
+
+  .about-main-image {
+    height: 780px;
+  }
+
+  .about-image-frame {
+    max-width: 520px;
   }
 }

@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const { pool } = require("../database/data");
 const sql = require("mssql");
-const isAuthenticated = require("../Middleware/is_logged_in");
-const checkEmailVerified = require("../Middleware/getEmailVerification");
-const { verifyCsrf } = require("../Middleware/csrf");
+const isAuthenticated = require("../middleware/is-logged-in");
+const checkEmailVerified = require("../middleware/get-email-verification");
+const { verifyCsrf } = require("../middleware/csrf");
 
 
 
@@ -12,7 +12,7 @@ router.get("/wish", isAuthenticated,checkEmailVerified, async (req, res) => {
   const userId = req.session.userId;
   try {
     const result = await pool.request().input("user_id", userId).query("SELECT * FROM wish_items WHERE user_id = @user_id");
-    const { getAllProductRatings } = require("../helper_functions/getRating");
+    const { getAllProductRatings } = require("../helper-functions/get-rating");
     const ratingsMap = await getAllProductRatings();
     res.render("wish.ejs", { data: result.recordset, page: "wish", ratingsMap });
   } catch (err) {
@@ -27,7 +27,7 @@ router.post("/wish", isAuthenticated,checkEmailVerified, verifyCsrf, async (req,
   const currentDate = new Date();
 
   // Secure backend price lookup to prevent client-side manipulation
-  const { findProductByName } = require("../helper_functions/getRating");
+  const { findProductByName } = require("../helper-functions/get-rating");
   const product = findProductByName(itemName);
   if (!product) {
     if (req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest') {

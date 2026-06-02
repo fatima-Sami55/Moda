@@ -22,6 +22,8 @@
 html {
   scroll-behavior: smooth !important;
   background-color: var(--bg-deep);
+  overflow-x: hidden; /* Prevent horizontal scroll on all pages */
+  min-width: 320px;   /* Never render below 320px (smallest supported viewport) */
 }
 
 a,
@@ -245,4 +247,137 @@ body.unverified .site-header {
 
 body.unverified .sidebar-card-wrapper {
   top: 188px !important; /* Offsets sticky profile sidebar: 140px default + 48px strip */
+}
+
+/* ==========================================================================
+   GLOBAL RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* Large Tablet / Small Desktop — 991px */
+@media (max-width: 991px) {
+  :root {
+    --header-height: 70px;
+  }
+
+  section {
+    padding: 60px 0;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+  }
+
+  h2 {
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+  }
+
+  h3 {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+  }
+}
+
+/* Tablet — 768px */
+@media (max-width: 768px) {
+  section {
+    padding: 50px 0;
+  }
+
+  button,
+  .btn,
+  input[type="submit"],
+  input[type="button"] {
+    padding: 0.75rem 1.2rem;
+    font-size: 0.85rem;
+  }
+
+  .verification-strip {
+    height: auto !important;
+    min-height: 48px !important;
+    padding: 8px 12px !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .verification-strip .strip-text {
+    font-size: 11px !important;
+  }
+
+  .verification-strip .strip-action-btn {
+    font-size: 9px !important;
+    padding: 5px 12px !important;
+  }
+
+  body.unverified {
+    padding-top: 160px !important;
+  }
+
+  body.unverified header,
+  body.unverified .site-header {
+    top: 64px !important;
+  }
+
+  body.unverified .sidebar-card-wrapper {
+    top: 220px !important;
+  }
+}
+
+/* Mobile — 576px */
+@media (max-width: 576px) {
+  :root {
+    --header-height: 65px;
+  }
+
+  section {
+    padding: 40px 0;
+  }
+
+  h1 {
+    font-size: clamp(1.8rem, 8vw, 2.8rem);
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 7vw, 2.2rem);
+  }
+
+  h3 {
+    font-size: clamp(1.2rem, 6vw, 1.8rem);
+  }
+
+  button,
+  .btn,
+  input[type="submit"],
+  input[type="button"] {
+    padding: 0.7rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .verification-strip .strip-text {
+    font-size: 10px !important;
+  }
+
+  body.unverified {
+    padding-top: 180px !important;
+  }
+}
+
+/* Small Mobile — 400px */
+@media (max-width: 400px) {
+  h1 {
+    font-size: clamp(1.5rem, 9vw, 2.2rem);
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 8vw, 1.9rem);
+  }
+
+  section {
+    padding: 32px 0;
+  }
+}
+
+/* Wide Desktop — 1400px+ */
+@media (min-width: 1400px) {
+  section {
+    padding: 100px 0;
+  }
 }

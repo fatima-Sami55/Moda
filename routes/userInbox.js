@@ -2,18 +2,18 @@ const express = require("express");
 const router = express.Router();
 const { pool } = require("../database/data");
 const sql = require("mssql");
-const getUserMiddleware = require("../Middleware/getUser");
-const getPurchaseMiddleware = require("../Middleware/getPurchase");
-const getOrderMiddleware = require("../Middleware/getOrders");
-const isAuthenticated = require("../Middleware/is_logged_in");
-const checkEmailVerified = require("../Middleware/getEmailVerification");
-const { verifyCsrf } = require("../Middleware/csrf");
-const logEmail = require("../helper_functions/emailLogger");
-const sendEmail = require("../helper_functions/emailWriter");
-const {html2, html3, html4} = require("../helper_functions/emailMessages");
+const getUserMiddleware = require("../middleware/get-user");
+const getPurchaseMiddleware = require("../middleware/get-purchase");
+const getOrderMiddleware = require("../middleware/get-orders");
+const isAuthenticated = require("../middleware/is-logged-in");
+const checkEmailVerified = require("../middleware/get-email-verification");
+const { verifyCsrf } = require("../middleware/csrf");
+const logEmail = require("../helper-functions/email-logger");
+const sendEmail = require("../helper-functions/email-writer");
+const {html2, html3, html4} = require("../helper-functions/email-messages");
 const {
   getCurrentNotifications,
-} = require("../helper_functions/timeBasedUpdate");
+} = require("../helper-functions/time-based-update");
 
 router.get("/orders", isAuthenticated, checkEmailVerified, (req, res) => {
   res.redirect("/user-profile?tab=orders");

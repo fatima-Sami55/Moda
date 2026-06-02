@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('../partials/head', {title: 'Acess - Shopping Cart'}) %>
+  <%- include('../partials/head', {title: 'Moda - Shopping Cart'}) %>
   <!-- stylesheets -->
   <link href="/css/cart.css" rel="stylesheet" type="text/css" />
   <link
@@ -58,7 +58,7 @@
           <div class="col-12 col-lg-8">
             
             <!-- Desktop Table View -->
-            <div class="table-responsive d-none d-md-block">
+            <div class="table-responsive d-none d-lg-block">
               <table id="cart" class="table align-middle">
                 <thead>
                   <tr>
@@ -105,7 +105,7 @@
             </div>
 
             <!-- Mobile Card View -->
-            <div class="d-block d-md-none">
+            <div class="d-block d-lg-none">
               <% cartItems.forEach((item, index) => { %>
                 <div class="card mb-3 cart-mobile-card">
                   <div class="card-body">

@@ -226,3 +226,38 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--primary-accent);
 }
+
+/* ==========================================================================
+   REVIEW PAGE — COMPREHENSIVE RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+body {
+  padding-top: 110px;
+}
+
+@media (max-width: 991px) {
+  body { padding-top: 100px; }
+  .review-item.card strong[id^="productName"] { font-size: 1.3rem !important; }
+}
+
+@media (max-width: 768px) {
+  body { padding-top: 90px; }
+  .review-item.card { box-shadow: 4px 4px 0px var(--text-primary) !important; }
+  .review-item.card strong[id^="productName"] { font-size: 1.15rem !important; }
+  .rating { font-size: 26px; }
+  .input-group-text { font-size: 0.9rem !important; }
+  .btn-submit, .btn-delete { font-size: 0.85rem !important; padding: 8px 18px !important; }
+}
+
+@media (max-width: 576px) {
+  body { padding-top: 80px; }
+  .review-item.card strong[id^="productName"] { font-size: 1rem !important; }
+  .rating { font-size: 22px; height: 26px; line-height: 26px; }
+  .review-input.form-control { padding: 8px 12px !important; }
+  .btn-submit, .btn-delete { width: 100% !important; font-size: 0.8rem !important; }
+  .review-item.card h6.text-muted { font-size: 0.85rem; }
+}
+
+@media (max-width: 400px) {
+  .review-item.card strong[id^="productName"] { font-size: 0.88rem !important; }
+  .rating { font-size: 20px; }
+}
