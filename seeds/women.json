@@ -4,7 +4,7 @@
       "name": "Pink sneakers",
       "description": "Comfortable sneakers with breathable mesh and cushioned soles.",
       "price": 89.99,
-      "image": "../image/women/women1.jpg",
+      "image": "../image/women/women-1.jpg",
       "categories": "women",
       "style": "casual"
     },
@@ -13,7 +13,7 @@
       "name": "High Heels",
       "description": "Elegant high heels with a sleek design and comfortable fit.",
       "price": 79.99,
-      "image": "../image/women/women2.avif",
+      "image": "../image/women/women-2.avif",
       "categories": "women",
       "style": "formal"
     },
@@ -22,7 +22,7 @@
       "name": "Summer Dress",
       "description": "Lightweight summer dress with floral print and adjustable straps.",
       "price": 59.99,
-      "image": "../image/women/women3.jpg",
+      "image": "../image/women/women-3.jpg",
       "categories": "women",
       "style": "casual"
     },
@@ -31,7 +31,7 @@
       "name": "Evening Gown",
       "description": "Stunning evening gown with sequins and a flowing silhouette.",
       "price": 149.99,
-      "image": "../image/women/women4.jpg",
+      "image": "../image/women/women-4.jpg",
       "categories": "women",
       "style": "formal"
     },
@@ -40,7 +40,7 @@
       "name": "Leather Jacket",
       "description": "Classic leather jacket with zippered pockets and quilted lining.",
       "price": 129.99,
-      "image": "../image/women/women5.jpg",
+      "image": "../image/women/women-5.jpg",
       "categories": "women",
       "style": "casual"
     },
@@ -49,7 +49,7 @@
       "name": "Boho Chic Blouse",
       "description": "Bohemian-style blouse with intricate embroidery and tassel ties.",
       "price": 69.99,
-      "image": "../image/women/women6.avif",
+      "image": "../image/women/women-6.avif",
       "categories": "women",
       "style": "bohemian"
     },
@@ -58,7 +58,7 @@
       "name": "Denim Jeans",
       "description": "Slim-fit denim jeans with distressed detailing.",
       "price": 79.99,
-      "image": "../image/women/women7.jpg",
+      "image": "../image/women/women-7.jpg",
       "categories": "women",
       "style": "casual"
     },
@@ -67,7 +67,7 @@
       "name": "Maxi Skirt",
       "description": "Flowy maxi skirt with a comfortable elastic waistband.",
       "price": 49.99,
-      "image": "../image/women/women8.jpg",
+      "image": "../image/women/women-8.jpg",
       "categories": "women",
       "style": "casual"
     },
@@ -76,7 +76,7 @@
       "name": "Ankle Boots",
       "description": "Stylish ankle boots with stacked heels and side zipper.",
       "price": 109.99,
-      "image": "../image/women/women9.avif",
+      "image": "../image/women/women-9.avif",
       "categories": "women",
       "style": "casual"
     },
@@ -85,7 +85,7 @@
       "name": "Diamond Necklace",
       "description": "Exquisite diamond necklace with a sparkling pendant.",
       "price": 299.99,
-      "image": "../image/women/women10.avif",
+      "image": "../image/women/women-10.avif",
       "categories": "women",
       "style": "formal"
     },
@@ -94,7 +94,7 @@
       "name": "Gold Bracelet",
       "description": "Elegant gold bracelet with intricate filigree work.",
       "price": 199.99,
-      "image": "../image/women/women11.avif",
+      "image": "../image/women/women-11.avif",
       "categories": "women",
       "style": "formal"
     },
@@ -103,7 +103,7 @@
       "name": "Pearl Earrings",
       "description": "Classic pearl earrings with sterling silver posts.",
       "price": 89.99,
-      "image": "../image/women/women12.avif",
+      "image": "../image/women/women-12.avif",
       "categories": "women",
       "style": "formal"
     },
@@ -112,7 +112,7 @@
       "name": "Sun Hat",
       "description": "Wide-brimmed sun hat with UPF 50+ protection.",
       "price": 39.99,
-      "image": "../image/women/women13.avif",
+      "image": "../image/women/women-13.avif",
       "categories": "women",
       "style": "casual"
     },
@@ -121,7 +121,7 @@
       "name": "Silk Scarf",
       "description": "Luxurious silk scarf with a vibrant floral print.",
       "price": 49.99,
-      "image": "../image/women/women14.avif",
+      "image": "../image/women/women-14.avif",
       "categories": "women",
       "style": "formal"
     },
@@ -130,7 +130,7 @@
       "name": "Black sari",
       "description": "A timeless black Indian sari, elegantly woven with intricate patterns, perfect for special occasions.",
       "price": 69.99,
-      "image": "../image/women/women15.jpg",
+      "image": "../image/women/women-15.jpg",
       "categories": "women",
       "style": "traditional"
     },
@@ -139,7 +139,7 @@
       "name": "Wedding Dress",
       "description": "Exquisite wedding dress with lace detailing and a flowing train.",
       "price": 999.99,
-      "image": "../image/women/women16.avif",
+      "image": "../image/women/women-16.avif",
       "categories": "women",
       "style": "formal"
     },
@@ -148,7 +148,7 @@
       "name": "Retro Sunglasses",
       "description": "Vintage-inspired sunglasses with UV protection.",
       "price": 29.99,
-      "image": "../image/women/women17.avif",
+      "image": "../image/women/women-17.avif",
       "categories": "women",
       "style": "vintage"
     },
@@ -157,7 +157,7 @@
       "name": "Leather Handbag",
       "description": "Stylish leather handbag with multiple compartments.",
       "price": 149.99,
-      "image": "../image/women/women18.avif",
+      "image": "../image/women/women-18.avif",
       "categories": "women",
       "style": "casual"
     },
@@ -166,7 +166,7 @@
       "name": "Casual Sneakers",
       "description": "Comfortable casual sneakers with a sporty design.",
       "price": 79.99,
-      "image": "../image/women/women19.avif",
+      "image": "../image/women/women-19.avif",
       "categories": "women",
       "style": "casual"
     },
@@ -175,7 +175,7 @@
       "name": "Traditional blue kurta",
       "description": "A classic blue kurta, tailored in traditional style with intricate detailing, ideal for cultural gatherings.",
       "price": 59.99,
-      "image": "../image/women/women20.jpg",
+      "image": "../image/women/women-20.jpg",
       "categories": "women",
       "style": "traditional"
     },
@@ -184,7 +184,7 @@
       "name": "Cashmere Sweater",
       "description": "Luxurious cashmere sweater with ribbed cuffs and hem.",
       "price": 129.99,
-      "image": "../image/women/women21.jpg",
+      "image": "../image/women/women-21.jpg",
       "categories": "women",
       "style": "formal"
     },
@@ -193,7 +193,7 @@
       "name": "Winter Coat",
       "description": "Warm winter coat with faux fur trim and quilted lining.",
       "price": 199.99,
-      "image": "../image/women/women22.avif",
+      "image": "../image/women/women-22.avif",
       "categories": "women",
       "style": "casual"
     },
@@ -202,7 +202,7 @@
       "name": "Gold Necklace",
       "description": "Bold statement necklace with colorful gemstones.",
       "price": 149.99,
-      "image": "../image/women/women23.avif",
+      "image": "../image/women/women-23.avif",
       "categories": "women",
       "style": "formal"
     },
@@ -211,7 +211,7 @@
       "name": "Fashion Watch",
       "description": "Stylish fashion watch with a sleek stainless steel design.",
       "price": 99.99,
-      "image": "../image/women/women24.avif",
+      "image": "../image/women/women-24.avif",
       "categories": "women",
       "style": "casual"
     }

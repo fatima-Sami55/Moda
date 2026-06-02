@@ -20,10 +20,6 @@ function searchProducts(query) {
   query = query || ""; // Default to an empty string if query is undefined
   query = query.toLowerCase();
 
-  console.log(`Filtering products with query: ${query}`);
-
-  const start = Date.now();
-
   // Combine all products from accessories and products data
   const allProducts = [
     ...accessoriesData.shoes,
@@ -40,10 +36,6 @@ function searchProducts(query) {
   const filteredProducts = allProducts.filter((product) => {
     return product.name?.toLowerCase().includes(query);
   });
-
-  const end = Date.now();
-  console.log(`Filtering completed in ${end - start}ms`);
-  console.log(`Filtered products: ${filteredProducts.length}`);
 
   return filteredProducts;
 }

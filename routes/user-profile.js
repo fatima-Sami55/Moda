@@ -11,7 +11,7 @@ const isAuthenticated = require("../middleware/is-logged-in");
 const multer = require("multer");
 const bcrypt = require("bcryptjs");
 const validateSignupInput = require("../helper-functions/validation");
-const { verifyCsrf } = require("../Middleware/csrf");
+const { verifyCsrf } = require("../middleware/csrf");
 const { storage } = require("../cloudinary/cloudinary");
 const upload = multer({ storage });
 const logEmail = require("../helper-functions/email-logger");
@@ -22,7 +22,6 @@ const { getCurrentNotifications } = require("../helper-functions/time-based-upda
 function sanitizeSession() {
   const delSql = `DELETE FROM sessions WHERE JSON_VALUE(data, '$.userId') IS NULL`;
   pool.request().query(delSql).then(() => {
-    console.log("cleared session!");
   }).catch((err) => {
     console.error("Error deleting sessions:", err);
   });

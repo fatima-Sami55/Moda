@@ -9,7 +9,6 @@ require("dotenv").config();
  * @returns {Promise<boolean>} success
  */
 const sendEmail = async ({ to, subject, html }) => {
-  console.log(to, subject, html);
   try {
     await transporter.sendMail({
       from: `"Moda" <${process.env.GMAIL_USER}>`,
@@ -17,10 +16,9 @@ const sendEmail = async ({ to, subject, html }) => {
       subject,
       html,
     });
-    console.log("✅ Email sent to:", to);
     return true;
   } catch (err) {
-    console.error("❌ Email send error:", err);
+    console.error("Email send error:", err);
     return false;
   }
 };

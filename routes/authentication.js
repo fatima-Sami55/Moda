@@ -6,20 +6,20 @@ const path = require("path");
 const { pool } = require("../database/data");
 const sql = require("mssql");
 const baseUrl = process.env.BASE_URL;
-const getUserMiddleware = require("../Middleware/get-user");
-const getCartMiddleware = require("../Middleware/get-cart");
-const getWishMiddleware = require("../Middleware/get-wishlist");
-const getPurchaseMiddleware = require("../Middleware/get-purchase");
+const getUserMiddleware = require("../middleware/get-user");
+const getCartMiddleware = require("../middleware/get-cart");
+const getWishMiddleware = require("../middleware/get-wishlist");
+const getPurchaseMiddleware = require("../middleware/get-purchase");
 // getNoticeCount import removed
 const transporter = require("../helper-functions/email");
 const crypto = require("crypto");
-const isAuthenticated = require("../Middleware/is-logged-in");
+const isAuthenticated = require("../middleware/is-logged-in");
 const logEmail = require("../helper-functions/email-logger");
 const validateSignupInput = require("../helper-functions/validation");
-const redirectIfAuthenticated = require("../Middleware/is-allowed");
+const redirectIfAuthenticated = require("../middleware/is-allowed");
 const { storage } = require("../cloudinary/cloudinary");
 const upload = multer({ storage });
-const { verifyCsrf } = require("../Middleware/csrf");
+const { verifyCsrf } = require("../middleware/csrf");
 
 async function getUserByEmail(email) {
   const result = await pool
@@ -76,12 +76,7 @@ const { isValid, errors } = validateSignupInput({
   zip,
 });
 
-console.log(req.body)
-console.log(imageUrl)
-
-
 if (!isValid) {
-  console.log("Validation errors:", errors);
    return res.json({error: "Check input fields for errors."});
 }
 
@@ -92,7 +87,6 @@ if (!isValid) {
       .query("SELECT email FROM users WHERE email = @email");
 
     if (checkUser.recordset.length > 0) {
-         console.log("That email is already registered. Try logging in instead.");
          return res.json({error: "⚠️ That email is already registered. Try logging in instead."});
     }
 
@@ -119,9 +113,8 @@ if (!isValid) {
         `,
       });
       req.flash("success", "✅ Verification email sent" );
-      console.log("✅ Verification email sent to:", email);
     } catch (emailError) {
-      console.log("❌ Email failed to send:", emailError);
+      console.error("Email verification send failed:", emailError);
       return res.json({error: "❌ Email failed to send."});
     }
 
@@ -147,7 +140,6 @@ if (!isValid) {
         VALUES (@firstname, @lastname, @email, @Pass, @phone, @address, @city, @province, @zip, @img, @date_joined)
       `);
 
-    console.log(result)
     const userId = result.recordset[0].id;
 
     // Save token for verification
@@ -174,8 +166,7 @@ if (!isValid) {
 
 
   } catch (error) {
-    console.error("🔥 Signup crash:", error);
-    console.log("Unexpected error occurred. Try again.");
+    console.error("Signup failed:", error);
     res.status(500).json({ error: "Signup crash. Unexpected error occurred. Try again." });
   }
 });
@@ -232,7 +223,7 @@ router.post("/login", async (req, res) => {
     });
 
   } catch (e) {
-    console.log("Error:", e);
+    console.error("Login failed:", e);
     if (req.accepts("json")) {
       return res.status(500).json({ error: "Internal Server Error" });
     }
@@ -344,9 +335,8 @@ router.post("/resend-verification", isAuthenticated, async (req, res) => {
           <p>This link will expire in 24 hours.</p>
         `,
       });
-      console.log("✅ Verification email re-sent to:", email);
     } catch (emailErr) {
-      console.error("❌ Email send error:", emailErr);
+      console.error("Verification email resend failed:", emailErr);
       return res.json({ error: "❌ Failed to send email. Try again." });
     }
 

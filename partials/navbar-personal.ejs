@@ -47,29 +47,6 @@ header .logo img {
   filter: drop-shadow(0 0 8px var(--border-glow));
 }
 
-header.nav-after {
-  top: 0;
-}
-
-header.offset-top {
-  top: 60px; 
-}
-
-@media (max-width: 804px) {
-  body.unverified header.nav-after {
-    top: 120px !important;
-  }
-  .user-dashboard {
-    padding-top: 250px;
-  }
-}
-
-@media (max-width: 360px) {
-  body.unverified header.nav-after {
-    top: 130px !important;
-  }
-}
-
 #chk1 {
   display: none;
 }
@@ -90,8 +67,6 @@ header ul {
   flex: 2;
   justify-content: space-evenly;
   align-items: center;
-  margin: 0;
-  padding: 0;
 }
 
 header ul li {
@@ -154,62 +129,34 @@ header a:focus {
     top: 90px;
     right: -100%;
     width: 60%;
-    height: calc(100dvh - 90px);
-    max-height: calc(100dvh - 90px);
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    height: calc(100vh - 90px);
     background-color: var(--bg-surface) !important;
     border-left: 1px solid var(--border-light);
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     padding-top: 40px;
-    padding-bottom: 40px;
     gap: 40px;
     transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     box-shadow: var(--shadow-premium);
-    z-index: 1099;
-  }
-
-  body.unverified header ul {
-    top: 130px;
-    height: calc(100dvh - 130px);
-    max-height: calc(100dvh - 130px);
+    z-index: 1000;
   }
 
   #chk1:checked ~ ul {
     right: 0;
   }
 }
-
-header.checkout-nav {
-  justify-content: center;
-}
-
-header.checkout-nav .logo {
-  flex: 0 0 auto;
-}
-
-header.checkout-nav .menu,
-header.checkout-nav .nav-links,
-header.checkout-nav #chk1 {
-  display: none !important;
-}
 </style>
 
 <!-- Global Neobrutalist Toast component included -->
 <%- include('toast') %>
-<%
-  let headerClass = 'nav-after';
-  if (page === 'user' && !isVerified) {
-    headerClass += ' offset-top';
-  }
-%>
 
-<!-- Header -->
-<header id="navbar" class="shadow p-3 mb-5 bg-body-tertiary rounded <%= headerClass %> <%= page === 'checkout' ? 'checkout-nav' : '' %>">
-    <!-- Navbar logo -->
-   <div class="logo">
+<header id="navbar" class="nav-after">
+  <!-- Hidden checkbox to control menu toggle -->
+  <input type="checkbox" id="chk1">
+
+  <!-- Logo -->
+  <div class="logo">
     <h3>
       <a
         href="/home"
@@ -217,7 +164,7 @@ header.checkout-nav #chk1 {
         style="text-decoration: none; color: black"
       >
         <img
-          src="../image/Acess logo/logo.png"
+          src="../image/moda-logo/logo.png"
           class="h-8"
           alt="Moda Logo"
           style="width: 60px; height: 60px"
@@ -229,28 +176,43 @@ header.checkout-nav #chk1 {
       </a>
     </h3>
   </div>
-  <!-- Hamburger toggle -->
-  <input type="checkbox" id="chk1" hidden />
-  
   <!-- Hamburger Icon -->
-  <div class="menu">
-    <label for="chk1"><i class="fa fa-bars"></i></label>
-  </div>
+  <label for="chk1" class="menu">
+    <i class="fa fa-bars"></i>
+  </label>
 
   <!-- Navigation Links -->
-  <ul class="nav-links">
-    <% if (page === 'wish') { %>
-      <li><a href="/home">Home</a></li>
-      <li><a href="/add-to-cart">Cart</a></li>
-    <% } else if (page === 'cart') { %>
-      <li><a href="/home">Home</a></li>
-      <li><a href="/wish">Wishlist</a></li>
-    <% } else if (page === 'user') { %>
-      <li><a href="/home">Home</a></li>
-      <li><a href="/wish">Wishlist</a></li>
-      <li><a href="/add-to-cart">Cart</a></li>
+  <ul>
+    <% if (page === 'inbox') { %>
+    <li><a href="/home">Home</a></li>
+    <li><a href="/orders">Orders</a></li>
+    <li><a href="/email">Email</a></li>
+    <li><a href="/review">Reviews</a></li>
+    <% } else if (page === 'orders') { %>
+    <li><a href="/home">Home</a></li>
+    <li><a href="/inbox">Inbox</a></li>
+    <li><a href="/email">Email</a></li>
+    <li><a href="/review">Reviews</a></li>
+    <% } else if (page === 'email') { %>
+    <li><a href="/home">Home</a></li>
+    <li><a href="/inbox">Inbox</a></li>
+    <li><a href="/orders">Orders</a></li>
+    <li><a href="/review">Reviews</a></li>
+    <% } else if (page === 'Reviews') { %>
+    <li><a href="/home">Home</a></li>
+    <li><a href="/inbox">Inbox</a></li>
+    <li><a href="/orders">Orders</a></li>
+    <li><a href="/email">Email</a></li>
+    <% } else if (page === 'track') { %>
+    <li><a href="/home">Home</a></li>
+    <li><a href="/acessiories">Accessories</a></li>
+    <li><a href="/orders">Back</a></li>
+    <% } else if (page === 'shop') { %>
+    <li><a href="/home">Home</a></li>
+    <li><a href="#" class="nav-link category-link" data-category="men">Men</a></li>
+    <li><a href="#" class="nav-link category-link" data-category="women">Women</a></li>
+    <li><a href="#" class="nav-link category-link" data-category="kids">Kids</a></li>
     <% } %>
   </ul>
 </header>
-
 

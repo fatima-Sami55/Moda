@@ -20,7 +20,7 @@
     />
 
 <!-- Navbar -->
-<%- include('../partials/navbar_personal', { page: page }) %>
+<%- include('../partials/navbar-personal', { page: page }) %>
 <!-- review counter section  -->
   <div class="container" style="padding-top: 200px;">
   <div class="row justify-content-center">
@@ -156,7 +156,6 @@
       if (response.ok) {
         window.location.href = '/review';
       } else {
-        console.log('Review not deleted!');
         button.disabled = false;
         button.innerHTML = originalHTML;
       }

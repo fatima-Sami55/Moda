@@ -16,7 +16,6 @@ cron.schedule("*/30 * * * *", async () => {
 
 // ✅ Insert new notification (avoid duplicates) and notify user (now benign to avoid target collisions)
 async function insertNotifications(notifications) {
-  console.log("⏰ Scheduled background notification check executed (benign).");
 }
 
 // Fetch and emit notifications strictly to the user's private socket room
@@ -32,10 +31,9 @@ async function getCurrentNotifications(userId) {
 
     if (global.io) {
       global.io.to(`user_${userId}`).emit("notifications", notifResult.recordset);
-      console.log(`📥 Notifications emitted to room user_${userId}. Count: ${notifResult.recordset.length}`);
     }
   } catch (err) {
-    console.error(`❌ Error fetching notifications for user ${userId}:`, err);
+    console.error(`Error fetching notifications for user ${userId}:`, err);
   }
 }
 

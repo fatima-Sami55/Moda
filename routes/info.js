@@ -72,7 +72,6 @@ router.post("/contact", isAuthenticated, checkEmailVerified, getUserMiddleware, 
       `
     });
 
-    console.log(`✉️ Contact message successfully forwarded to Samifatima975@gmail.com from ${email}`);
     return res.status(200).json({ success: "✅ Message successfully sent! Our client team will get back to you shortly." });
   } catch (err) {
     console.error("🔥 Error dispatching contact form email:", err);

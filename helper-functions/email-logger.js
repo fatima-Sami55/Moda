@@ -11,7 +11,6 @@ async function logEmail(userId, userName, userEmail, purpose) {
         INSERT INTO EmailLogs (userId, userName, userEmail, purpose)
         VALUES (@userId, @userName, @userEmail, @purpose)
       `);
-    console.log(`📧 Email log recorded for ${userEmail} (${purpose})`);
   } catch (err) {
     console.error("❌ Failed to log email:", err);
   }

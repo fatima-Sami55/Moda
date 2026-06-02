@@ -3,7 +3,7 @@
     "id": 1,
     "name": "Classic Pink Lipstick",
     "description": "Radiate confidence with our vibrant pink lipstick, perfect for any look.",
-    "image": "/image/home/card1.avif",
+    "image": "/image/home/card-1.avif",
     "price": 59.99,
     "categories": "women",
     "style": "formal"
@@ -12,7 +12,7 @@
     "id": 2,
     "name": "Classic Brown Leather Watch",
     "description": "Embrace timeless elegance with our classic brown leather watch, blending sophistication and versatility for every occasion.",
-    "image": "/image/home/card2.avif",
+    "image": "/image/home/card-2.avif",
     "price": 89.99,
     "categories": "men",
     "style": "formal"
@@ -21,7 +21,7 @@
     "id": 3,
     "name": "Fiery Red Lipstick",
     "description": "Make a bold statement with our fiery red lipstick, designed to empower and captivate with its timeless allure.",
-    "image": "/image/home/card3.avif",
+    "image": "/image/home/card-3.avif",
     "price": 120.10,
     "categories": "women",
     "style": "formal"
@@ -30,7 +30,7 @@
     "id": 4,
     "name": "Chic White Frame Shades",
     "description": "Elevate your style with our chic white frame shades, combining modern design with a touch of sophistication for effortless glamour.",
-    "image": "/image/home/card4.avif",
+    "image": "/image/home/card-4.avif",
     "price": 75.50,
     "categories": "women",
     "style": "casual"
@@ -39,7 +39,7 @@
     "id": 5,
     "name": "Tri-color Urban Sneaker",
     "description": "Step into urban style with our tri-color sneaker, featuring a dynamic blend of red, black, and white for a bold, contemporary look.",
-    "image": "/image/home/card5.avif",
+    "image": "/image/home/card-5.avif",
     "price": 95.02,
     "categories": "men",
     "style": "casual"
@@ -48,7 +48,7 @@
     "id": 6,
     "name": "Classic White Sneaker",
     "description": "Refresh your wardrobe with our classic white sneaker, crafted for comfort and versatility, perfect for everyday wear and stylish outings.",
-    "image": "/image/home/card6.avif",
+    "image": "/image/home/card-6.avif",
     "price": 110.02,
     "categories": "men",
     "style": "casual"
@@ -57,7 +57,7 @@
     "id": 7,
     "name": "Bold Red Cap",
     "description": "Complete your look with our bold red cap, adding a vibrant pop of color and sporty flair to your outfit.",
-    "image": "/image/home/card7.avif",
+    "image": "/image/home/card-7.avif",
     "price": 45.99,
     "categories": "men",
     "style": "casual"
@@ -66,7 +66,7 @@
     "id": 8,
     "name": "Pack of 4 Crocheted Sweaters",
     "description": "Stay snug and stylish with our pack of 4 crocheted sweaters, offering comfort and versatility.",
-    "image": "/image/home/card8.avif",
+    "image": "/image/home/card-8.avif",
     "price": 35.99,
     "categories": "women",
     "style": "vintage"
@@ -75,7 +75,7 @@
     "id": 9,
     "name": "Classic Golden Frame Shades",
     "description": "Exude timeless sophistication with our classic thin golden frame shades, blending elegance and style.",
-    "image": "/image/home/card9.avif",
+    "image": "/image/home/card-9.avif",
     "price": 55.99,
     "categories": "kids",
     "style": "vintage"

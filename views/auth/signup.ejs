@@ -39,7 +39,7 @@
       <div id="loginForm" class="card shadow mb-4">
         <div class="card-body">
           <h3 class="text-center">
-            <img src="/image/Acess logo/logo.png" alt="Logo" width="60" />
+            <img src="/image/moda-logo/logo.png" alt="Logo" width="60" />
           </h3>
           <form id="form1" class="needs-validation" novalidate enctype="multipart/form-data">
             <div class="row g-3">
@@ -90,7 +90,7 @@
       <div id="signupForm" class="card shadow mb-4 d-none">
         <div class="card-body">
           <h3 class="text-center">
-            <img src="/image/Acess logo/logo.png" alt="Logo" width="60" />
+            <img src="/image/moda-logo/logo.png" alt="Logo" width="60" />
           </h3>
           <form id="form2" class="needs-validation" novalidate>
             <div class="row g-3">
@@ -301,7 +301,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Form 2 Ajax Registration Submission
   form2.addEventListener("submit", function (event) {
     event.preventDefault();
-    console.log("🚀 form2 submit event triggered");
 
     if (!validateForm2()) {
       form2.classList.add("was-validated");
@@ -340,7 +339,6 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
           data = await response.json();
         } catch (err) {
-          console.log("❌ JSON Parse Error");
           if (window.showToast) {
             window.showToast("Could not parse server response.", "error");
           }
@@ -377,7 +375,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       })
       .catch((err) => {
-        console.log("🔥 Fetch error:", err);
         if (window.showToast) {
           window.showToast("Something went wrong. Please try again.", "error");
         }

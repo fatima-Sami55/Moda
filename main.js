@@ -20,8 +20,8 @@ const wish = require("./routes/wish");
 const checkout = require("./routes/checkout");
 const email = require("./routes/email");
 const search = require("./routes/search");
-const userInbox = require("./routes/userInbox");
-const userProfile = require("./routes/userProfile");
+const userInbox = require("./routes/user-inbox");
+const userProfile = require("./routes/user-profile");
 const info = require("./routes/info");
 const error = require("./routes/error");
 const { poolConnect } = require("./database/data");
@@ -32,8 +32,8 @@ const {
 // wrap everything inside async IIFE
 (async () => {
   try {
-    await poolConnect; // ensure MSSQL is connected
-    console.log("✅ MSSQL Connected");
+    await poolConnect;
+    console.log("MSSQL connected");
     await require("./database/migrate")();
 
     // SESSION CONFIG (after DB ready)
@@ -52,7 +52,7 @@ const {
       }),
       secret: (() => {
         if (!process.env.SESSION_SECRET) {
-          throw new Error("❌ CRITICAL: SESSION_SECRET environment variable is missing!");
+          throw new Error("SESSION_SECRET environment variable is missing");
         }
         return process.env.SESSION_SECRET;
       })(),
@@ -69,7 +69,7 @@ const {
     //MIDDLEWARE
     app.set("trust proxy", 1);
 
-    // 🛡️ SECURITY HEADERS (Helmet)
+    // SECURITY HEADERS (Helmet)
     app.use(helmet({
       contentSecurityPolicy: {
         directives: {
@@ -124,7 +124,7 @@ const {
       }
     }));
 
-    // 🛡️ GENERAL RATE LIMITER (DoS Protection) - TEMPORARILY DISABLED FOR TESTING
+    // GENERAL RATE LIMITER (DoS Protection)
   
     const generalLimiter = rateLimit({
       windowMs: 15 * 60 * 1000,
@@ -136,7 +136,7 @@ const {
     app.use(generalLimiter);
   
 
-    // 🛡️ AUTH RATE LIMITER (Brute-Force Protection) - TEMPORARILY DISABLED FOR TESTING
+    // AUTH RATE LIMITER (Brute-Force Protection)
     
     const authLimiter = rateLimit({
       windowMs: 15 * 60 * 1000,
@@ -191,11 +191,7 @@ const {
     io.on("connection", (socket) => {
       socket.on("join", (userId) => {
         socket.join(`user_${userId}`);
-        console.log(`👤 User joined room: user_${userId}`);
         getCurrentNotifications(userId);
-      });
-      socket.on("disconnect", () => {
-        console.log("A user disconnected");
       });
     });
 
@@ -212,19 +208,19 @@ const {
     app.use("/", info);
     app.use("/", error);
 
-    // 🛡️ GLOBAL ERROR HANDLER
+    // GLOBAL ERROR HANDLER
     app.use((err, req, res, next) => {
-      console.error("🔥 Unhandled Server Error:", err);
+      console.error("Unhandled server error:", err);
       res.status(500).render("500-page");
     });
 
    
     // START SERVER
     http.listen(port, () => {
-      console.log(`🚀 Server running at ${port}`);
+      console.log(`Server running on port ${port}`);
     });
 
   } catch (err) {
-    console.error("❌ Failed to start server:", err);
+    console.error("Failed to start server:", err);
   }
 })();

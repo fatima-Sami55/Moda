@@ -16,7 +16,7 @@
     />
 
 <!-- navbar  -->
-    <%- include('../partials/navbar_personal', { page: "track" }) %>
+    <%- include('../partials/navbar-personal', { page: "track" }) %>
 <!-- tracking order section  -->
     <section
       class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16"
@@ -144,8 +144,7 @@
               <ol
                 class="relative ms-3 border-s border-gray-200 dark:border-gray-700"
               >
-                <%=console.log(currentDate)%> <%console.log(new
-                Date(orderData.delivery))%> <% if (currentDate >=new
+                <% if (currentDate >=new
                 Date(orderData.delivery)) { %>
                 <li class="mb-10 ms-6">
                   <span

@@ -5,7 +5,6 @@ async function checkEmailVerified(req, res, next) {
     const userId = req.session.userId;
 
     if (!userId) {
-      console.log("🚫 No user session found.");
       req.flash("error", "🚫 No user session found.");
       return res.redirect("/login");
     }
@@ -16,7 +15,6 @@ async function checkEmailVerified(req, res, next) {
       .query("SELECT is_verified FROM users WHERE id = @id");
 
     if (result.recordset.length === 0) {
-      console.log("❌ User not found in DB.");
       req.flash("error", "❌ User not found in DB.");
       return res.redirect("/login");
     }
@@ -24,7 +22,6 @@ async function checkEmailVerified(req, res, next) {
     const isVerified = result.recordset[0].is_verified;
 
     if (!isVerified) {
-      console.log("⚠️ User email not verified. Blocking access.");
       req.flash("error", "⚠️ User email not verified. Blocking access.");
        if (req.xhr || req.headers.accept?.indexOf("json") > -1) {
        return res.status(401).json({ redirect: "/Product", error: "Email not verified" });}

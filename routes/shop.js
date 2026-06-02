@@ -28,7 +28,6 @@ router.get("/",getUserMiddleware,getCartMiddleware,getWishMiddleware,getPurchase
 
     let email = null;
     let attempts = 0;
- console.log(req.cartItemsCount)
     // Only run these if the user is logged in
     if (isLoggedIn && req.loggedInUser) {
       email = req.loggedInUser.email;
@@ -46,8 +45,6 @@ router.get("/",getUserMiddleware,getCartMiddleware,getWishMiddleware,getPurchase
 
       attempts = attemptResult.recordset[0].attempts;
     }
-
-    //console.log(req.loggedInUser);
 
     const ratingsMap = await getAllProductRatings();
     res.render("home", {
@@ -79,7 +76,6 @@ router.get("/home",getUserMiddleware,getCartMiddleware,getWishMiddleware,getPurc
 
     let email = null;
     let attempts = 0;
- console.log(req.cartItemsCount)
     // Only run these if the user is logged in
     if (isLoggedIn && req.loggedInUser) {
       email = req.loggedInUser.email;
@@ -97,8 +93,6 @@ router.get("/home",getUserMiddleware,getCartMiddleware,getWishMiddleware,getPurc
 
       attempts = attemptResult.recordset[0].attempts;
     }
-
-    //console.log(req.loggedInUser);
 
     const ratingsMap = await getAllProductRatings();
     res.render("home", {
@@ -200,8 +194,6 @@ router.get("/Product",getUserMiddleware,getCartMiddleware,getWishMiddleware,getP
       console.error("Error fetching purchases count:", err);
     }
 
-    console.log(req.cartItemsCount);
-
     // Calculate dynamic average rating and reviews count
     let totalReviews = 0;
     let sumRating = 0;
@@ -264,7 +256,7 @@ router.get("/shop-products", async (req, res) => {
   }
 
   const ratingsMap = await getAllProductRatings();
-  res.render("../partials/shop_products", { data, ratingsMap });
+  res.render("../partials/shop-products", { data, ratingsMap });
 });
 
 router.get("/shop", getUserMiddleware, getCartMiddleware, getWishMiddleware, getPurchaseMiddleware, async(req, res) => {

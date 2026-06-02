@@ -148,7 +148,7 @@
             <% } else { %>
             <div class="no-results">
               <div class="no-results-illustration">
-                <img src="/image/vectors/no_results.svg" alt="No Results Found" class="no-results-svg" />
+                <img src="/image/vectors/no-results.svg" alt="No Results Found" class="no-results-svg" />
               </div>
               <h2 class="no-results-title">No Results Found</h2>
               <p class="no-results-sub">Try a different search term or adjust your filters.</p>
@@ -214,8 +214,6 @@
 
         /* ---- Master function: reads sort + ALL filters, renders grid ---- */
         function applyAll() {
-          console.log("Applying search page filters and sorting...");
-
           // 1. Read sort option
           var sortEl = document.getElementById('sort');
           var sortVal = sortEl ? sortEl.value : 'default';
@@ -235,8 +233,6 @@
           // 4. Read price radio option
           var priceEl = document.querySelector('input[name="price"]:checked');
           var price   = priceEl ? priceEl.value.toLowerCase().trim() : null;
-
-          console.log("Filters active - Categories:", cats, "Styles:", styles, "Price Range:", price, "Sort:", sortVal);
 
           // 5. Filter dataset
           var results = RAW_DATA.filter(function(p) {
@@ -270,7 +266,6 @@
           // 7. Update DOM Grid
           var grid = document.getElementById('p-card');
           if (!grid) {
-            console.warn("Product grid container '#p-card' not found in the DOM.");
             return;
           }
 
@@ -284,7 +279,7 @@
             grid.innerHTML = `
               <div class="no-results" style="grid-column: 1 / -1; width: 100%; box-sizing: border-box;">
                 <div class="no-results-illustration">
-                  <img src="/image/vectors/no_results.svg" alt="No Results Found" class="no-results-svg" />
+                  <img src="/image/vectors/no-results.svg" alt="No Results Found" class="no-results-svg" />
                 </div>
                 <h2 class="no-results-title">No Results Found</h2>
                 <p class="no-results-sub">Try adjusting your filters or clearing them.</p>
@@ -293,15 +288,12 @@
           }
 
           grid.innerHTML = results.map(buildCard).join('');
-          console.log("Search page results rendered successfully. Count:", results.length);
         }
 
         // Expose functions globally immediately
         window.applyAll = applyAll;
 
         window.clearFilters = function() {
-          console.log("Clearing all filters...");
-          
           // Uncheck every checkbox and radio button
           document.querySelectorAll('input[type="checkbox"], input[type="radio"]')
                   .forEach(function(i) { i.checked = false; });
@@ -316,8 +308,6 @@
 
         // Initialize DOM-dependent listeners
         function initListeners() {
-          console.log("Initializing search page DOM listeners...");
-
           /* ---- Accordion toggle ---- */
           document.querySelectorAll('.filter-toggle-btn').forEach(function(btn) {
             btn.addEventListener('click', function() {

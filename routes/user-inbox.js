@@ -93,7 +93,6 @@ router.post("/delete-notification", isAuthenticated, checkEmailVerified, verifyC
       .input("user_id", sql.Int, userId)
       .query("DELETE FROM notifications WHERE id = @id AND user_id = @user_id");
 
-    console.log("Notification deleted:", result.rowsAffected);
     
     // Fetch updated notification list and emit count to client
     const countResult = await pool.request()
@@ -118,7 +117,6 @@ router.post("/delete-all", isAuthenticated, checkEmailVerified, verifyCsrf, asyn
       .input("user_id", sql.Int, userId)
       .query("DELETE FROM notifications WHERE user_id = @user_id");
 
-    console.log("All notifications deleted:", result.rowsAffected);
     res.json({ success: true });
   } catch (error) {
     console.error("Error deleting all notifications:", error);

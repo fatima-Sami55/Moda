@@ -4,8 +4,6 @@ const sql = require("mssql");
 async function runMigrations() {
   try {
     await poolConnect;
-    console.log("⚙️ Running Database Schema Migrations...");
-
     // Check if columns exist
     const checkColumns = await pool.request().query(`
       SELECT COLUMN_NAME 
@@ -28,14 +26,10 @@ async function runMigrations() {
     }
 
     if (columnsToAdd.length > 0) {
-      console.log(`🔨 Adding missing tracking columns to purchaseditems: ${columnsToAdd.join(", ")}`);
       await pool.request().query(`
         ALTER TABLE purchaseditems 
         ADD ${columnsToAdd.join(", ")};
       `);
-      console.log("✅ Database tracking columns successfully added!");
-    } else {
-      console.log("✅ Database tracking columns are already up-to-date!");
     }
 
     // Check if users reset token columns exist
@@ -57,14 +51,10 @@ async function runMigrations() {
     }
 
     if (usersColumnsToAdd.length > 0) {
-      console.log(`🔨 Adding reset token columns to users: ${usersColumnsToAdd.join(", ")}`);
       await pool.request().query(`
         ALTER TABLE users 
         ADD ${usersColumnsToAdd.join(", ")};
       `);
-      console.log("✅ Users reset token columns successfully added!");
-    } else {
-      console.log("✅ Users reset token columns are already up-to-date!");
     }
   } catch (err) {
     console.error("❌ Database migration failed:", err);

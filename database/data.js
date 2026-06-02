@@ -22,7 +22,6 @@ pool.on('error', err => {
 
 process.on('SIGINT', async () => {
   await pool.close();
-  console.log("🧹 SQL pool closed");
   process.exit(0);
 });
 

@@ -1,88 +1,186 @@
-🛍️ Moda — E-commerce Web Application
-======================================
+# Moda E-commerce Web Application
 
-A modern, full-featured, and responsive e-commerce web application built with Node.js, Express, EJS, and Microsoft SQL Server (hosted on Azure).
+Moda is a full-stack e-commerce web application built with Node.js, Express, EJS, Socket.IO, and Microsoft SQL Server. The project provides a server-rendered shopping experience with authentication, product browsing, cart and wishlist management, checkout, order tracking, reviews, notifications, and transactional email support.
 
-🎯 Project Overview
--------------------
+## Project Overview
 
-**Moda** is an end-to-end e-commerce platform designed for modern retail experiences. It includes user authentication, cart & wishlist features, real-time notifications, email verification, order management, admin dashboards, and mobile-first responsive UI — all backed by a robust MSSQL database deployed on Microsoft Azure.
+Moda is designed as a complete retail storefront for fashion and accessories. It combines server-side rendering with interactive client-side behavior to support a responsive shopping workflow across desktop and mobile devices.
 
-⚙️ Core Functionality
----------------------
+The application includes customer account management, email verification, profile management, product discovery, category filtering, real-time notifications, and order lifecycle tracking. Static product seed data is used alongside database-backed user, cart, wishlist, review, order, notification, and email records.
 
-*   👤 User registration, login, and email verification
-*   🛒 Cart and wishlist functionality with session handling
-*   📦 Order placement, tracking, and review submission
-*   🔔 Real-time notifications (Socket.IO) for order status
-*   📧 Email sending using Nodemailer (e.g., activation links, order confirmations)
-*   🖼️ Product image uploads via Multer
-*   🕐 Cron jobs for background tasks like notifications
-*   📱  Mobile-responsive design with custom breakpoints
-*   👉 And much more
+## Key Features
 
-💻 Tech Stack
--------------
+- User registration, login, logout, and session management
+- Email verification and password reset flows
+- Product catalog for home, shop, men, women, kids, and accessories
+- Product detail pages with ratings, reviews, and related product suggestions
+- Cart and wishlist management
+- Secure checkout workflow with CSRF protection
+- Order history and order tracking views
+- Review submission and review deletion
+- User profile editing with image upload support
+- Real-time user notifications with Socket.IO
+- Contact form and transactional email delivery with Nodemailer
+- SQL Server backed sessions using `connect-mssql-v2`
+- Production-focused security middleware with Helmet, rate limiting, secure cookies, and CSRF validation
+- Responsive EJS views with custom CSS, Bootstrap, and Tailwind configuration
 
-##### 🧠 Backend
+## Technology Stack
 
-*   **Node.js & Express** — Core server logic and routing
-*   **MSSQL (via `mssql`)** — Main database, hosted on Azure
-*   **connect-mssql-v2** — Session store using SQL Server
-*   **Passport.js** — Local strategy for user authentication
-*   **Socket.IO** — Real-time communication for notifications
-*   **Node-cron** — Task scheduling for background jobs
+### Backend
 
-##### 🎨 Frontend
+- Node.js
+- Express
+- EJS
+- Microsoft SQL Server
+- `mssql`
+- `connect-mssql-v2`
+- Express Session
+- Socket.IO
+- Nodemailer
+- Multer and Cloudinary storage
+- Node Cron
+- Helmet
+- Express Rate Limit
+- Validator
 
-*   **EJS** — Templating engine for server-rendered HTML
-*   **Bootstrap 5** — Responsive layout and UI components
-*   **TailwindCSS** — Utility-first styling for custom design
-*   **JavaScript** — Form validation, AJAX, and dynamic UI behavior
+### Frontend
 
-🌐 Responsiveness
------------------
+- EJS templates
+- Bootstrap
+- Tailwind CSS configuration
+- Custom CSS modules by page
+- Client-side JavaScript for AJAX workflows, filtering, sorting, cart actions, wishlist actions, reviews, and notifications
 
-The entire application is built with a mobile-first approach using Bootstrap grid system and Tailwind utility classes. The layout adapts seamlessly across:
+### Data and Assets
 
-*   📱 Mobile (hamburger menus, stacked layouts)
-*   💻 Desktop (sidebars, dropdowns, modals)
-*   🖥️ Large screens (multi-column product galleries)
+- SQL Server for application data and sessions
+- JSON seed files for product catalog data
+- Kebab-case static asset naming under `public/image`
+- Static documents under `public/documents`
 
-☁️ Deployment & Hosting
------------------------
+## Project Structure
 
-The MSSQL database is hosted on **Microsoft Azure** for scalability and cloud reliability. The app is production-ready for deployment on platforms like Render, Railway, or custom VPS environments.
+```text
+.
+|-- cloudinary/             # Cloudinary storage configuration
+|-- database/               # SQL Server connection and schema migration logic
+|-- helper-functions/       # Email, search, rating, notification, and validation helpers
+|-- middleware/             # Authentication, CSRF, user, cart, wishlist, order, and verification middleware
+|-- partials/               # Shared EJS partials
+|-- public/                 # Static CSS, images, and documents
+|-- routes/                 # Express route modules
+|-- seeds/                  # Product, accessory, notification, and rating seed data
+|-- views/                  # Page-level EJS templates
+|-- main.js                 # Application entry point
+|-- package.json            # Project scripts and dependencies
+`-- tailwind.config.js      # Tailwind configuration
+```
 
-🚀 Installation & Setup
------------------------
+## Environment Variables
 
-1.  Clone the repository
-2.  Install dependencies:
-    
-        npm install
-    
-3.  Create a `.env` file with the following variables:
+Create a `.env` file in the project root with the required runtime configuration.
 
-*    PORT=3000
-*    DB_USER=your_db_username
-*    DB_PASSWORD=your_password
-*    DB_NAME=your_database_name
-*    SESSION_SECRET=your_secure_secret
-*    EMAIL_USER=<youremail@example.com>
-*    EMAIL_PASS=emailpassword
-*    BASE_URL=<http://localhost:{port}>
+```env
+PORT=3000
+NODE_ENV=development
 
+DB_USER=your_database_user
+DB_PASSWORD=your_database_password
+DB_SERVER=your_database_server
+DB_PORT=1433
+DB_NAME=your_database_name
 
-4.  Run the development server:
-    
-        npm run dev
-    
-📄 License
-----------
+SESSION_SECRET=your_secure_session_secret
+BASE_URL=http://localhost:3000
 
-This project is licensed under the **MIT License**. You are free to use, modify, and distribute it with proper attribution.
+GMAIL_USER=your_email_address
+GMAIL_PASS=your_email_password_or_app_password
 
-* * *
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_KEY=your_cloudinary_api_key
+CLOUDINARY_SECRET=your_cloudinary_api_secret
+```
 
-© 2025 Moda WebApp — All Rights Reserved
+## Installation
+
+Install dependencies from the project root.
+
+```bash
+npm install
+```
+
+## Running the Application
+
+Start the development server with Nodemon.
+
+```bash
+npm run dev
+```
+
+Start the application in production mode.
+
+```bash
+npm start
+```
+
+The application listens on the port defined by `PORT`.
+
+## Database Setup
+
+The application expects a SQL Server database configured through the `.env` variables. On startup, `database/migrate.js` runs schema checks for required tracking and password reset columns.
+
+Before running in production, confirm that:
+
+- Database credentials are valid.
+- The SQL Server firewall allows connections from the deployment environment.
+- `SESSION_SECRET` is set to a strong private value.
+- Email and Cloudinary credentials are configured.
+- `BASE_URL` matches the deployed application URL.
+
+## Security Notes
+
+The application includes several production-oriented safeguards:
+
+- Helmet security headers
+- General request rate limiting
+- Stricter rate limiting for authentication routes
+- HTTP-only session cookies
+- Secure cookies when `NODE_ENV=production`
+- CSRF token middleware
+- Session storage in SQL Server
+- Sanitized production logging without sensitive request bodies, CSRF token values, or email payloads
+
+## Static Asset Naming
+
+Static images in `public/image` use kebab-case naming. This keeps paths consistent across Windows, Linux, and cloud deployment environments where case sensitivity can differ.
+
+Examples:
+
+- `public/image/home/card-1.avif`
+- `public/image/logos/master-card.svg`
+- `public/image/vectors/empty-cart.svg`
+- `public/image/charts/size-chart-men.jpg`
+
+## Available Scripts
+
+```bash
+npm run dev
+npm start
+```
+
+## Production Checklist
+
+Before deploying, verify the following:
+
+- `NODE_ENV` is set to `production`.
+- `SESSION_SECRET` is configured and private.
+- SQL Server credentials are available in the environment.
+- Cloudinary credentials are available if profile image uploads are enabled.
+- Email credentials are available for verification, password reset, contact, and order emails.
+- All static asset paths use kebab-case and resolve correctly.
+- The deployment platform provides HTTPS so secure cookies can be used.
+
+## License
+
+This project is licensed under the MIT License. See the `license` file for details.

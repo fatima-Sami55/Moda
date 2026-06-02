@@ -27,7 +27,7 @@ function verifyCsrf(req, res, next) {
   const token = req.body._csrf || req.query._csrf || req.headers["x-csrf-token"];
   
   if (!req.session || !req.session.csrfToken || token !== req.session.csrfToken) {
-    console.warn(`🛡️ CSRF Verification Failed: Expected ${req.session?.csrfToken}, received ${token}`);
+    console.warn("CSRF verification failed");
     req.flash("error", "❌ Security Session Timeout or Forgery Detected. Please try again.");
     
     // Support AJAX and standard form requests gracefully
