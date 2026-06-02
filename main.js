@@ -126,14 +126,14 @@ const {
 
     // 🛡️ GENERAL RATE LIMITER (DoS Protection) - TEMPORARILY DISABLED FOR TESTING
   
-    // const generalLimiter = rateLimit({
-    //   windowMs: 15 * 60 * 1000,
-    //   max: 200,
-    //   standardHeaders: true,
-    //   legacyHeaders: false,
-    //   message: "Too many requests from this IP. Please try again in 15 minutes."
-    // });
-    // app.use(generalLimiter);
+    const generalLimiter = rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 200,
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: "Too many requests from this IP. Please try again in 15 minutes."
+    });
+    app.use(generalLimiter);
   
 
     // 🛡️ AUTH RATE LIMITER (Brute-Force Protection) - TEMPORARILY DISABLED FOR TESTING
