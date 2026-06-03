@@ -59,101 +59,58 @@
         <h1 class="cart-main-title mb-4">Your Shopping Cart</h1>
         
         <div class="row g-5">
-          <!-- Left Column: Products List (Table on Desktop, Cards on Mobile) -->
+          <!-- Left Column: Products List -->
           <div class="col-12 col-lg-8">
-            
-            <!-- Desktop Table View -->
-            <div class="table-responsive d-none d-lg-block">
-              <table id="cart" class="table align-middle">
-                <thead>
-                  <tr>
-                    <th style="width: 50%">Product</th>
-                    <th style="width: 15%">Price</th>
-                    <th style="width: 20%">Quantity</th>
-                    <th style="width: 15%" class="text-end">Subtotal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% cartItems.forEach((item, index) => { %>
-                    <tr class="cart-item-row">
-                      <td>
-                        <div class="d-flex align-items-center gap-3">
-                          <img src="<%= item.item_img %>" loading="lazy" width="80" height="80" alt="<%= item.item_Name %>" class="img-thumbnail cart-item-thumb smooth-image" />
-                          <div class="cart-item-details">
-                            <h6 class="cart-item-name mb-1"><%= item.item_Name %></h6>
-                            <small class="cart-item-desc d-block text-truncate" title="<%= item.item_description %>">
-                              <%= item.item_description %>
-                            </small>
-                            <!-- Remove trigger underneath desktop text for cleaner layout -->
-                            <form action="/delete/<%= item.id %>" method="POST" class="mt-2 cart-delete-form">
-                              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                              <button class="cart-remove-link" type="button">
-                                <i class="fa-regular fa-trash-can me-1"></i> Remove
-                              </button>
-                            </form>
-                          </div>
-                        </div>
-                      </td>
-                      <td><span class="item-price">$<%= item.item_price %></span></td>
-                      <td>
-                        <div class="input-group quantity-group">
-                          <button type="button" class="btn btn-qty-minus" data-index="<%= index %>">-</button>
-                          <input type="number" class="form-control text-center quantity-input" value="1" min="1" max="20" data-index="<%= index %>" readonly />
-                          <button type="button" class="btn btn-qty-plus" data-index="<%= index %>">+</button>
-                        </div>
-                      </td>
-                      <td class="text-end"><span class="item-subtotal">$0.00</span></td>
-                    </tr>
-                  <% }) %>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Mobile Card View -->
-            <div class="d-block d-lg-none">
+            <div class="cart-items-wrapper">
               <% cartItems.forEach((item, index) => { %>
-                <div class="card mb-3 cart-mobile-card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                      <img src="<%= item.item_img %>" loading="lazy" width="80" height="80" alt="<%= item.item_Name %>" class="img-thumbnail cart-item-thumb smooth-image" />
-                      <div class="flex-grow-1 overflow-hidden">
-                        <h6 class="cart-item-name mb-1"><%= item.item_Name %></h6>
-                        <small class="cart-item-desc d-block text-truncate" title="<%= item.item_description %>">
+                <div class="product-card cart-item-card" data-id="<%= item.id %>" data-price="<%= item.item_price %>">
+                  <div class="card-inner-layout">
+                    <!-- Product Image Section -->
+                    <div class="card-image-wrapper">
+                      <img src="<%= item.item_img %>" loading="lazy" alt="<%= item.item_Name %>" class="product-card-img smooth-image" />
+                      <span class="product-card-badge">MODA ORIGINAL</span>
+                    </div>
+                    
+                    <!-- Product Details Section -->
+                    <div class="card-info-wrapper">
+                      <div class="info-header">
+                        <h3 class="product-card-name"><%= item.item_Name %></h3>
+                        <p class="product-card-desc text-truncate" title="<%= item.item_description %>">
                           <%= item.item_description %>
-                        </small>
+                        </p>
+                      </div>
+                      
+                      <div class="price-info-row">
+                        <div class="price-item">
+                          <span class="price-label">Unit Price:</span>
+                          <span class="unit-price">$<%= item.item_price %></span>
+                        </div>
+                        <div class="price-item">
+                          <span class="price-label">Line Total:</span>
+                          <span class="line-total item-subtotal">$0.00</span>
+                        </div>
                       </div>
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                      <span class="mobile-label">Price:</span>
-                      <span class="item-price">$<%= item.item_price %></span>
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                      <span class="mobile-label">Quantity:</span>
-                      <div class="input-group quantity-group">
-                        <button type="button" class="btn btn-qty-minus" data-index="<%= index %>">-</button>
-                        <input type="number" class="form-control text-center quantity-input" value="1" min="1" max="20" data-index="<%= index %>" readonly />
-                        <button type="button" class="btn btn-qty-plus" data-index="<%= index %>">+</button>
+                    <!-- Actions Section -->
+                    <div class="card-actions-wrapper">
+                      <div class="quantity-counter-wrapper">
+                        <button type="button" class="btn btn-qty-change btn-qty-minus" aria-label="Decrease quantity">−</button>
+                        <input type="number" class="quantity-input" value="<%= item.quantity || 1 %>" min="1" max="20" readonly />
+                        <button type="button" class="btn btn-qty-change btn-qty-plus" aria-label="Increase quantity">+</button>
                       </div>
+                      
+                      <form action="/delete/<%= item.id %>" method="POST" class="cart-delete-form m-0">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                        <button type="button" class="btn-remove-item cart-remove-link" title="Remove Item">
+                          <i class="fa-regular fa-trash-can"></i> Remove
+                        </button>
+                      </form>
                     </div>
-
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                      <span class="mobile-label">Subtotal:</span>
-                      <span class="item-subtotal">$0.00</span>
-                    </div>
-
-                    <form action="/delete/<%= item.id %>" method="POST" class="mt-2 cart-delete-form">
-                      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                      <button class="btn btn-sm btn-danger w-100 py-2 d-flex align-items-center justify-content-center gap-2 cart-remove-link-mobile" type="button">
-                        <i class="fa-regular fa-trash-can"></i> Remove Item
-                      </button>
-                    </form>
                   </div>
                 </div>
               <% }) %>
             </div>
-            
           </div>
 
           <!-- Right Column: Sidebar Order Summary -->
@@ -191,21 +148,40 @@
     <!-- scripts -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        const desktopRows = document.querySelectorAll("table#cart tbody tr");
-        const mobileCards = document.querySelectorAll(".cart-mobile-card");
+        const cartCards = document.querySelectorAll(".cart-item-card");
+        const csrfToken = "<%= csrfToken %>";
 
-        function updateTotal() {
+        function updateTotals() {
           let total = 0;
-          // Sum subtotals from desktop rows (or mobile if desktop is hidden)
-          const rowsToUse = desktopRows.length > 0 ? desktopRows : mobileCards;
-          rowsToUse.forEach((row) => {
-            const subtotalEl = row.querySelector(".item-subtotal");
-            if (subtotalEl) {
-              total += parseFloat(subtotalEl.innerText.replace("$", "").trim()) || 0;
+          const quantities = [];
+
+          cartCards.forEach((card) => {
+            const qtyInput = card.querySelector(".quantity-input");
+            const price = parseFloat(card.getAttribute("data-price")) || 0;
+            const quantity = parseInt(qtyInput.value) || 1;
+            
+            // Recalculate line total
+            const lineTotal = price * quantity;
+            const lineTotalEl = card.querySelector(".item-subtotal");
+            if (lineTotalEl) {
+              lineTotalEl.innerText = "$" + lineTotal.toFixed(2);
             }
+
+            // Manage minus button state
+            const minusBtn = card.querySelector(".btn-qty-minus");
+            if (minusBtn) {
+              if (quantity <= 1) {
+                minusBtn.disabled = true;
+              } else {
+                minusBtn.disabled = false;
+              }
+            }
+
+            total += lineTotal;
+            quantities.push(quantity);
           });
-          
-          // Update total price values on sidebar
+
+          // Update sidebar order summary
           document.querySelectorAll("#cart-total").forEach((el) => {
             el.innerText = "$" + total.toFixed(2);
           });
@@ -216,108 +192,70 @@
           }
 
           localStorage.setItem("cartTotal", total.toFixed(2));
-
-          // Sync quantities array to localStorage
-          const quantities = [];
-          rowsToUse.forEach((row) => {
-            const qtyInput = row.querySelector(".quantity-input");
-            if (qtyInput) {
-              quantities.push(parseInt(qtyInput.value) || 1);
-            }
-          });
           localStorage.setItem("quantities", JSON.stringify(quantities));
         }
 
-        // Helper to calculate subtotal for a given row or card element
-        function updateElementSubtotal(el) {
-          const priceEl = el.querySelector(".item-price");
-          const qtyInput = el.querySelector(".quantity-input");
-          const subtotalEl = el.querySelector(".item-subtotal");
-          if (priceEl && qtyInput && subtotalEl) {
-            const price = parseFloat(priceEl.innerText.replace("$", "").trim()) || 0;
-            const quantity = parseInt(qtyInput.value) || 1;
-            const subtotal = price * quantity;
-            subtotalEl.innerText = "$" + subtotal.toFixed(2);
-          }
-        }
-
-        // Synchronizes quantity input and subtotal across both layouts
-        function syncQuantityAndSubtotal(index, newQty) {
-          // 1. Sync Desktop Row
-          const desktopRow = desktopRows[index];
-          if (desktopRow) {
-            const qtyInput = desktopRow.querySelector(".quantity-input");
-            if (qtyInput) qtyInput.value = newQty;
-            updateElementSubtotal(desktopRow);
-          }
-
-          // 2. Sync Mobile Card
-          const mobileCard = mobileCards[index];
-          if (mobileCard) {
-            const qtyInput = mobileCard.querySelector(".quantity-input");
-            if (qtyInput) qtyInput.value = newQty;
-            updateElementSubtotal(mobileCard);
-          }
-
-          // 3. Update overall Cart Total & quantities array
-          updateTotal();
-        }
-
-        // Add event listeners for desktop view
-        desktopRows.forEach((row, index) => {
-          const minusBtn = row.querySelector(".btn-qty-minus");
-          const plusBtn = row.querySelector(".btn-qty-plus");
-          const qtyInput = row.querySelector(".quantity-input");
-
-          minusBtn?.addEventListener("click", function () {
-            let value = parseInt(qtyInput.value) || 1;
-            if (value > 1) {
-              syncQuantityAndSubtotal(index, value - 1);
-            }
-          });
-
-          plusBtn?.addEventListener("click", function () {
-            let value = parseInt(qtyInput.value) || 1;
-            if (value < 20) {
-              syncQuantityAndSubtotal(index, value + 1);
-            }
-          });
-
-          updateElementSubtotal(row);
-        });
-
-        // Add event listeners for mobile view
-        mobileCards.forEach((card, index) => {
+        // Initialize and bind card events
+        cartCards.forEach((card) => {
           const minusBtn = card.querySelector(".btn-qty-minus");
           const plusBtn = card.querySelector(".btn-qty-plus");
           const qtyInput = card.querySelector(".quantity-input");
+          const itemId = card.getAttribute("data-id");
+
+          function sendQuantityUpdate(newQty) {
+            fetch("/cart/update-quantity", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                itemId: itemId,
+                quantity: newQty,
+                _csrf: csrfToken
+              })
+            })
+            .then(async (response) => {
+              if (!response.ok) {
+                const data = await response.json();
+                console.error("Failed to update quantity:", data.error || "Server error");
+                if (window.showToast) {
+                  window.showToast(data.error || "Failed to update quantity.", "error");
+                }
+              }
+            })
+            .catch((err) => {
+              console.error("AJAX Error:", err);
+            });
+          }
 
           minusBtn?.addEventListener("click", function () {
             let value = parseInt(qtyInput.value) || 1;
             if (value > 1) {
-              syncQuantityAndSubtotal(index, value - 1);
+              qtyInput.value = value - 1;
+              updateTotals();
+              sendQuantityUpdate(value - 1);
             }
           });
 
           plusBtn?.addEventListener("click", function () {
             let value = parseInt(qtyInput.value) || 1;
             if (value < 20) {
-              syncQuantityAndSubtotal(index, value + 1);
+              qtyInput.value = value + 1;
+              updateTotals();
+              sendQuantityUpdate(value + 1);
             }
           });
-
-          updateElementSubtotal(card);
         });
 
-        // Initial overall cart total
-        updateTotal();
+        // Initial update
+        updateTotals();
 
         // Soft confirmation overlay for removal
         let activeRemoveForm = null;
         const overlay = document.getElementById("cart-confirm-overlay");
 
         document.addEventListener("click", (event) => {
-          const removeBtn = event.target.closest(".cart-remove-link, .cart-remove-link-mobile");
+          const removeBtn = event.target.closest(".cart-remove-link");
           if (removeBtn) {
             event.preventDefault();
             activeRemoveForm = removeBtn.closest("form");

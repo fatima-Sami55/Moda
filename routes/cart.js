@@ -116,4 +116,38 @@ router.post("/delete/:itemId", isAuthenticated,checkEmailVerified, verifyCsrf, a
   }
 });
 
+// POST /cart/update-quantity
+router.post("/cart/update-quantity", isAuthenticated, checkEmailVerified, verifyCsrf, async (req, res, next) => {
+  const { itemId, quantity } = req.body;
+  const userId = req.session.userId;
+
+  if (!itemId || quantity === undefined) {
+    return res.status(400).json({ error: "Item ID and quantity are required." });
+  }
+
+  const parsedQty = parseInt(quantity, 10);
+  if (isNaN(parsedQty) || parsedQty < 1) {
+    return res.status(400).json({ error: "Invalid quantity." });
+  }
+
+  try {
+    const sql = require("mssql");
+    const result = await pool
+      .request()
+      .input("id", sql.Int, itemId)
+      .input("userId", sql.Int, userId)
+      .input("quantity", sql.Int, parsedQty)
+      .query("UPDATE cart_items SET quantity = @quantity WHERE id = @id AND user_id = @userId");
+
+    if (result.rowsAffected[0] > 0) {
+      return res.status(200).json({ success: true, message: "Quantity updated successfully." });
+    } else {
+      return res.status(404).json({ error: "Cart item not found." });
+    }
+  } catch (err) {
+    console.error("Error updating cart quantity:", err);
+    return res.status(500).json({ error: "Internal server error." });
+  }
+});
+
 module.exports = router;

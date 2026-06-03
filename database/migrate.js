@@ -88,6 +88,21 @@ async function runMigrations() {
       `);
     }
 
+    // 5. Check & Add cart_items columns if they don't exist
+    const checkCartColumns = await pool.request().query(`
+      SELECT COLUMN_NAME 
+      FROM INFORMATION_SCHEMA.COLUMNS 
+      WHERE TABLE_NAME = 'cart_items' 
+      AND COLUMN_NAME = 'quantity'
+    `);
+
+    if (checkCartColumns.recordset.length === 0) {
+      await pool.request().query(`
+        ALTER TABLE cart_items 
+        ADD quantity INT NOT NULL DEFAULT 1;
+      `);
+    }
+
     // 3. Seeding reviews is removed to speed up server startup.
 
 

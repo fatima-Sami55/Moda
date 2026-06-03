@@ -52,7 +52,6 @@
     <% } else { %>
       <!-- Active Wishlist Curated Showcase -->
       <div class="container wish-container my-5">
-        
         <!-- Curated Minimal Header -->
         <div class="d-flex justify-content-between align-items-baseline mb-4 border-bottom border-1 border-dark pb-2">
           <h1 class="wish-main-title mb-0">My Wishlist</h1>
@@ -61,21 +60,21 @@
         
         <div class="wishlist-list-wrapper">
           <% data.forEach(item => { %>
-            <div class="wishlist-item-row wishlist-item-container py-4 border-bottom border-light">
-              <div class="row align-items-center">
-                
-                <!-- Product Image (Unbordered, organic) -->
-                <div class="col-4 col-sm-2 c-img text-center text-sm-start position-relative">
-                  <img src="<%= item.item_image %>" alt="<%= item.item_Name %>" class="wishlist-item-img img-fluid" />
+            <div class="product-card wishlist-item-card wishlist-item-container" data-id="<%= item.id %>">
+              <div class="card-inner-layout">
+                <!-- Product Image Section -->
+                <div class="card-image-wrapper c-img position-relative">
+                  <img src="<%= item.item_image %>" loading="lazy" alt="<%= item.item_Name %>" class="product-card-img smooth-image" />
                   <div class="wishlist-heart-badge">
                     <i class="fa-solid fa-heart"></i>
                   </div>
+                  <span class="product-card-badge">CURATED STYLE</span>
                 </div>
                 
-                <!-- Product Content Details -->
-                <div class="col-8 col-sm-6 col-md-7">
-                  <div class="d-flex flex-column gap-1">
-                    <h3 class="wishlist-item-name c-title text-capitalize mb-1">
+                <!-- Product Details Section -->
+                <div class="card-info-wrapper">
+                  <div class="info-header">
+                    <h3 class="product-card-name c-title text-capitalize">
                       <strong><%= item.item_Name %></strong>
                     </h3>
                     <div class="wishlist-stars mb-1">
@@ -88,32 +87,32 @@
                         <i class="fa-<%= i <= avgRating ? 'solid' : 'regular' %> fa-star"></i>
                       <% } %>
                     </div>
-                    <p class="wishlist-item-desc mb-2">
+                    <p class="product-card-desc text-truncate" title="<%= item.item_description %>">
                       <span class="c-text"><%= item.item_description %></span>
                     </p>
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                      <div class="wishlist-item-price c-price">$<%= item.item_price %></div>
-                      <span class="wishlist-curated-tag"><i class="fa-solid fa-heart me-1"></i> CURATED STYLE</span>
+                  </div>
+                  
+                  <div class="price-info-row">
+                    <div class="price-item">
+                      <span class="price-label">Price:</span>
+                      <span class="unit-price c-price">$<%= item.item_price %></span>
                     </div>
                   </div>
                 </div>
-                
-                <!-- Minimal Action operations triggers -->
-                <div class="col-12 col-sm-4 col-md-3 d-flex flex-row flex-sm-column gap-3 justify-content-start justify-content-sm-end align-items-center align-items-sm-end mt-3 mt-sm-0">
-                  <!-- Add to Cart AJAX action -->
-                  <button class="btn wishlist-action-btn btn-cart px-4 py-2" title="Add to Cart">
+
+                <!-- Actions Section -->
+                <div class="card-actions-wrapper">
+                  <button class="btn wishlist-action-btn btn-cart py-2" title="Add to Cart">
                     Add to Cart <i class="fa fa-arrow-right ms-2"></i>
                   </button>
                   
-                  <!-- Remove wishlist item -->
-                  <form action="/delete/wishItem/<%= item.id %>" method="POST" class="m-0 wishlist-remove-form">
+                  <form action="/delete/wishItem/<%= item.id %>" method="POST" class="wishlist-remove-form m-0">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                    <button type="button" class="wishlist-remove-btn" title="Remove Style">
-                      <i class="fa-regular fa-trash-can me-1"></i> REMOVE
+                    <button type="button" class="btn-remove-item wishlist-remove-btn" title="Remove Style">
+                      <i class="fa-regular fa-trash-can"></i> Remove
                     </button>
                   </form>
                 </div>
-                
               </div>
             </div>
           <% }) %>
