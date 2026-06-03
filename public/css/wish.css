@@ -28,11 +28,12 @@ body {
 .wish-container {
   flex: 1 0 auto !important; /* Crucial: Push the footer down */
   max-width: 1200px;
-  width: 100%;
+  width: 100% !important;
   margin: 0 auto;
   padding: 0 20px;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
 .wish-main-title {
@@ -110,6 +111,8 @@ footer#footer {
   flex-direction: column;
   margin-top: 24px;
   margin-bottom: 48px;
+  width: 100% !important;
+  box-sizing: border-box;
 }
 
 /* ==========================================================================
@@ -117,38 +120,50 @@ footer#footer {
    ========================================================================== */
 .product-card {
   background-color: var(--bg-surface) !important;
-  border: 3px solid var(--border-light) !important;
-  box-shadow: var(--shadow-premium) !important;
-  border-radius: 0 !important; /* Sharp corners */
+  border: 2px solid var(--text-primary) !important;
+  box-shadow: 6px 6px 0px var(--text-primary) !important;
+  border-radius: 0px !important;
   margin-bottom: 24px;
-  width: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
   transition: var(--transition-smooth);
+  display: block !important;
+  box-sizing: border-box !important;
+  overflow: hidden;
 }
 
 .product-card:hover {
   transform: translate(-3px, -3px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 9px 9px 0px var(--text-primary) !important;
 }
 
+/* Desktop layout: image | details | actions */
 .card-inner-layout {
-  display: grid;
-  grid-template-columns: 180px 1fr 200px;
-  gap: 20px;
-  padding: 20px;
+  display: flex !important;
+  flex-direction: row !important;
   align-items: center;
+  gap: 0;
+  padding: 0;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  min-width: 0;
 }
 
-/* Image Section */
+/* Image Section — fixed width, never shrinks */
 .card-image-wrapper {
   position: relative;
-  width: 100%;
-  height: 140px;
+  flex: 0 0 160px !important;
+  width: 160px !important;
+  min-width: 160px !important;
+  height: 160px;
   background-color: #ffffff;
-  border: 2px solid var(--text-primary);
+  border-right: 2px solid var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  align-self: stretch;
+  box-sizing: border-box !important;
 }
 
 .product-card-img {
@@ -185,7 +200,7 @@ footer#footer {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--primary-accent) !important; /* Neon Orange */
+  background: var(--primary-accent) !important;
   color: #FFFFFF !important;
   border: 2px solid var(--text-primary) !important;
   display: flex;
@@ -198,7 +213,7 @@ footer#footer {
 }
 
 .product-card:hover .wishlist-heart-badge {
-  background: var(--secondary-accent) !important; /* Sporty electric violet */
+  background: var(--secondary-accent) !important;
   transform: scale(1.1) rotate(12deg);
   box-shadow: 3px 3px 0px var(--text-primary);
 }
@@ -208,41 +223,57 @@ footer#footer {
   display: flex;
   gap: 4px;
   font-size: 0.8rem;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .wishlist-stars i {
-  color: #FE672E !important; /* Vivid Burn Orange consistent rating star colors */
+  color: #FE672E !important;
 }
 
-/* Details Section */
+/* Details Section — takes remaining space, must have min-width:0 for truncation */
 .card-info-wrapper {
+  flex: 1 1 0 !important;
+  min-width: 0 !important; /* CRITICAL: allows text-overflow to work */
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.info-header {
+  min-width: 0;
 }
 
 .product-card-name {
   font-family: var(--font-heading) !important;
   font-weight: 800;
-  font-size: 1.1rem !important;
+  font-size: 1rem !important;
   color: var(--text-primary) !important;
-  margin: 0;
+  margin: 0 0 4px 0;
   text-transform: uppercase;
   letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .product-card-desc {
   font-family: var(--font-body) !important;
-  font-size: 0.88rem !important;
+  font-size: 0.85rem !important;
   color: var(--text-secondary) !important;
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .price-info-row {
   display: flex;
-  gap: 24px;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .price-item {
@@ -252,26 +283,34 @@ footer#footer {
 
 .price-label {
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: var(--text-secondary);
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .unit-price {
   font-family: var(--font-heading) !important;
   font-weight: 800;
-  font-size: 1.1rem !important;
-  color: var(--text-primary) !important;
+  font-size: 1rem !important;
+  color: var(--primary-accent) !important; /* Orange price for wishlist */
 }
 
-/* Actions Section */
+/* Actions Section — fixed width column, never shrinks */
 .card-actions-wrapper {
+  flex: 0 0 190px !important;
+  width: 190px !important;
+  min-width: 190px !important;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  align-items: flex-end;
+  gap: 14px;
+  align-items: center;
   justify-content: center;
+  padding: 16px;
+  border-left: 2px solid var(--text-primary);
+  align-self: stretch;
+  box-sizing: border-box !important;
 }
 
 /* Add to Cart Button */
@@ -378,14 +417,20 @@ footer#footer {
     padding: 0 15px;
   }
 
-  .card-inner-layout {
-    grid-template-columns: 160px 1fr 180px;
-    gap: 16px;
-    padding: 16px;
+  /* Tighten image on tablet */
+  .card-image-wrapper {
+    flex: 0 0 130px !important;
+    width: 130px !important;
+    min-width: 130px !important;
+    height: 130px;
   }
 
-  .card-image-wrapper {
-    height: 120px;
+  /* Tighten actions on tablet */
+  .card-actions-wrapper {
+    flex: 0 0 160px !important;
+    width: 160px !important;
+    min-width: 160px !important;
+    padding: 12px;
   }
 
   .wish-main-title {
@@ -393,6 +438,7 @@ footer#footer {
   }
 }
 
+/* Stack vertically on mobile */
 @media (max-width: 767px) {
   body {
     padding-top: 80px;
@@ -402,24 +448,33 @@ footer#footer {
     padding: 0 12px;
   }
 
+  /* Stack the flex row to a column */
   .card-inner-layout {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 16px;
+    flex-direction: column !important;
+    align-items: stretch !important;
   }
 
+  /* Image: constrained height, full width */
   .card-image-wrapper {
-    height: 200px;
+    flex: none !important;
+    width: 100% !important;
+    min-width: unset !important;
+    height: 200px !important;
+    border-right: none !important;
+    border-bottom: 2px solid var(--text-primary) !important;
   }
 
+  /* Actions: full width, row layout */
   .card-actions-wrapper {
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    margin-top: 8px;
-    border-top: 1px solid var(--border-light);
-    padding-top: 16px;
+    flex: none !important;
+    width: 100% !important;
+    min-width: unset !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    border-left: none !important;
+    border-top: 2px solid var(--text-primary) !important;
+    padding: 14px 16px !important;
   }
 
   .wishlist-action-btn {
@@ -429,6 +484,15 @@ footer#footer {
   .wish-main-title {
     font-size: 1.5rem !important;
     padding-bottom: 8px;
+  }
+
+  .product-card-name {
+    font-size: 1rem !important;
+    white-space: normal; /* Allow wrapping on mobile */
+  }
+
+  .product-card-desc {
+    white-space: nowrap;
   }
 
   .empty-wishlist-showcase {
