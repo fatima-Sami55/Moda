@@ -1,10 +1,13 @@
+const fs = require("fs");
+const path = require("path");
 const { pool, poolConnect } = require("./data");
 const sql = require("mssql");
 
 async function runMigrations() {
   try {
     await poolConnect;
-    // Check if columns exist
+    
+    // 1. Check & Add purchaseditems columns if they don't exist
     const checkColumns = await pool.request().query(`
       SELECT COLUMN_NAME 
       FROM INFORMATION_SCHEMA.COLUMNS 
@@ -32,12 +35,12 @@ async function runMigrations() {
       `);
     }
 
-    // Check if users reset token columns exist
+    // 2. Check & Add users columns if they don't exist (reset_token, reset_expires, is_seed)
     const checkUsersColumns = await pool.request().query(`
       SELECT COLUMN_NAME 
       FROM INFORMATION_SCHEMA.COLUMNS 
       WHERE TABLE_NAME = 'users' 
-      AND COLUMN_NAME IN ('reset_token', 'reset_expires')
+      AND COLUMN_NAME IN ('reset_token', 'reset_expires', 'is_seed')
     `);
 
     const existingUsersColumns = checkUsersColumns.recordset.map(r => r.COLUMN_NAME.toLowerCase());
@@ -49,13 +52,27 @@ async function runMigrations() {
     if (!existingUsersColumns.includes("reset_expires")) {
       usersColumnsToAdd.push("reset_expires DATETIME NULL");
     }
+    if (!existingUsersColumns.includes("is_seed")) {
+      usersColumnsToAdd.push("is_seed BIT DEFAULT 0");
+    }
 
     if (usersColumnsToAdd.length > 0) {
       await pool.request().query(`
         ALTER TABLE users 
         ADD ${usersColumnsToAdd.join(", ")};
       `);
+      
+      // Update existing users to have is_seed = 0 if is_seed column was just added
+      if (usersColumnsToAdd.some(col => col.includes("is_seed"))) {
+        await pool.request().query(`
+          UPDATE users SET is_seed = 0 WHERE is_seed IS NULL;
+        `);
+      }
     }
+
+    // 3. Seeding reviews is removed to speed up server startup.
+
+
   } catch (err) {
     console.error("❌ Database migration failed:", err);
   }

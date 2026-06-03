@@ -1,12 +1,12 @@
-require('dotenv').config();
-const sql = require('mssql');
+const sql = require("mssql");
+const config = require("../config");
 
 const connection = {
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  server: process.env.DB_SERVER,
-  port: Number(process.env.DB_PORT),
-  database: process.env.DB_NAME,
+  user: config.db.user,
+  password: config.db.password,
+  server: config.db.server,
+  port: config.db.port,
+  database: config.db.database,
   options: {
     encrypt: true,
     trustServerCertificate: true,
@@ -14,13 +14,13 @@ const connection = {
 };
 
 const pool = new sql.ConnectionPool(connection);
-const poolConnect = pool.connect(); // no callback
+const poolConnect = pool.connect();
 
-pool.on('error', err => {
-  console.error('❌ SQL error:', err);
+pool.on("error", err => {
+  console.error("[Database] SQL pool error:", err);
 });
 
-process.on('SIGINT', async () => {
+process.on("SIGINT", async () => {
   await pool.close();
   process.exit(0);
 });

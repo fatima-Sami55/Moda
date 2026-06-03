@@ -381,3 +381,27 @@ body.unverified .sidebar-card-wrapper {
     padding: 100px 0;
   }
 }
+
+/* ==========================================================================
+   SMOOTH IMAGE LAZY LOADING & SKELETON ANIMATIONS
+   ========================================================================== */
+img.smooth-image {
+  opacity: 0;
+  transition: opacity 0.35s ease-in-out;
+  background-color: var(--bg-surface) !important;
+  background-image: linear-gradient(90deg, var(--bg-surface) 25%, rgba(31, 30, 35, 0.06) 50%, var(--bg-surface) 75%) !important;
+  background-size: 200% 100% !important;
+  animation: img-skeleton-loading 1.6s infinite linear !important;
+}
+
+img.smooth-image.loaded {
+  opacity: 1 !important;
+  background-image: none !important;
+  animation: none !important;
+}
+
+@keyframes img-skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+

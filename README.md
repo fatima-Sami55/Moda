@@ -1,186 +1,134 @@
 # Moda E-commerce Web Application
 
-**Moda** is a full-stack e-commerce web application built with **Node.js**, **Express**, **EJS**, **Socket.IO**, and **Microsoft SQL Server**. The project provides a server-rendered shopping experience with authentication, product browsing, cart and wishlist management, checkout, order tracking, reviews, notifications, and transactional email support.
+**Moda** is a premium, full-stack e-commerce web storefront built with **Node.js**, **Express**, **EJS**, **Socket.IO**, and **Microsoft SQL Server**. The application is designed with high-end editorial streetwear aesthetics, offering a server-rendered shopping experience with robust authentication, product browsing, dynamic filtering, cart and wishlist management, secure checkout, real-time notification overlays, and transaction email tracking.
 
-## Project Overview
+---
 
-Moda is designed as a complete retail storefront for fashion and accessories. It combines server-side rendering with interactive client-side behavior to support a responsive shopping workflow across desktop and mobile devices.
+## Project Upgrades & Modernizations
 
-The application includes **customer account management**, **email verification**, **profile management**, **product discovery**, **category filtering**, **real-time notifications**, and **order lifecycle tracking**. Static product seed data is used alongside database-backed user, cart, wishlist, review, order, notification, and email records.
+This codebase has been optimized with production-grade reliability, visual performance, and security enhancements:
 
-## Key Features
+### 1. Centralized Configuration System
+- All configuration keys and environment variables are consolidated inside `config.js` in the root.
+- Replaced scattered raw `process.env` references to prevent silent lookup crashes and ensure clean environment separation.
 
-- User registration, login, logout, and session management
-- Email verification and password reset flows
-- Product catalog for home, shop, men, women, kids, and accessories
-- Product detail pages with ratings, reviews, and related product suggestions
-- Cart and wishlist management
-- Secure checkout workflow with CSRF protection
-- Order history and order tracking views
-- Review submission and review deletion
-- User profile editing with image upload support
-- Real-time user notifications with **Socket.IO**
-- Contact form and transactional email delivery with **Nodemailer**
-- SQL Server backed sessions using `connect-mssql-v2`
-- Production-focused security middleware with **Helmet**, rate limiting, secure cookies, and CSRF validation
-- Responsive EJS views with custom CSS, Bootstrap, and Tailwind configuration
+### 2. Transactional Email System (Resend API)
+- Upgraded the email delivery from GMAIL SMTP (Nodemailer) to the official **Resend API SDK**.
+- **Local Git-Controlled Templates:** Created a dedicated `email-templates/` directory containing responsive, neo-brutalist HTML templates styled with design tokens from `global.css`.
+- Emails are loaded and compiled at runtime from the local disk using string placeholder replacements (e.g. `{{{firstname}}}`), keeping templates version-controlled in Git.
+- Official backend email domains send from `@modashop.store` (like `noreply@modashop.store`, `support@modashop.store`, `orders@modashop.store`).
+
+### 3. Responsive Search Sidebar & Filters
+- Modified search filter sidebar styling (`public/css/search.css`): Enabled sticky scrolling for desktop grid viewports (`min-width: 901px`), but collapsed it into normal, non-sticky document flow on smaller mobile devices.
+
+### 4. Visual Performance & Image Optimization
+- Implemented `loading="lazy"`, custom `smooth-image` fade-in CSS transitions, and explicit height/width attributes for all product cards, logos, and avatars across all EJS views to eliminate Cumulative Layout Shift (CLS).
+- Added base64 inline SVG image placeholders on error (`onerror`) to prevent broken visual cards if external image hosts fail.
+
+### 5. Review Database Seeding & User Isolation
+- Integrated database migrations in `database/migrate.js` to alter tables on startup (introducing `is_seed` column on `users` table).
+- Implemented an automated database seeder that creates 8 realistic seed user accounts flagged with `is_seed = 1` and registers 498 unique product reviews linked directly to those IDs.
+- Seeded reviewer accounts are isolated from real user logs or analytics metrics.
+
+### 6. Checkout Redirection
+- Removed separate GET `/edit-profile` route and `views/auth/edit.ejs` view file.
+- Consolidated user details modifications directly into the in-page profile editing dashboard inside `/user-profile`.
+- Redirected the checkout profile and address modifier links directly to `/user-profile`.
+
+### 7. Security Pipeline and Order
+- Structured `main.js` middleware stack strictly in the correct loading order: Helmet (Security headers) → Rate Limiter (general + auth thresholds) → Parsers (JSON/URL/cookies) → SQL Session Store → CSRF protection → Route handlers → Global 500 error boundary.
+
+---
 
 ## Technology Stack
 
 ### Backend
-
-| Package | Purpose |
-|---|---|
-| Node.js + Express | Server and routing |
-| EJS | Server-side templating |
-| Microsoft SQL Server + `mssql` | Primary database |
-| `connect-mssql-v2` | SQL-backed session store |
-| Express Session | Session management |
-| Socket.IO | Real-time notifications |
-| Nodemailer | Transactional email |
-| Multer + Cloudinary | File upload and image storage |
-| Node Cron | Scheduled background tasks |
-| Helmet + Express Rate Limit | Security middleware |
-| Validator | Input validation |
+- **Node.js + Express**: App logic and server-side routing
+- **EJS**: Server-rendered templating views
+- **Microsoft SQL Server + `mssql`**: Primary database store
+- **`connect-mssql-v2`**: SQL Server backed session storage
+- **Resend Node.js SDK**: High-deliverability transactional email gateway
+- **Socket.IO**: Real-time customer notifications
+- **Multer + Cloudinary**: File uploads and secure image hosting
+- **Helmet + Express Rate Limit**: Enterprise security headers and DOS throttling
 
 ### Frontend
+- **Bootstrap 5 / Tailwind CSS**: Unified utility UI styling
+- **Custom CSS Modules**: Neo-brutalist editorial typography and color themes
+- **Client JS**: AJAX dynamic shopping cart, product details coordination, coordinate hover zoom, and review handlers
 
-| Technology | Purpose |
-|---|---|
-| EJS Templates | Server-rendered views |
-| Bootstrap | UI component base |
-| Tailwind CSS | Utility class configuration |
-| Custom CSS Modules | Per-page styling |
-| Client-side JavaScript | AJAX workflows, filtering, sorting, cart, wishlist, reviews, and notifications |
-
-### Data and Assets
-
-- SQL Server for application data and sessions
-- JSON seed files for product catalog data
-- Kebab-case static asset naming under `public/image`
-- Static documents under `public/documents`
+---
 
 ## Project Structure
 
 ```text
 .
 |-- cloudinary/             # Cloudinary storage configuration
-|-- database/               # SQL Server connection and schema migration logic
-|-- helper-functions/       # Email, search, rating, notification, and validation helpers
-|-- middleware/             # Authentication, CSRF, user, cart, wishlist, order, and verification middleware
-|-- partials/               # Shared EJS partials
-|-- public/                 # Static CSS, images, and documents
-|-- routes/                 # Express route modules
-|-- seeds/                  # Product, accessory, notification, and rating seed data
-|-- views/                  # Page-level EJS templates
-|-- main.js                 # Application entry point
-|-- package.json            # Project scripts and dependencies
-`-- tailwind.config.js      # Tailwind configuration
+|-- database/               # SQL Server pool setup and schema migration logic
+|-- email-templates/        # Local HTML email templates (verification, reset, order, contact)
+|-- helper-functions/       # Resend email, search indexing, rating, and validation modules
+|-- middleware/             # Auth guards, CSRF, cookie parsing, and session loading
+|-- partials/               # Shared headers, footers, navbars, and component partials
+|-- public/                 # Static global CSS stylesheets, images, and documents
+|-- routes/                 # Express page routers (signup, cart, checkout, shop, search, etc.)
+|-- seeds/                  # JSON product catalogs, notifications, ratings, and reviews
+|-- views/                  # Core application EJS pages
+|-- main.js                 # Unified server entry point
+|-- config.js               # Centralized configuration management
+|-- package.json            # Scripts, dependency locks, and metadata
+`-- tailwind.config.js      # Custom theme grid details
 ```
+
+---
 
 ## Environment Variables
 
-Create a `.env` file in the project root with the required runtime configuration.
+Create a `.env` file in the project root with the following configuration:
 
 ```env
 PORT=3000
 NODE_ENV=development
+BASE_URL=http://localhost:3000
 
-DB_USER=your_database_user
+# Database Configuration
+DB_USER=your_database_username
 DB_PASSWORD=your_database_password
-DB_SERVER=your_database_server
+DB_SERVER=your_database_server_address
 DB_PORT=1433
 DB_NAME=your_database_name
 
-SESSION_SECRET=your_secure_session_secret
-BASE_URL=http://localhost:3000
+# Session Configuration
+SESSION_SECRET=your_secure_random_session_secret
 
-GMAIL_USER=your_email_address
-GMAIL_PASS=your_email_password_or_app_password
+# Resend Mail Configuration
+RESEND_API_KEY=your_resend_api_key
 
+# Cloudinary Configuration
 CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_KEY=your_cloudinary_api_key
-CLOUDINARY_SECRET=your_cloudinary_api_secret
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 ```
 
-## Installation
+---
 
-Install dependencies from the project root.
+## Installation & Running
 
+1. **Install Dependencies**
 ```bash
 npm install
 ```
 
-## Running the Application
-
-Start the development server with Nodemon.
-
+2. **Run in Development Mode**
 ```bash
 npm run dev
 ```
 
-Start the application in production mode.
-
+3. **Run in Production Mode**
 ```bash
 npm start
 ```
 
-The application listens on the port defined by `PORT`.
-
-## Database Setup
-
-The application expects a SQL Server database configured through the `.env` variables. On startup, `database/migrate.js` runs schema checks for required tracking and password reset columns.
-
-Before running in production, confirm that:
-
-- Database credentials are valid.
-- The SQL Server firewall allows connections from the deployment environment.
-- `SESSION_SECRET` is set to a strong private value.
-- Email and Cloudinary credentials are configured.
-- `BASE_URL` matches the deployed application URL.
-
-## Security Notes
-
-The application includes several production-oriented safeguards:
-
-- Helmet security headers
-- General request rate limiting
-- Stricter rate limiting for authentication routes
-- HTTP-only session cookies
-- Secure cookies when `NODE_ENV=production`
-- CSRF token middleware
-- Session storage in SQL Server
-- Sanitized production logging without sensitive request bodies, CSRF token values, or email payloads
-
-## Static Asset Naming
-
-Static images in `public/image` use kebab-case naming. This keeps paths consistent across Windows, Linux, and cloud deployment environments where case sensitivity can differ.
-
-Examples:
-
-- `public/image/home/card-1.avif`
-- `public/image/logos/master-card.svg`
-- `public/image/vectors/empty-cart.svg`
-- `public/image/charts/size-chart-men.jpg`
-
-## Available Scripts
-
-```bash
-npm run dev
-npm start
-```
-
-## Production Checklist
-
-Before deploying, verify the following:
-
-- `NODE_ENV` is set to `production`.
-- `SESSION_SECRET` is configured and private.
-- SQL Server credentials are available in the environment.
-- Cloudinary credentials are available if profile image uploads are enabled.
-- Email credentials are available for verification, password reset, contact, and order emails.
-- All static asset paths use kebab-case and resolve correctly.
-- The deployment platform provides HTTPS so secure cookies can be used.
+---
 
 ## License
 

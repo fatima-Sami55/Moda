@@ -38,8 +38,13 @@
         <div class="empty-cart-showcase">
           <img
             src="/image/vectors/empty-cart.svg"
+            loading="lazy"
+            width="280"
+            height="240"
             alt="No items"
-            class="img-fluid empty-cart-img"
+            class="img-fluid empty-cart-img smooth-image"
+           
+           
           />
           <h2 class="mt-4 empty-cart-heading">Your Cart is Empty</h2>
           <p class="empty-cart-sub">Looks like you haven't added anything to your cart yet.</p>
@@ -73,7 +78,7 @@
                     <tr class="cart-item-row">
                       <td>
                         <div class="d-flex align-items-center gap-3">
-                          <img src="<%= item.item_img %>" alt="<%= item.item_Name %>" class="img-thumbnail cart-item-thumb" />
+                          <img src="<%= item.item_img %>" loading="lazy" width="80" height="80" alt="<%= item.item_Name %>" class="img-thumbnail cart-item-thumb smooth-image" />
                           <div class="cart-item-details">
                             <h6 class="cart-item-name mb-1"><%= item.item_Name %></h6>
                             <small class="cart-item-desc d-block text-truncate" title="<%= item.item_description %>">
@@ -110,7 +115,7 @@
                 <div class="card mb-3 cart-mobile-card">
                   <div class="card-body">
                     <div class="d-flex align-items-center gap-3 mb-3">
-                      <img src="<%= item.item_img %>" alt="<%= item.item_Name %>" class="img-thumbnail cart-item-thumb" />
+                      <img src="<%= item.item_img %>" loading="lazy" width="80" height="80" alt="<%= item.item_Name %>" class="img-thumbnail cart-item-thumb smooth-image" />
                       <div class="flex-grow-1 overflow-hidden">
                         <h6 class="cart-item-name mb-1"><%= item.item_Name %></h6>
                         <small class="cart-item-desc d-block text-truncate" title="<%= item.item_description %>">

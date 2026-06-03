@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-require("dotenv").config();
 const data1 = require("../seeds/product.json");
 const data2 = require("../seeds/acessiories.json");
 const data3 = require("../seeds/men.json");

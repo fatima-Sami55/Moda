@@ -9,8 +9,6 @@ const isAuthenticated = require("../middleware/is-logged-in");
 const checkEmailVerified = require("../middleware/get-email-verification");
 const { verifyCsrf } = require("../middleware/csrf");
 const logEmail = require("../helper-functions/email-logger");
-const sendEmail = require("../helper-functions/email-writer");
-const {html2, html3, html4} = require("../helper-functions/email-messages");
 const {
   getCurrentNotifications,
 } = require("../helper-functions/time-based-update");

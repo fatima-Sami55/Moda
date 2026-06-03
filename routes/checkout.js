@@ -2,32 +2,42 @@ const express = require("express");
 const router = express.Router();
 const { pool } = require("../database/data");
 const sql = require("mssql");
+
+// Middlewares
 const getUserMiddleware = require("../middleware/get-user");
 const getCartMiddleware = require("../middleware/get-cart");
 const isAuthenticated = require("../middleware/is-logged-in");
 const checkEmailVerified = require("../middleware/get-email-verification");
-const { html1 } = require("../helper-functions/email-messages");
-const logEmail = require("../helper-functions/email-logger");
-const sendEmail = require("../helper-functions/email-writer");
 const { verifyCsrf } = require("../middleware/csrf");
 
+// Email/Logger Helpers
+const { sendOrderConfirmationEmail } = require("../helper-functions/email");
+const logEmail = require("../helper-functions/email-logger");
 
-router.get("/checkout", isAuthenticated, getUserMiddleware, getCartMiddleware,checkEmailVerified, (req, res) => {
-  res.render("checkout", {
+/* ==========================================================================
+   GET ROUTES
+   ========================================================================== */
+
+router.get("/checkout", isAuthenticated, getUserMiddleware, getCartMiddleware, checkEmailVerified, (req, res) => {
+  res.status(200).render("checkout", {
     loggedInUser: req.loggedInUser,
     cartItemsCount: req.cartItemsCount,
   });
 });
 
-router.post("/checkout", isAuthenticated, checkEmailVerified, verifyCsrf, async (req, res) => {
+router.get("/safe-checkout", isAuthenticated, checkEmailVerified, async (req, res, next) => {
+  res.redirect("/checkout");
+});
+
+/* ==========================================================================
+   POST ROUTES
+   ========================================================================== */
+
+router.post("/checkout", isAuthenticated, checkEmailVerified, verifyCsrf, async (req, res, next) => {
   const userId = req.session.userId;
-  const {
-    ShippingAddress,
-    PurchaseDate,
-  } = req.body;
+  const { ShippingAddress, PurchaseDate } = req.body;
 
   try {
-    // 1. Fetch user's cart items from DB to compute actual TotalPrice and Quantity
     const cartResult = await pool.request()
       .input("userId", sql.Int, userId)
       .query("SELECT * FROM cart_items WHERE user_id = @userId");
@@ -44,21 +54,18 @@ router.post("/checkout", isAuthenticated, checkEmailVerified, verifyCsrf, async 
     for (const item of cartItems) {
       const product = findProductByName(item.item_Name);
       const price = product ? product.price : parseFloat(item.item_price);
-      computedSubtotal += price; // default quantity is 1
+      computedSubtotal += price;
       computedQuantity += 1;
     }
 
     const shippingFee = computedSubtotal > 150 ? 0.00 : 15.00;
     const finalTotalPrice = computedSubtotal + shippingFee;
-
-    // Secure initial state
     const orderStatus = "Placed";
 
-    // Generate progressive tracking dates
     const now = new Date();
-    const arrivalDate = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000); // 2 days
-    const shipmentDate = new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000); // 5 days
-    const deliveryDate = new Date(now.getTime() + 8 * 24 * 60 * 60 * 1000); // 8 days
+    const arrivalDate = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000);
+    const shipmentDate = new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000);
+    const deliveryDate = new Date(now.getTime() + 8 * 24 * 60 * 60 * 1000);
 
     const result = await pool.request()
       .input("TotalPrice", sql.Decimal(10, 2), finalTotalPrice)
@@ -86,25 +93,16 @@ router.post("/checkout", isAuthenticated, checkEmailVerified, verifyCsrf, async 
       return res.status(500).json({ success: false, message: "Checkout failed. Please try again." });
     }
   } catch (err) {
-    console.error("SQL Error:", err);
-    return res.status(500).json({ success: false, message: "An error occurred during checkout." });
+    console.error("[Checkout] checkout post error:", err);
+    next(err);
   }
 });
 
-router.get("/safe-checkout", isAuthenticated,checkEmailVerified, async (req, res, next) => {
-  res.redirect("/checkout");
-});
-
-router.post("/safe-checkout", isAuthenticated, getCartMiddleware, checkEmailVerified, verifyCsrf, async (req, res) => {
+router.post("/safe-checkout", isAuthenticated, getCartMiddleware, checkEmailVerified, verifyCsrf, async (req, res, next) => {
   const userId = req.session.userId;
-  const fullName = req.session.user.firstname + " " +  req.session.user.lastname;
-  const email =  req.session.user.email;
-  const {
-    cardType,
-    quantities,
-    ShippingAddress,
-    PurchaseDate,
-  } = req.body;
+  const fullName = req.session.user.firstname + " " + req.session.user.lastname;
+  const email = req.session.user.email;
+  const { cardType, quantities, ShippingAddress, PurchaseDate } = req.body;
 
   if (!cardType) {
     req.flash("error", "No card type selected");
@@ -133,16 +131,13 @@ router.post("/safe-checkout", isAuthenticated, getCartMiddleware, checkEmailVeri
 
     const shippingFee = computedSubtotal > 150 ? 0.00 : 15.00;
     const finalTotalPrice = computedSubtotal + shippingFee;
-
     const orderStatus = "Placed";
 
-    // Generate progressive tracking dates
     const now = new Date();
-    const arrivalDate = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000); // 2 days
-    const shipmentDate = new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000); // 5 days
-    const deliveryDate = new Date(now.getTime() + 8 * 24 * 60 * 60 * 1000); // 8 days
+    const arrivalDate = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000);
+    const shipmentDate = new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000);
+    const deliveryDate = new Date(now.getTime() + 8 * 24 * 60 * 60 * 1000);
 
-    // Insert into purchaseditems
     const result = await pool.request()
       .input("TotalPrice", sql.Decimal(10, 2), finalTotalPrice)
       .input("OrderStatus", sql.VarChar, orderStatus)
@@ -152,7 +147,7 @@ router.post("/safe-checkout", isAuthenticated, getCartMiddleware, checkEmailVeri
       .input("UserId", sql.Int, userId)
       .input("PaymentMethod", sql.VarChar, cardType)
       .input("shipping_fee", sql.Decimal(10, 2), shippingFee)
-      .input("Discount", sql.Decimal(10, 2), 0.00) // Secure backend-enforced discount
+      .input("Discount", sql.Decimal(10, 2), 0.00)
       .input("arrivalDate", sql.DateTime, arrivalDate)
       .input("shipmentDate", sql.DateTime, shipmentDate)
       .input("deliveryDate", sql.DateTime, deliveryDate)
@@ -164,7 +159,6 @@ router.post("/safe-checkout", isAuthenticated, getCartMiddleware, checkEmailVeri
 
     const purchaseId = result.recordset[0].PurchaseID;
 
-    // Prepare insert values for `orders` table
     for (let i = 0; i < req.cartItems.length; i++) {
       const item = req.cartItems[i];
       const parsedQty = parseInt(parsedQuantities[i], 10) || 1;
@@ -185,21 +179,21 @@ router.post("/safe-checkout", isAuthenticated, getCartMiddleware, checkEmailVeri
         `);
     }
 
-    // Delete cart items
     await pool.request()
       .input("user_id", sql.Int, userId)
       .query("DELETE FROM cart_items WHERE user_id = @user_id");
 
-    const subject = "Order Confirmation - Acess"; 
-    await sendEmail({ to: email, subject, html: html1 });
+    await sendOrderConfirmationEmail({ to: email, orderId: purchaseId, type: "placed" })
+      .catch(err => console.error("[Checkout] Order confirmation email failed to send:", err));
+      
     await logEmail(userId, fullName, email, "order_placed");
 
     req.flash("success", "Order is placed. Thanks!");
     return res.status(200).json({ success: true, message: "Payment information updated successfully!" });
 
   } catch (err) {
-    console.error("SQL Error:", err);
-    return res.status(500).json({ success: false, message: "An error occurred during checkout." });
+    console.error("[Checkout] Safe checkout error:", err);
+    next(err);
   }
 });
 

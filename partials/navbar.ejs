@@ -491,6 +491,8 @@ body.unverified .banner {
         <img
           src="../image/moda-logo/logo.png"
           class="h-8"
+          width="60"
+          height="60"
           alt="Moda Logo"
           style="width: 60px; height: 60px"
         />
@@ -707,9 +709,14 @@ body.unverified .banner {
         >
           <img
             id="user-img"
-            class="rounded-pill"
+            class="rounded-pill smooth-image"
             src="<%= loggedInUser.img %>"
+            loading="lazy"
+            width="42"
+            height="42"
             alt="user photo"
+           
+           
           />
         </a>
         <div class="dropdown-menu" style="min-width: 300px">
@@ -796,6 +803,8 @@ body.unverified .banner {
         <img
           src="../image/moda-logo/logo.png"
           class="h-8"
+          width="60"
+          height="60"
           alt="Moda Logo"
           style="width: 60px; height: 60px"
         />

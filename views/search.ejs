@@ -122,7 +122,7 @@
               %>
               <div class="product-card" data-category="<%= product.categories %>" data-style="<%= product.style %>" data-price="<%= product.price %>">
                 <div class="product-img-wrapper">
-                  <img class="product-thumb" src="<%= product.image %>" alt="<%= product.name %>" />
+                  <img class="product-thumb smooth-image" src="<%= product.image %>" loading="lazy" width="220" height="240" alt="<%= product.name %>" />
                   <span class="product-badge"><%= product.categories %></span>
                 </div>
                 <div class="product-card-body">
@@ -148,7 +148,7 @@
             <% } else { %>
             <div class="no-results">
               <div class="no-results-illustration">
-                <img src="/image/vectors/no-results.svg" alt="No Results Found" class="no-results-svg" />
+                <img src="/image/vectors/no-results.svg" loading="lazy" width="140" height="140" alt="No Results Found" class="no-results-svg smooth-image" />
               </div>
               <h2 class="no-results-title">No Results Found</h2>
               <p class="no-results-sub">Try a different search term or adjust your filters.</p>
@@ -194,7 +194,7 @@
           return `
             <div class="product-card" data-category="${safeCategory}" data-style="${safeStyle}" data-price="${safePrice}">
               <div class="product-img-wrapper">
-                <img class="product-thumb" src="${p.image || ''}" alt="${safeName}" />
+                <img class="product-thumb smooth-image" src="${p.image || ''}" loading="lazy" width="220" height="240" alt="${safeName}" />
                 <span class="product-badge">${p.categories || 'Item'}</span>
               </div>
               <div class="product-card-body">
@@ -279,7 +279,7 @@
             grid.innerHTML = `
               <div class="no-results" style="grid-column: 1 / -1; width: 100%; box-sizing: border-box;">
                 <div class="no-results-illustration">
-                  <img src="/image/vectors/no-results.svg" alt="No Results Found" class="no-results-svg" />
+                  <img src="/image/vectors/no-results.svg" loading="lazy" width="140" height="140" alt="No Results Found" class="no-results-svg smooth-image" />
                 </div>
                 <h2 class="no-results-title">No Results Found</h2>
                 <p class="no-results-sub">Try adjusting your filters or clearing them.</p>
