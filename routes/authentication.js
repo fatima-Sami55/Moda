@@ -78,6 +78,88 @@ router.get("/logout", (req, res) => {
 router.get("/verify-email", async (req, res, next) => {
   const { token } = req.query;
 
+  const expiredHtml = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Verification Link Expired</title>
+      <style>
+        body { background-color: #FFFAF0; font-family: sans-serif; color: #1F1E23; text-align: center; padding: 50px 10px; }
+        .card { max-width: 500px; margin: 0 auto; background: #FFF5EA; border: 4px solid #1F1E23; padding: 40px; box-shadow: 8px 8px 0 #1F1E23; text-align: left; }
+        h2 { font-size: 24px; text-transform: uppercase; margin-bottom: 20px; text-align: center; }
+        p { color: #4A494F; line-height: 1.6; font-size: 16px; margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; }
+        input[type="email"] { width: 100%; padding: 12px; border: 3px solid #1F1E23; box-sizing: border-box; font-size: 16px; }
+        .btn { display: block; width: 100%; padding: 12px; background-color: #FE672E; color: #1F1E23; border: 3px solid #1F1E23; box-shadow: 4px 4px 0 #1F1E23; text-transform: uppercase; font-weight: bold; font-size: 16px; cursor: pointer; text-align: center; text-decoration: none; margin-top: 10px; }
+        .btn:hover { background-color: #ff8552; }
+        .alert { padding: 15px; border: 3px solid #1F1E23; margin-bottom: 20px; display: none; font-weight: bold; }
+        .alert-success { background-color: #d4edda; color: #155724; }
+        .alert-danger { background-color: #f8d7da; color: #721c24; }
+      </style>
+    </head>
+    <body>
+      <div class="card">
+        <h2>Link Expired or Invalid</h2>
+        <p>This verification link is invalid or has expired (verification links are valid for 24 hours).</p>
+        
+        <div id="alert-msg" class="alert"></div>
+
+        <form id="resend-form">
+          <div class="form-group">
+            <label for="email">Enter your email to request a new verification link:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+          </div>
+          <button type="submit" class="btn">Resend Verification Email</button>
+        </form>
+        <a href="/login" class="btn" style="background-color: transparent; margin-top: 20px;">Back to Login</a>
+      </div>
+
+      <script>
+        document.getElementById('resend-form').addEventListener('submit', function(e) {
+          e.preventDefault();
+          const email = document.getElementById('email').value;
+          const btn = e.target.querySelector('button');
+          const alertDiv = document.getElementById('alert-msg');
+          
+          btn.disabled = true;
+          btn.innerText = 'Sending...';
+          alertDiv.style.display = 'none';
+
+          fetch('/resend-verification', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.error) {
+              alertDiv.className = 'alert alert-danger';
+              alertDiv.innerText = data.error;
+              alertDiv.style.display = 'block';
+            } else {
+              alertDiv.className = 'alert alert-success';
+              alertDiv.innerText = data.success;
+              alertDiv.style.display = 'block';
+              document.getElementById('resend-form').reset();
+            }
+            btn.disabled = false;
+            btn.innerText = 'Resend Verification Email';
+          })
+          .catch(err => {
+            alertDiv.className = 'alert alert-danger';
+            alertDiv.innerText = 'An error occurred. Please try again.';
+            alertDiv.style.display = 'block';
+            btn.disabled = false;
+            btn.innerText = 'Resend Verification Email';
+          });
+        });
+      </script>
+    </body>
+    </html>
+  `;
+
   try {
     const tokenResult = await pool
       .request()
@@ -85,10 +167,21 @@ router.get("/verify-email", async (req, res, next) => {
       .query("SELECT * FROM email_tokens WHERE token = @token");
 
     if (tokenResult.recordset.length === 0) {
-      return res.status(400).send("Invalid or expired token.");
+      return res.status(400).send(expiredHtml);
     }
 
-    const { user_id } = tokenResult.recordset[0];
+    const dbToken = tokenResult.recordset[0];
+    if (new Date(dbToken.expires_at) < new Date()) {
+      // Invalidate the expired token by deleting it
+      await pool
+        .request()
+        .input("token", token)
+        .query("DELETE FROM email_tokens WHERE token = @token");
+
+      return res.status(400).send(expiredHtml);
+    }
+
+    const { user_id } = dbToken;
 
     await pool
       .request()
@@ -196,9 +289,26 @@ router.post("/signup", redirectIfAuthenticated, upload.single("img"), async (req
     const checkUser = await pool
       .request()
       .input("email", email)
-      .query("SELECT email FROM users WHERE email = @email");
+      .query("SELECT id, email, is_verified FROM users WHERE email = @email");
 
     if (checkUser.recordset.length > 0) {
+      const existingUser = checkUser.recordset[0];
+      if (!existingUser.is_verified) {
+        const tokenResult = await pool
+          .request()
+          .input("userId", existingUser.id)
+          .query("SELECT * FROM email_tokens WHERE user_id = @userId");
+
+        if (tokenResult.recordset.length > 0) {
+          const existingToken = tokenResult.recordset[0];
+          if (existingToken.created_at) {
+            const timeDiff = Date.now() - new Date(existingToken.created_at).getTime();
+            if (timeDiff < 24 * 60 * 60 * 1000) {
+              return res.status(429).json({ error: "A verification email was already sent. Please wait 24 hours before requesting another or check your spam folder." });
+            }
+          }
+        }
+      }
       return res.status(409).json({ error: "⚠️ That email is already registered. Try logging in instead." });
     }
 
@@ -209,13 +319,15 @@ router.post("/signup", redirectIfAuthenticated, upload.single("img"), async (req
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hrs
     const verifyUrl = `${baseUrl}/verify-email?token=${token}`;
 
-    try {
-      await sendVerificationEmail({ to: email, firstname, verifyUrl });
-      req.flash("success", "✅ Verification email sent");
-    } catch (emailError) {
-      console.error("[Authentication] Email verification send failed:", emailError);
-      return res.status(500).json({ error: "❌ Email failed to send." });
+    const emailResult = await sendVerificationEmail({ to: email, firstname, verifyUrl });
+    if (!emailResult.success) {
+      if (emailResult.rateLimit) {
+        return res.status(429).json({ error: "Our email service is temporarily unavailable. Please try again in a few minutes." });
+      } else {
+        return res.status(500).json({ error: "Something went wrong while sending the email. Please try again shortly." });
+      }
     }
+    req.flash("success", "✅ Verification email sent");
 
     const dateJoined = new Date();
 
@@ -245,9 +357,10 @@ router.post("/signup", redirectIfAuthenticated, upload.single("img"), async (req
       .input("user_id", userId)
       .input("token", token)
       .input("expires_at", expiresAt)
+      .input("created_at", new Date())
       .query(`
-        INSERT INTO email_tokens (user_id, token, expires_at)
-        VALUES (@user_id, @token, @expires_at)
+        INSERT INTO email_tokens (user_id, token, expires_at, created_at)
+        VALUES (@user_id, @token, @expires_at, @created_at)
       `);
 
     const fullName = `${firstname} ${lastname}`;
@@ -313,68 +426,90 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-router.post("/resend-verification", isAuthenticated, async (req, res, next) => {
+router.post("/resend-verification", async (req, res, next) => {
   const { email } = req.body;
-  const fullName = req.session.user.firstname + " " + req.session.user.lastname;
+  if (!email) {
+    return res.status(400).json({ error: "❌ Email is required." });
+  }
+
+  const cleanEmail = email.trim().toLowerCase();
 
   try {
     const userResult = await pool
       .request()
-      .input("email", email)
-      .query("SELECT id, firstname FROM Users WHERE email = @email AND is_verified = 0");
+      .input("email", cleanEmail)
+      .query("SELECT id, firstname, lastname, is_verified FROM users WHERE email = @email");
+
+    // Secure generic message to prevent email harvesting/enumeration
+    const genericSuccessResponse = { success: "If an account with that email exists, you will receive an email shortly." };
 
     if (userResult.recordset.length === 0) {
-      return res.status(400).json({ error: "❌ Invalid or already verified email." });
+      console.log(`[Resend Verification Alert] Non-existent email resend attempt: ${cleanEmail}`);
+      return res.status(200).json(genericSuccessResponse);
     }
 
-    const { id: userId, firstname } = userResult.recordset[0];
+    const user = userResult.recordset[0];
 
-    const attemptResult = await pool
+    if (user.is_verified) {
+      console.log(`[Resend Verification Alert] Already verified email resend attempt: ${cleanEmail}`);
+      return res.status(200).json(genericSuccessResponse);
+    }
+
+    // Check rate limit: 1 verification email every 24 hours
+    const tokenResult = await pool
       .request()
-      .input("email", email)
-      .input("userId", userId)
-      .query(`
-        SELECT COUNT(*) AS attempts
-        FROM EmailResendAttempts
-        WHERE userId = @userId AND attemptAt > DATEADD(HOUR, -24, GETDATE())
-      `);
+      .input("userId", user.id)
+      .query("SELECT * FROM email_tokens WHERE user_id = @userId");
 
-    const attempts = attemptResult.recordset[0].attempts;
-
-    if (attempts >= 3) {
-      return res.status(429).json({ error: "⚠️ You have reached your 3 daily resend attempts. Please try again tomorrow." });
+    if (tokenResult.recordset.length > 0) {
+      const existingToken = tokenResult.recordset[0];
+      if (existingToken.created_at) {
+        const timeDiff = Date.now() - new Date(existingToken.created_at).getTime();
+        if (timeDiff < 24 * 60 * 60 * 1000) {
+          return res.status(429).json({ error: "A verification email was already sent. Please wait 24 hours before requesting another or check your spam folder." });
+        }
+      }
     }
 
     const token = crypto.randomBytes(32).toString("hex");
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    const createdAt = new Date();
     const verifyUrl = `${baseUrl}/verify-email?token=${token}`;
 
-    await pool
-      .request()
-      .input("user_id", userId)
-      .input("token", token)
-      .input("expires_at", expiresAt)
-      .query(`
-        INSERT INTO email_tokens (user_id, token, expires_at)
-        VALUES (@user_id, @token, @expires_at)
-      `);
-
-    try {
-      await sendVerificationEmail({ to: email, firstname, verifyUrl });
-    } catch (emailErr) {
-      console.error("[Authentication] Verification email resend failed:", emailErr);
-      return res.status(500).json({ error: "❌ Failed to send email. Try again." });
+    const emailResult = await sendVerificationEmail({ to: cleanEmail, firstname: user.firstname, verifyUrl });
+    if (!emailResult.success) {
+      if (emailResult.rateLimit) {
+        return res.status(429).json({ error: "Our email service is temporarily unavailable. Please try again in a few minutes." });
+      } else {
+        return res.status(500).json({ error: "Something went wrong while sending the email. Please try again shortly." });
+      }
     }
 
-    await pool
-      .request()
-      .input("userId", userId)
-      .input("email", email)
-      .query("INSERT INTO EmailResendAttempts (userId, userEmail) VALUES (@userId, @email)");
+    const transaction = new sql.Transaction(pool);
+    await transaction.begin();
+    try {
+      const request = new sql.Request(transaction);
+      await request.input("userId", sql.Int, user.id)
+                   .query("DELETE FROM email_tokens WHERE user_id = @userId");
 
-    await logEmail(userId, fullName, email, "email verification");
+      await request.input("user_id", sql.Int, user.id)
+                   .input("token", sql.VarChar, token)
+                   .input("expires_at", sql.DateTime, expiresAt)
+                   .input("created_at", sql.DateTime, createdAt)
+                   .query(`
+                     INSERT INTO email_tokens (user_id, token, expires_at, created_at)
+                     VALUES (@user_id, @token, @expires_at, @created_at)
+                   `);
+      await transaction.commit();
+    } catch (dbErr) {
+      await transaction.rollback();
+      throw dbErr;
+    }
 
-    return res.status(200).json({ success: "Verification email sent successfully!" });
+    const fullName = `${user.firstname} ${user.lastname}`;
+    await logEmail(user.id, fullName, cleanEmail, "email verification");
+
+    return res.status(200).json(genericSuccessResponse);
   } catch (err) {
     console.error("[Authentication] Resend route error:", err);
     return res.status(500).json({ error: "💥 Server error. Please try again." });
@@ -383,28 +518,55 @@ router.post("/resend-verification", isAuthenticated, async (req, res, next) => {
 
 router.post("/forgot-password", redirectIfAuthenticated, verifyCsrf, async (req, res, next) => {
   const { email } = req.body;
+  const genericResponse = "If an account with that email exists, you will receive an email shortly.";
+
   try {
     const user = await getUserByEmail(email);
     if (!user) {
-      req.flash("error", "❌ That email address is not registered.");
+      console.log(`[Forgot Password Alert] Non-existent email reset attempt: ${email}`);
+      req.flash("success", genericResponse);
       return res.redirect("/forgot-password");
     }
 
-    const token = crypto.randomBytes(32).toString("hex");
-    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour expiration
+    // Rate Limit: 1 password reset request every 12 hours
+    const now = new Date();
+    if (user.reset_token && user.reset_expires && new Date(user.reset_expires) > now) {
+      if (user.reset_requested_at) {
+        const timeDiff = now.getTime() - new Date(user.reset_requested_at).getTime();
+        if (timeDiff < 12 * 60 * 60 * 1000) {
+          req.flash("error", "A password reset link was already sent to your email. Please wait 12 hours before requesting another.");
+          return res.redirect("/forgot-password");
+        }
+      }
+    }
 
+    const token = crypto.randomBytes(32).toString("hex");
+    const expiresAt = new Date(Date.now() + 12 * 60 * 60 * 1000); // 12 hours expiration
+    const requestedAt = new Date();
+    const resetUrl = `${baseUrl}/reset-password?token=${token}`;
+
+    // Attempt to send email first before writing to database
+    const emailResult = await sendPasswordResetEmail({ to: email, firstname: user.firstname, resetUrl, isConfirmation: false });
+    if (!emailResult.success) {
+      if (emailResult.rateLimit) {
+        req.flash("error", "Our email service is temporarily unavailable. Please try again in a few minutes.");
+      } else {
+        req.flash("error", "Something went wrong while sending the email. Please try again shortly.");
+      }
+      return res.redirect("/forgot-password");
+    }
+
+    // Email succeeded. Now write token to database
     await pool.request()
       .input("userId", sql.Int, user.id)
       .input("token", sql.VarChar, token)
       .input("expires", sql.DateTime, expiresAt)
-      .query("UPDATE users SET reset_token = @token, reset_expires = @expires WHERE id = @userId");
-
-    const resetUrl = `${baseUrl}/reset-password?token=${token}`;
-    await sendPasswordResetEmail({ to: email, firstname: user.firstname, resetUrl, isConfirmation: false });
+      .input("requestedAt", sql.DateTime, requestedAt)
+      .query("UPDATE users SET reset_token = @token, reset_expires = @expires, reset_requested_at = @requestedAt WHERE id = @userId");
 
     await logEmail(user.id, `${user.firstname} ${user.lastname}`, email, "password_reset_link");
 
-    req.flash("success", "✅ A password reset link has been sent to your email.");
+    req.flash("success", genericResponse);
     return res.redirect("/forgot-password");
 
   } catch (err) {
@@ -446,7 +608,10 @@ router.post("/reset-password", redirectIfAuthenticated, verifyCsrf, async (req, 
       .input("Pass", sql.VarChar, hashedPass)
       .query("UPDATE users SET Pass = @Pass, reset_token = NULL, reset_expires = NULL WHERE id = @userId");
 
-    await sendPasswordResetEmail({ to: user.email, firstname: user.firstname, isConfirmation: true });
+    const emailResult = await sendPasswordResetEmail({ to: user.email, firstname: user.firstname, isConfirmation: true });
+    if (!emailResult.success) {
+      console.warn(`[Authentication] Password reset confirmation email failed to send: rateLimit=${emailResult.rateLimit}, error=${emailResult.error}`);
+    }
 
     await logEmail(user.id, `${user.firstname} ${user.lastname}`, user.email, "password_reset_confirmation");
 

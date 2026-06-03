@@ -61,7 +61,6 @@ router.post("/contact", isAuthenticated, checkEmailVerified, getUserMiddleware, 
     const { firstname, lastname, email } = req.loggedInUser;
 
     await sendContactReplyEmail({
-      to: "Samifatima975@gmail.com",
       firstname,
       lastname,
       email,

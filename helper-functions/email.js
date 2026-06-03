@@ -16,6 +16,27 @@ const readTemplate = (fileName) => {
   }
 };
 
+const isRateLimit = (error) => {
+  if (!error) return false;
+  return (
+    error.status === 429 ||
+    error.statusCode === 429 ||
+    (error.message && error.message.toLowerCase().includes("rate limit")) ||
+    (error.code && error.code === "rate_limit_exceeded") ||
+    (error.name && error.name === "RateLimitExceeded")
+  );
+};
+
+const isAuthError = (error) => {
+  if (!error) return false;
+  return (
+    error.status === 403 ||
+    error.statusCode === 403 ||
+    (error.message && error.message.toLowerCase().includes("unauthorized")) ||
+    (error.message && error.message.toLowerCase().includes("invalid api key"))
+  );
+};
+
 /**
  * Send Verification Email
  */
@@ -34,10 +55,18 @@ const sendVerificationEmail = async ({ to, firstname, verifyUrl }) => {
       subject: "Please Verify Your Email 📧",
       html: htmlContent,
     });
-    return !!data;
+    return { success: true, data };
   } catch (err) {
-    console.error("[EmailModule] sendVerificationEmail failed:", err);
-    throw err;
+    if (isRateLimit(err)) {
+      console.error(`[Email:sendVerificationEmail] Failed to send email to unverified customer: ${err.message}`);
+      return { success: false, rateLimit: true };
+    }
+    if (isAuthError(err)) {
+      console.error(`[Email:sendVerificationEmail] Failed to send email to unverified customer: Authentication error (403). Check API key.`);
+    } else {
+      console.error(`[Email:sendVerificationEmail] Failed to send email to unverified customer: ${err.message}`);
+    }
+    return { success: false, error: true };
   }
 };
 
@@ -47,6 +76,7 @@ const sendVerificationEmail = async ({ to, firstname, verifyUrl }) => {
 const sendPasswordResetEmail = async ({ to, firstname, resetUrl, isConfirmation = false }) => {
   let htmlContent = "";
   let subject = "";
+  const recipientType = isConfirmation ? "registered customer (password reset confirmation)" : "registered customer (password reset)";
 
   try {
     if (isConfirmation) {
@@ -67,10 +97,18 @@ const sendPasswordResetEmail = async ({ to, firstname, resetUrl, isConfirmation 
       subject,
       html: htmlContent,
     });
-    return !!data;
+    return { success: true, data };
   } catch (err) {
-    console.error("[EmailModule] sendPasswordResetEmail failed:", err);
-    throw err;
+    if (isRateLimit(err)) {
+      console.error(`[Email:sendPasswordResetEmail] Failed to send email to ${recipientType}: ${err.message}`);
+      return { success: false, rateLimit: true };
+    }
+    if (isAuthError(err)) {
+      console.error(`[Email:sendPasswordResetEmail] Failed to send email to ${recipientType}: Authentication error (403). Check API key.`);
+    } else {
+      console.error(`[Email:sendPasswordResetEmail] Failed to send email to ${recipientType}: ${err.message}`);
+    }
+    return { success: false, error: true };
   }
 };
 
@@ -124,39 +162,80 @@ const sendOrderConfirmationEmail = async ({ to, orderId, type }) => {
       subject,
       html: htmlContent,
     });
-    return !!data;
+    return { success: true, data };
   } catch (err) {
-    console.error("[EmailModule] sendOrderConfirmationEmail failed:", err);
-    throw err;
+    if (isRateLimit(err)) {
+      console.error(`[Email:sendOrderConfirmationEmail] Failed to send email to paying customer (order confirmation): ${err.message}`);
+    } else if (isAuthError(err)) {
+      console.error(`[Email:sendOrderConfirmationEmail] Failed to send email to paying customer (order confirmation): Authentication error (403). Check API key.`);
+    } else {
+      console.error(`[Email:sendOrderConfirmationEmail] Failed to send email to paying customer (order confirmation): ${err.message}`);
+    }
+    // Silently fail and return success: true so the route continues normally
+    return { success: true, data: null, warning: true };
   }
 };
 
 /**
- * Send Contact Reply Email / Admin Notification
+ * Send Contact Support Emails (Site Owner notification + Customer confirmation)
  */
-const sendContactReplyEmail = async ({ to, subject, message, firstname, lastname, email }) => {
-  const mailSubject = `[Moda Contact Form] ${subject}`;
+const sendContactReplyEmail = async ({ firstname, lastname, email, subject, message }) => {
   const senderName = `${firstname} ${lastname}`;
 
   try {
-    let htmlContent = readTemplate("contact-support.html");
-    htmlContent = htmlContent
-      .replace(/{{{senderName}}}/g, senderName)
-      .replace(/{{{senderEmail}}}/g, email)
-      .replace(/{{{subject}}}/g, subject)
-      .replace(/{{{message}}}/g, message);
+    // 1. Send support notification to support@modashop.store (Non-critical, wrap in try/catch)
+    try {
+      let supportHtml = readTemplate("contact-support.html");
+      supportHtml = supportHtml
+        .replace(/{{{senderName}}}/g, senderName)
+        .replace(/{{{senderEmail}}}/g, email)
+        .replace(/{{{subject}}}/g, subject)
+        .replace(/{{{message}}}/g, message);
 
-    const data = await resend.emails.send({
-      from: "Moda Support <support@modashop.store>",
-      to,
-      replyTo: email,
-      subject: mailSubject,
-      html: htmlContent,
-    });
-    return !!data;
+      await resend.emails.send({
+        from: "Moda Contact <noreply@modashop.store>",
+        to: "support@modashop.store",
+        reply_to: email,
+        subject: subject,
+        html: supportHtml,
+      });
+    } catch (supportErr) {
+      if (isRateLimit(supportErr)) {
+        console.error(`[Email:sendContactReplyEmail] Failed to send email to support team: ${supportErr.message}`);
+      } else if (isAuthError(supportErr)) {
+        console.error(`[Email:sendContactReplyEmail] Failed to send email to support team: Authentication error (403). Check API key.`);
+      } else {
+        console.error(`[Email:sendContactReplyEmail] Failed to send email to support team: ${supportErr.message}`);
+      }
+    }
+
+    // 2. Send confirmation receipt back to the customer (Non-critical, wrap in try/catch)
+    try {
+      let confirmHtml = readTemplate("contact-confirmation.html");
+      confirmHtml = confirmHtml
+        .replace(/{{{firstname}}}/g, firstname)
+        .replace(/{{{subject}}}/g, subject);
+
+      await resend.emails.send({
+        from: "Moda Support <support@modashop.store>",
+        to: email,
+        subject: "We received your inquiry - Moda Support 📧",
+        html: confirmHtml,
+      });
+    } catch (confirmErr) {
+      if (isRateLimit(confirmErr)) {
+        console.error(`[Email:sendContactReplyEmail] Failed to send email to inquiring customer: ${confirmErr.message}`);
+      } else if (isAuthError(confirmErr)) {
+        console.error(`[Email:sendContactReplyEmail] Failed to send email to inquiring customer: Authentication error (403). Check API key.`);
+      } else {
+        console.error(`[Email:sendContactReplyEmail] Failed to send email to inquiring customer: ${confirmErr.message}`);
+      }
+    }
+
+    return { success: true };
   } catch (err) {
     console.error("[EmailModule] sendContactReplyEmail failed:", err);
-    throw err;
+    return { success: true, warning: true };
   }
 };
 

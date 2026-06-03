@@ -35,12 +35,12 @@ async function runMigrations() {
       `);
     }
 
-    // 2. Check & Add users columns if they don't exist (reset_token, reset_expires, is_seed)
+    // 2. Check & Add users columns if they don't exist (reset_token, reset_expires, is_seed, reset_requested_at)
     const checkUsersColumns = await pool.request().query(`
       SELECT COLUMN_NAME 
       FROM INFORMATION_SCHEMA.COLUMNS 
       WHERE TABLE_NAME = 'users' 
-      AND COLUMN_NAME IN ('reset_token', 'reset_expires', 'is_seed')
+      AND COLUMN_NAME IN ('reset_token', 'reset_expires', 'is_seed', 'reset_requested_at')
     `);
 
     const existingUsersColumns = checkUsersColumns.recordset.map(r => r.COLUMN_NAME.toLowerCase());
@@ -55,6 +55,9 @@ async function runMigrations() {
     if (!existingUsersColumns.includes("is_seed")) {
       usersColumnsToAdd.push("is_seed BIT DEFAULT 0");
     }
+    if (!existingUsersColumns.includes("reset_requested_at")) {
+      usersColumnsToAdd.push("reset_requested_at DATETIME NULL");
+    }
 
     if (usersColumnsToAdd.length > 0) {
       await pool.request().query(`
@@ -68,6 +71,21 @@ async function runMigrations() {
           UPDATE users SET is_seed = 0 WHERE is_seed IS NULL;
         `);
       }
+    }
+
+    // 4. Check & Add email_tokens columns if they don't exist
+    const checkTokenColumns = await pool.request().query(`
+      SELECT COLUMN_NAME 
+      FROM INFORMATION_SCHEMA.COLUMNS 
+      WHERE TABLE_NAME = 'email_tokens' 
+      AND COLUMN_NAME = 'created_at'
+    `);
+
+    if (checkTokenColumns.recordset.length === 0) {
+      await pool.request().query(`
+        ALTER TABLE email_tokens 
+        ADD created_at DATETIME NULL;
+      `);
     }
 
     // 3. Seeding reviews is removed to speed up server startup.

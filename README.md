@@ -124,6 +124,11 @@ All system communications use dedicated, domain-authenticated mail headers to pr
 * **Order status alerts (receipts, delivery):** `Moda Orders <orders@modashop.store>`
 * **Customer service / contact requests:** `Moda Support <support@modashop.store>`
 
+### Rate Limiting & Token Lifecycle Design
+* **Verification Email Throttling**: Users are restricted to 1 email verification resend request every 24 hours. The verification token expires in 24 hours.
+* **Password Reset Throttling**: Users are restricted to 1 password reset request every 12 hours. The generated reset link expires in 12 hours.
+* **Safe Database State Order**: To prevent race conditions or orphaned/unused tokens accumulating in the database when the email provider fails, the system uses a strict "Email Success before Database Write" flow. The verification or reset token is generated in memory and the email is attempted *first*. Only after the email provider returns a success code are the changes written to the database (and any old tokens invalidated). If the send fails, the token is discarded in memory, keeping the database clean and allowing the user to retry immediately.
+
 ---
 
 ## Database System (MSSQL on Azure)
@@ -200,6 +205,7 @@ The application implements a production-grade defense stack to protect client da
 * **Helmet Middleware**: Enforces secure HTTP headers including strict Content Security Policy (CSP), HTTP Strict Transport Security (HSTS), Frame Options, and X-Content-Type-Options.
 * **CSRF Token Validation**: Employs double-submit cookie validations for state-changing endpoints (POST/PUT/DELETE) to shield user routes from Cross-Site Request Forgery.
 * **Express Rate Limiters**: Protects routes from brute-force authentication attempts (signups, logins, and password resets capped at 15 requests per 15 minutes) and standard requests (capped at 200 per 15 minutes).
+* **Token Rate Limiting & Lifecycle Controls**: Employs a 12-hour expiration on password reset links and 24-hour expiration on verification resends, coupled with an "Email success before Database Write" transactional policy to block brute forcing and prevent orphaned state leaks.
 * **Secure Cookie Directives**: Cookies are configured with `HttpOnly`, `SameSite=Lax`, and `Secure` (in production) to prevent cookie sniffing and hijacking.
 * **Azure SQL Firewall Rules**: Only whitelisted IP addresses (such as Render's server IPs) are permitted to open connections to the MSSQL database.
 * **Data Input Sanitization**: Form fields use parameterized SQL queries inside the `mssql` pool, eliminating SQL injection vectors.
