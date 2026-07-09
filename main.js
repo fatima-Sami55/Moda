@@ -30,11 +30,15 @@ const error = require("./routes/error");
 const { poolConnect } = require("./database/data");
 const { getCurrentNotifications } = require("./helper-functions/time-based-update");
 
-// wrap everything inside async IIFE
+// Tracks whether the DB has connected at least once successfully
+let dbReady = false;
+
+// Attempt DB connection in the background — never blocks server startup
 (async () => {
   try {
     await poolConnect;
     console.log("MSSQL connected");
+    dbReady = true;
     await require("./database/migrate")();
 
     // SESSION CONFIG (after DB ready)
@@ -66,6 +70,14 @@ const { getCurrentNotifications } = require("./helper-functions/time-based-updat
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       },
     };
+
+    // DB HEALTH CHECK — serves 500-page to users if DB is not ready
+    app.use((req, res, next) => {
+      if (!dbReady) {
+        return res.status(503).render("500-page");
+      }
+      next();
+    });
 
     // TRUST PROXY
     app.set("trust proxy", 1);
@@ -213,12 +225,15 @@ const { getCurrentNotifications } = require("./helper-functions/time-based-updat
       res.status(500).render("500-page");
     });
 
-    // START SERVER
-    http.listen(port, () => {
-      console.log(`Server running on port ${port}`);
-    });
+    dbReady = true; // already set above, but ensure flag stays true after full init
 
   } catch (err) {
-    console.error("[Main] Failed to start server:", err);
+    console.error("[Main] DB connection failed on startup — server will still run:", err);
+    // dbReady stays false; the health-check middleware will serve 500-page to users
   }
 })();
+
+// Always start the server immediately, regardless of DB state
+http.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
